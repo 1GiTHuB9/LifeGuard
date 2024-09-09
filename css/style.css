@@ -1,0 +1,41 @@
+body, html {
+    margin: 0;
+    padding: 0;
+    height: 100%;
+    width: 100%;
+}
+
+.fullscreen-image {
+    position: relative;
+    height: 100%;
+    width: 100%;
+    overflow: hidden;
+}
+
+.fullscreen-image img {
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    height: 100%;
+    width: auto;
+    transform: translate(-50%, -50%);
+}
+
+.fullscreen-image::after {
+    content: "";
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: rgba(255, 255, 255, 0.5); /* ここで不透明度を調整 */
+    pointer-events: none; /* オーバーレイがクリックイベントをブロックしないようにする */
+}
+
+@media (min-aspect-ratio: 16/9) {
+    .fullscreen-image img {
+        width: 100%;
+        height: auto;
+    }
+}
+
