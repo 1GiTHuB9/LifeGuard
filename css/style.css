@@ -39,3 +39,11 @@ body, html {
     }
 }
 
+.login-form {
+    text-align: center;
+    margin: 0 auto;
+    width: 300px;
+    padding: 20px;
+    border: 1px solid #ccc;
+}
+
