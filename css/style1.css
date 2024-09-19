@@ -1,0 +1,109 @@
+html, body {
+    margin: 0;
+    padding: 0;
+    height: 100%;
+    width: 100%;
+}
+
+
+ 
+.fullscreen-image {
+    position: relative;
+    height: 100%;
+    width: 100%;
+    overflow: hidden;
+    opacity: 0.5;
+
+}
+ 
+.fullscreen-image img {
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    height: 100%;
+    width: auto;
+    transform: translate(-50%, -50%);
+}
+ 
+.fullscreen-image::after {
+    content: "";
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: rgba(255, 255, 255, 0); /* 不透明度調整 */
+    z-index: -1; /* オーバーレイのレイヤー設定 */
+}
+ 
+@media (min-aspect-ratio: 16/9) {
+    .fullscreen-image img {
+        width: 100%;
+        height: auto;
+    }
+}
+
+
+/* ヘッター */
+.header{
+    position: absolute;
+    margin: 50px 0;
+    text-align: center;
+    width: 100%;
+}
+
+/* 入力欄 */
+.box{
+    box-shadow: inset 1px 1px 3px rgba(0, 0, 0, 0.5);
+}
+
+/* ボタン共通レイアウト */
+button{
+    border: 2px solid rgb(rgb(0, 183, 255), green, blue);
+    width: 30%; 
+    height: 40px;
+    font-size: 16px;
+}
+
+/* フォーム各種 */
+.login-form {
+    position: absolute;
+    margin: 150px auto;
+    /* transform: translate(-50%, -50%); */
+    text-align: center;
+    width: 100%;
+    z-index: 100; /* フォームを最前面に表示するためのレイヤーを10に設定 */
+}.signup-form {
+    position: absolute;
+    margin: 150px auto;
+    text-align: center;
+    width: 100%;
+    z-index: 10; /* フォームを最前面に表示するためのレイヤーを10に設定 */
+}.setting-form {
+    position: absolute;
+    margin: 150px auto;
+    text-align: center;
+    width: 100%;
+}
+
+/* 戻るボタン */
+.backlink {     
+    position: absolute;
+    text-align:left;
+    margin:10px 0 0 10px;
+    background-color: #3498db; /* 背景色 */
+    color: white;  /* 文字色 */
+    padding: 10px 20px;  /* 内側の余白 */
+    text-decoration: none; /* 下線を削除 */
+    border-radius: 5px;    /* 角を丸める */
+    z-index: 10; /* フォームを最前面に表示するためのレイヤーを10に設定 */
+  }
+
+  /* アイコン画像 */
+  .icon {
+    width: 200px;
+    height: 200px;
+    border-radius: 50%; /* 丸くする */
+    object-fit: cover; /* 画像を要素にフィットさせる */
+    border: 2px solid #000000;
+  }
