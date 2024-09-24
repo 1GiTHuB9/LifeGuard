@@ -62,14 +62,27 @@ body {
 .user-image {
     width: 100px;
     height: 100px;
-    background-color: #eee;
+    background-color: #fe0303;
     border-radius: 50%;
     margin: 0 auto;
     display: flex;
     align-items: center;
     justify-content: center;
     font-size: 30px;
-    color: #999;
+    color: #000000;
+}
+
+.user-image2 {
+    width: 100px;
+    height: 100px;
+    background-color: #2200fc;
+    border-radius: 50%;
+    margin: 0 auto;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 30px;
+    color: #050505;
 }
 
 .user-name, .user-profile {
