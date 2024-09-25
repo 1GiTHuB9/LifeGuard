@@ -4,28 +4,43 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>コメント入力画面</title>
-    <link rel="stylesheet" href="css/commentnyuryoku.css">
+    <link rel="stylesheet" href="./css/commentnyuryoku.css">
 </head>
 <body>
     <div class="fullscreen-image">
         <img src="haikei4.png" alt="Full Screen Image">
-      
-    </div>
     <div class="container">
-        <div class="back-button">
-            &larr; 戻る
-        </div>
+        <a href="#" class="back-button" onclick="goBack()">←戻る</a>
         <div class="user-image"><span>画像</span></div>
         <div class="user-name"> ユーザー名</div>
         <p>相談内容あああああああああああああああ</p>
-        <a href="#">続きを読む</a>
-
-        <div class="consultation-content">コメント*******************************<br>*****************************************</div>
-        <div class="checkbox-section"></div>
-            <label>
-                <input type="checkbox" checked> 匿名で投稿する
+        <a href="#" class="tuduki">続きを読む</a>
+        
+        <form id="consultation-form">
+        <textarea name="content" id="content" placeholder="コメント" required></textarea>
+        
+        <div class="anonymous">
+            <label for="anonymous">
+                <input type="checkbox" id="anonymous" name="anonymous">
+                匿名で投稿する
             </label>
+        </div>
         <button class="submit-button">確認する！</button>
-    </div>     
+    </div>  
+    <script>
+        document.getElementById('consultation-form').addEventListener('submit', function(event) {
+            event.preventDefault();
+            var content = document.getElementById('content').value;
+            var anonymous = document.getElementById('anonymous').checked;
+            var postStyle = anonymous ? '匿名' : '公開';
+            localStorage.setItem('postStyle', postStyle);
+            localStorage.setItem('content', content);
+            window.location.href = 'soudankakunin.html';
+        });
+
+        function goBack() {
+            history.back();
+        }
+    </script>   
 </body>
 </html>
