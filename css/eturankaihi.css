@@ -1,0 +1,159 @@
+/*背景のcss*/
+body, html {
+    margin: 0;
+    padding: 0;
+    width: 100%;
+    height:100%;
+    font-family: Arial, sans-serif;
+    overflow:hidden;
+}
+
+/*body {
+    margin: 0;
+    font-family: Arial, sans-serif;
+}*/
+
+/* 背景画像用の設定 */
+.fullscreen-image {
+    position: relative;
+    width: 100%;
+    height: 100vh;
+    overflow: hidden;
+}
+
+.fullscreen-image img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    position: absolute;
+    top: 0;
+    left: 0;
+}
+
+.fullscreen-image::after {
+    content: "";
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: rgba(255, 255, 255, 0.5); /* ここで不透明度を調整 */
+    pointer-events: none; /* オーバーレイがクリックイベントをブロックしないようにする */
+}
+/*背景のcss記述終わり*/
+
+.container {
+    /*width: auto;*/
+    height: 100%;
+    border: 1px solid #ccc;
+    display: flex;
+    flex-direction: column;
+    position: relative;
+    overflow: hidden;
+}
+
+.header {
+    display: flex;
+    justify-content: space-between;
+    padding: 10px;
+    background-color: rgba(255, 255, 255, 0.8);
+    border-bottom: 1px solid #ddd;
+}
+
+.back-button {
+    font-size: 16px;
+    color: #333;
+    text-decoration: none;
+    margin-top: 10px;
+}
+
+.menu-button {
+    background: none;
+    border: none;
+    font-size: 24px;
+    color: #333;
+}
+
+.chat-area {
+    flex: 1;
+    overflow-y:auto;
+    padding: 10px;
+    max-height: calc(100vh - 120px); /* ヘッダーとフッターを除いたスペースを考慮 */
+}
+
+.message {
+    display: flex;
+    align-items: flex-start;
+    margin-bottom: 10px;
+}
+
+.profile-pic {
+    width: 40px;
+    height: 40px;
+    background-color: #6cc;
+    border-radius: 50%;
+    margin-right: 10px;
+}
+
+.message-content {
+    max-width: 260px;
+}
+
+.username {
+    font-size: 14px;
+    font-weight: bold;
+    margin-bottom: 5px;
+}
+
+.text {
+    background-color: #fff;
+    padding: 10px;
+    border-radius: 10px;
+    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+    word-wrap: break-word;
+}
+
+.view-button {
+    background-color: #6cc;
+    color: #fff;
+    border: none;
+    padding: 5px 10px;
+    border-radius: 5px;
+    cursor: pointer;
+    margin-bottom:20px;
+    margin-left:20px;
+}
+
+.footer {
+    display: flex;
+    justify-content: center;
+    padding: 10px;
+    background-color: rgba(255, 255, 255, 0.8);
+    border-top: 1px solid #ddd;
+}
+
+.add-button {
+    width: 40px;
+    height: 40px;
+    background-color: #ffa500;
+    color: #fff;
+    border: none;
+    border-radius: 50%;
+    font-size: 24px;
+    cursor: pointer;
+}
+
+/* アスペクト比に応じたレイアウト調整 */
+@media (min-aspect-ratio: 16/9) {
+    .fullscreen-image img {
+        width: 100%;
+        height: auto;
+    }
+}
+
+@media (max-aspect-ratio: 9/16) {
+    .fullscreen-image img {
+        width: auto;
+        height: 100%;
+    }
+}
