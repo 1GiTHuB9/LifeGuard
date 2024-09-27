@@ -10,12 +10,10 @@
     <div class="fullscreen-image">
         <img src="img/haikei4.png" alt="Full Screen Image">
 
-        <a href="login.php" class="backlink">
-                戻る
-        </a>
+        <a href="#" class="back-button" onclick="goBack()">←戻る</a>
 
         <div class="header">
-            <h2>新規登録</h2><br>
+            <h1>新規登録</h1>
             
         </div>
         <div class="signup-form">
@@ -24,17 +22,24 @@
             
                 
 
-                <label for="email">メールアドレス</label><br>
+                <label for="email"><h3>メールアドレス</h3></label>
                 <input type="email" id="email" name="email" required class="box"><br>
                 <br>
    
-                <label for="password">パスワード</label><br>
+                <label for="password"><h3>パスワード</h3></label>
                 <input type="password" id="password" name="password" required class="box"><br>
                 <br><br>
+                
 
                 <button type="submit" class="Regist">登録</button>
             </form>
         </div>
     </div>
+
+    <script>
+        function goBack() {
+            history.back();
+        }
+    </script>
 </body>
 </html>
