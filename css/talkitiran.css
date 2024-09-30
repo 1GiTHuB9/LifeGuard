@@ -1,37 +1,26 @@
+/*背景のcss*/
 body, html {
     margin: 0;
     padding: 0;
-    height: 100%;
     width: 100%;
+    height:100%;
     font-family: Arial, sans-serif;
-}
-.container {
-    background-color: rgba(255, 255, 255, 0.8); /* 背景色を白、透明度80%に設定 */
-    padding: 20px;
-    border-radius: 10px;
-    box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
-    width: 90%;
-    max-width: 400px;
-    text-align: center;
+    overflow:hidden;
 }
 
-body {
+/*body {
     margin: 0;
     font-family: Arial, sans-serif;
-    height: 100vh;
-    overflow: hidden;
-}
-hr {
-    padding: 0.1px 0;
-  }
- 
+}*/
+
+/* 背景画像用の設定 */
 .fullscreen-image {
     position: relative;
     width: 100%;
-    height: 100%;
+    height: 100vh;
     overflow: hidden;
 }
- 
+
 .fullscreen-image img {
     width: 100%;
     height: 100%;
@@ -40,7 +29,7 @@ hr {
     top: 0;
     left: 0;
 }
- 
+
 .fullscreen-image::after {
     content: "";
     position: absolute;
@@ -52,14 +41,24 @@ hr {
     pointer-events: none; /* オーバーレイがクリックイベントをブロックしないようにする */
 }
 
+
+hr {
+    padding: 0.1px 0;
+  }
+ 
 .back-button {
-    align-self: flex-start;
-    margin-left: 20px;
+    display: block;
     margin-bottom: 20px;
+    text-decoration: none;
+    color: #000;
+    text-align: left; /* テキストを左揃え */
+    position: absolute;
+    left: 20px; /* 左から20pxの位置に配置 */
+    top: 20px;  /* 上から20pxの位置に配置 */
     font-size: 16px;
-    cursor: pointer;
-    color: white; /* ボタンの文字色を白に設定 */
-    text-shadow: 1px 1px 2px rgba(0, 0, 0, 0.7); /* テキストに影を追加して見やすくする */
+    margin-left: 10px;
+    margin-bottom: 10px;
+    text-align: left;
 }
 
 .profile-image {
@@ -83,7 +82,7 @@ hr {
 }
 
 .consultation-content {
-    margin-top: 20px;
+    margin-top: 5px;
     padding: 10px;
     background-color: rgba(242, 242, 242, 0.8); /* 背景色を白、透明度80%に設定 */
     border-radius: 5px;
@@ -93,23 +92,24 @@ hr {
     text-shadow: 1px 1px 2px rgba(255, 255, 255, 0.7); /* テキストに影を追加して見やすくする */
 }
 
-
-@media (min-aspect-ratio: 16/9) {
-    .fullscreen-image img {
-        width: 100%;
-        height: auto;
-    }
-}
- 
 .container {
     position: absolute;
     top: 50%;
     left: 50%;
     transform: translate(-50%, -50%);
-   
     flex-direction: column;
     align-items: center;
+
+    width: 90%;
+    max-width: 400px;
+    height: 70vh; /* 高さを指定 */
+    overflow-y: auto; /* 縦スクロール可能に */
+    background-color: rgba(255, 255, 255, 0.8);
+    padding: 20px;
+    border-radius: 10px;
+    box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
 }
+
  
 .back-button {
     font-size: 14px;
@@ -127,7 +127,20 @@ hr {
     padding: 8px;
 }
 
+/* アスペクト比に応じたレイアウト調整 */
+@media (min-aspect-ratio: 16/9) {
+    .fullscreen-image img {
+        width: 100%;
+        height: auto;
+    }
+}
 
-
+ 
+@media (max-aspect-ratio: 9/16) {
+    .fullscreen-image img {
+        width: auto;
+        height: 100%;
+    }
+}
 
  

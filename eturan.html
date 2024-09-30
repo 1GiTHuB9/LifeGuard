@@ -31,7 +31,7 @@
         <img src="haikei4.png" alt="Full Screen Image">
         <div class="container">
             <header class="header">
-                <a href="#" class="back-button">&larr; 戻る</a>
+                <a href="#" class="back-button" onclick="goBack()">←戻る</a>
                 <button class="menu-button">&#9776;</button>
             </header>
             <div class="content">
@@ -114,7 +114,7 @@
                             <p class="text">${content}</p>
                         </div>
                     </div>
-                    <button class="comment-button">コメント追加</button>
+                    <button class="comment-button" id="dynamicCommentButton">コメント追加</button>
                     <div class="commenter">
                         <div class="profile-commenter"></div>
                         <div class="comment-content">
@@ -127,6 +127,11 @@
                 </div>
             `;
 
+            // 動的に生成されたボタンにクリックイベントを追加
+            document.getElementById("dynamicCommentButton").addEventListener("click", function() {
+                goToNextcommet();  // ページ遷移関数を呼び出す
+            });
+
             // コンテンツ全体を2分割レイアウトに変更
             document.getElementById("chatArea").style.width = "50%";
         }
@@ -135,26 +140,28 @@
             window.location.href = "soudannyuryoku.html";
         }
 
+        function goToNextcommet() {
+            window.location.href = "commentnyuryoku.html";
+        }
+
         function resetLayout() {
-    const detailArea = document.getElementById("detailArea");
-    const chatArea = document.getElementById("chatArea");
+            const detailArea = document.getElementById("detailArea");
+            const chatArea = document.getElementById("chatArea");
 
-    // 詳細エリアをスライドアウトして非表示にする
-    detailArea.style.transform = "translateX(100%)";  // スライドアウト
-    setTimeout(() => {
-        detailArea.style.display = "none";  // 完全に非表示
-    }, 500);  // アニメーション時間と同じだけ待つ
+            // 詳細エリアをスライドアウトして非表示にする
+            detailArea.style.transform = "translateX(100%)";  // スライドアウト
+            setTimeout(() => {
+                detailArea.style.display = "none";  // 完全に非表示
+            }, 500);  // アニメーション時間と同じだけ待つ
 
-    // チャットエリアの幅を元に戻す
-    chatArea.style.width = "100%";
-    }
+            // チャットエリアの幅を元に戻す
+            chatArea.style.width = "100%";
+        }
 
-    // JavaScriptでボタンがクリックされたときにページ遷移
+        // JavaScriptで固定のコメント追加ボタンがクリックされたときにページ遷移
         document.getElementById("commentButton").addEventListener("click", function() {
-        window.location.href = "commentnyuryoku.html";
-    });
-
- 
+            goToNextcommet();  // ページ遷移関数を呼び出す
+        });
 
     </script>
 </body>

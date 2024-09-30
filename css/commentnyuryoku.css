@@ -49,18 +49,28 @@ body, html {
     width: 90%;
     max-width: 400px;
     text-align: center;
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+   
+    flex-direction: column;
+    align-items: center;
 }
 
 .back-button {
     display: block;
     margin-bottom: 20px;
-    font-size: 18px;
     text-decoration: none;
     color: #000;
     text-align: left; /* テキストを左揃え */
     position: absolute;
     left: 20px; /* 左から20pxの位置に配置 */
     top: 20px;  /* 上から20pxの位置に配置 */
+    font-size: 16px;
+    margin-left: 10px;
+    margin-bottom: 10px;
+    text-align: left;
 }
 
 textarea {
@@ -78,7 +88,7 @@ textarea {
 .user-image {
     width: 100px;
     height: 100px;
-    background-color: #eee;
+    background-color: #c61e1e;
     border-radius: 50%;
     margin: 0 auto;
     display: flex;
@@ -105,23 +115,7 @@ textarea {
     color: #333; /* テキスト色をダークグレーに設定 */
     text-shadow: 1px 1px 2px rgba(255, 255, 255, 0.7); /* テキストに影を追加して見やすくする */
 }
- 
-.container {
-    position: absolute;
-    top: 50%;
-    left: 50%;
-    transform: translate(-50%, -50%);
-   
-    flex-direction: column;
-    align-items: center;
-}
- 
-.back-button {
-    font-size: 14px;
-    margin-left: 10px;
-    margin-bottom: 10px;
-    text-align: left;
-}
+
 .comment-section {
     margin-top: 10px;
     margin-bottom: 20px;
@@ -157,6 +151,11 @@ textarea {
 
 .anonymous {
     margin-bottom: 20px;
+}
+
+.tuduki {
+    margin-bottom: 20px; /* 余白を20pxに設定、値は必要に応じて変更してください */
+    display: block; /* aタグはインライン要素なので、blockに変更 */
 }
 /* アスペクト比に応じたレイアウト調整 */
 @media (min-aspect-ratio: 16/9) {

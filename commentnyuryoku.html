@@ -13,7 +13,7 @@
         <a href="#" class="back-button" onclick="goBack()">←戻る</a>
         <div class="user-image"><span>画像</span></div>
         <div class="user-name"> ユーザー名</div>
-        <p>相談内容あああああああああああああああ</p>
+        <p>相談内容:あああああああああああああああ</p>
         <a href="#" class="tuduki">続きを読む</a>
         
         <form id="consultation-form">
@@ -27,6 +27,7 @@
         </div>
         <button class="submit-button">確認する！</button>
     </div>  
+    </div>
     <script>
         document.getElementById('consultation-form').addEventListener('submit', function(event) {
             event.preventDefault();
@@ -35,7 +36,7 @@
             var postStyle = anonymous ? '匿名' : '公開';
             localStorage.setItem('postStyle', postStyle);
             localStorage.setItem('content', content);
-            window.location.href = 'soudankakunin.html';
+            window.location.href = 'commentkakunin.html';
         });
 
         function goBack() {
