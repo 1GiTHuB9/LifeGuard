@@ -84,14 +84,14 @@
                         </div>
                 
                         <!-- コメントを追加 -->
-                        <button class="comment-button">コメント追加</button>
+                        <button class="comment-button" id="commentButton">コメント追加</button>
                         <!-- 「もっと見る」ボタン -->
                         <button class="vie-more-button">もっと見る</button>
                     </div>
                 </aside>
                 
             </div>
-            <footer class="footer">w
+            <footer class="footer">
                 <button class="add-button" onclick="goToNextPage()">+</button>
             </footer>
         </div>
@@ -148,6 +148,13 @@
     // チャットエリアの幅を元に戻す
     chatArea.style.width = "100%";
     }
+
+    // JavaScriptでボタンがクリックされたときにページ遷移
+        document.getElementById("commentButton").addEventListener("click", function() {
+        window.location.href = "commentnyuryoku.html";
+    });
+
+ 
 
     </script>
 </body>
