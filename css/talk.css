@@ -1,3 +1,4 @@
+
 body, html {
     margin: 0;
     padding: 0;
@@ -6,28 +7,23 @@ body, html {
     font-family: Arial, sans-serif;
 }
 
-.container {
-    background-color: rgba(255, 255, 255, 0.8); /* 背景色を白、透明度80%に設定 */
-    padding: 10px;
-    border-radius: 10px;
-    box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
-    width: 90%;
-    max-width: 400px;
-    text-align: left;
-}
-
 body {
     margin: 0;
     font-family: Arial, sans-serif;
     height: 100vh;
     overflow: hidden;
+    position: relative;
+    display: flex; /* フレックスボックスを使って中央揃え */
+    justify-content: center; /* 水平方向の中央揃え */
+    align-items: center; /* 垂直方向の中央揃え */
 }
 
 .fullscreen-image {
-    position: relative;
+    position: absolute;
     width: 100%;
     height: 100%;
     overflow: hidden;
+    z-index: -1;
 }
 
 .fullscreen-image img {
@@ -35,7 +31,7 @@ body {
     height: 100%;
     object-fit: cover;
     position: absolute;
-    top: 0;
+    top:0;
     left: 0;
 }
 
@@ -51,8 +47,10 @@ body {
 }
 
 .chat-container {
-    width: 300px;
-    margin: 50px auto;
+    position: relative;
+    z-index: 10; /* 背景画像の前に表示されるように */
+    width: 400px;
+    height: 500px;
     border: 1px solid #ddd;
     border-radius: 10px;
     background-color: #fff;
@@ -63,33 +61,27 @@ body {
     background-color: #f5f5f5;
     padding: 10px;
     display: flex;
-    justify-content: space-between;
+    justify-content: center; /* 中央揃えに変更 */
     align-items: center;
+    position: relative; /* ボタンのために相対配置にする */
     border-bottom: 1px solid #ddd;
 }
 
 .back-btn {
-    align-self: flex-start;
-    margin-left: 20px;
-    margin-bottom: 20px;
+    position: absolute;
+    left: 10px; /* 戻るボタンを左に配置 */
     font-size: 16px;
     cursor: pointer;
-    color: white; /* ボタンの文字色を白に設定 */
-    text-shadow: 1px 1px 2px rgba(0, 0, 0, 0.7); /* テキストに影を追加して見やすくする */
+    color: rgb(0, 0, 0); /* ボタンの文字色 */
+    text-shadow: 1px 1px 2px rgba(0, 0, 0, 0.7);
 }
 
 .user {
     font-size: 16px;
     color: #555;
+    text-align: center;
 }
 
-.chat-window {
-    padding: 10px;
-    height: 400px;
-    overflow-y: auto;
-    background-image: url('background-pattern.png'); /* You can replace this with the floral background */
-    background-size: cover;
-}
 
 .message {
     max-width: 70%;
@@ -97,7 +89,7 @@ body {
     border-radius: 15px;
     margin-bottom: 10px;
     font-size: 14px;
-    line-height: 1.4;
+    line-height: 2.3;
 }
 
 .left {
