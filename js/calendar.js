@@ -19,14 +19,19 @@ function changeMonth(offset) {
 }
 
 
-// サーバーから反応データを取得してカレンダーに反映
+//サーバーから反応データを取得してカレンダーに反映
 function loadReactions(year, month) {
     const formattedMonth = String(month + 1).padStart(2, '0');
     const startDate = `${year}-${formattedMonth}-01`;
     const endDate = `${year}-${formattedMonth}-31`;
     
     fetch(`./php/get_reactions.php?start_date=${startDate}&end_date=${endDate}`)
-        .then(response => response.json())
+        .then(response => {
+            if(!response.ok){
+                throw new Error('ネットワーク応答が不正です');
+            }
+            return response.json();
+        })
         .then(data => {
             reactionsData = {};
             data.forEach(item => {
@@ -34,11 +39,14 @@ function loadReactions(year, month) {
             });
             createCalendar(currentYear, currentMonth);
         })
-        .catch(error => console.error('データ取得エラー:', error));
+        .catch(error => {
+            console.error('データ取得エラー:', error);
+            createCalendar(currentYear,currentMonth);
+        });
 }
 
 function createCalendar(year, month) {
-    const calendarDiv = document.getElementById('calendar');
+    const calendarDiv = document.getElementById('calendars');
     calendarDiv.innerHTML = ''; // カレンダーをリセット
 
     const firstDay = new Date(year, month, 1).getDay();
@@ -92,7 +100,10 @@ function saveReaction(date, reaction) {
         .then(response => response.text())
         .then(data => {
             console.log(data);
-            loadReactions();
+
+            reactionsData[date] = reaction;
+            selectedDateCell.querySelector('.reaction').innerText = reaction;
+            // loadReactions();
         })
         .catch(error => console.error('保存エラー:', error));
 }
@@ -105,7 +116,7 @@ function openModal(dateCell, date) {
 
 function selectReaction(reaction) {
     if (selectedDateCell) {
-        selectedDateCell.querySelector('.reaction').innerText = reaction;
+        // selectedDateCell.querySelector('.reaction').innerText = reaction;
         saveReaction(selectedDate, reaction);
         closeModal();
     }

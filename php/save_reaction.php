@@ -1,8 +1,8 @@
 <?php
 // MySQLの接続設定
 $servername = "localhost";
-$username = "root";  // MySQLユーザー名
-$password = "";      // MySQLパスワード
+$username = "lifeguard_user";  // MySQLユーザー名
+$password = "Liguardfe712";      // MySQLパスワード
 $dbname = "lifeguard";  // データベース名
 
 $conn = new mysqli($servername, $username, $password, $dbname);
@@ -17,7 +17,7 @@ $date = $_POST['date'];
 $reaction = $_POST['reaction'];
 
 // 反応を保存または更新するSQL文
-$sql = "INSERT INTO reactions (reaction_date, reaction) VALUES (?, ?)
+$sql = "INSERT INTO calendar (user_id,reaction_date, reaction) VALUES (1,?, ?)
         ON DUPLICATE KEY UPDATE reaction = ?";
 
 $stmt = $conn->prepare($sql);
