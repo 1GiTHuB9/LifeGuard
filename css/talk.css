@@ -1,0 +1,131 @@
+
+body, html {
+    margin: 0;
+    padding: 0;
+    height: 100%;
+    width: 100%;
+    font-family: Arial, sans-serif;
+}
+
+body {
+    margin: 0;
+    font-family: Arial, sans-serif;
+    height: 100vh;
+    overflow: hidden;
+    position: relative;
+    display: flex; /* フレックスボックスを使って中央揃え */
+    justify-content: center; /* 水平方向の中央揃え */
+    align-items: center; /* 垂直方向の中央揃え */
+}
+
+.fullscreen-image {
+    position: absolute;
+    width: 100%;
+    height: 100%;
+    overflow: hidden;
+    z-index: -1;
+}
+
+.fullscreen-image img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    position: absolute;
+    top:0;
+    left: 0;
+}
+
+.fullscreen-image::after {
+    content: "";
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: rgba(255, 255, 255, 0.5); /* ここで不透明度を調整 */
+    pointer-events: none;
+}
+
+.chat-container {
+    position: relative;
+    z-index: 10; /* 背景画像の前に表示されるように */
+    width: 400px;
+    height: 500px;
+    border: 1px solid #ddd;
+    border-radius: 10px;
+    background-color: #fff;
+    overflow: hidden;
+}
+
+.header {
+    background-color: #f5f5f5;
+    padding: 10px;
+    display: flex;
+    justify-content: center; /* 中央揃えに変更 */
+    align-items: center;
+    position: relative; /* ボタンのために相対配置にする */
+    border-bottom: 1px solid #ddd;
+}
+
+.back-btn {
+    position: absolute;
+    left: 10px; /* 戻るボタンを左に配置 */
+    font-size: 16px;
+    cursor: pointer;
+    color: rgb(0, 0, 0); /* ボタンの文字色 */
+    text-shadow: 1px 1px 2px rgba(0, 0, 0, 0.7);
+}
+
+.user {
+    font-size: 16px;
+    color: #555;
+    text-align: center;
+}
+
+
+.message {
+    max-width: 70%;
+    padding: 10px;
+    border-radius: 15px;
+    margin-bottom: 10px;
+    font-size: 14px;
+    line-height: 2.3;
+}
+
+.left {
+    background-color: #f0f0f0;
+    align-self: flex-start;
+    margin-left: 10px;
+}
+
+.right {
+    background-color: #f0c98d;
+    align-self: flex-end;
+    margin-left: auto;
+    margin-right: 10px;
+}
+
+.input-area {
+    display: flex;
+    justify-content: space-between;
+    padding: 10px;
+    border-top: 1px solid #ddd;
+    background-color: #f5f5f5;
+}
+
+input[type="text"] {
+    width: 80%;
+    padding: 10px;
+    border: 1px solid #ddd;
+    border-radius: 5px;
+    font-size: 14px;
+}
+
+.send-btn {
+    background-color: #92c87e;
+    color: white;
+    padding: 10px 15px;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+}
