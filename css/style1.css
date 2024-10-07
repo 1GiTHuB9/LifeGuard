@@ -115,7 +115,7 @@ button{
     padding:0.5%;
 }.setting-form {
     /* position: absolute; */
-    margin: 100px auto;
+    margin: 50px auto;
     text-align: center;
     width: 100%;
 }.questions{
@@ -131,17 +131,6 @@ button{
     text-align: center;
     margin:20% auto;
     font-weight: bold;
-
-    background-image: url('img/back.png'); /* 画像のURLを指定 */
-    background-size: cover; /* 画像を要素全体にフィット */
-    background-repeat: no-repeat; /* 画像を繰り返さない */
-    background-position: center; /* 画像を中央に配置 */
-    width: 100%; /* 幅を100%に設定 */
-    height: 400px; /* 高さを400pxに設定 */
-    color: white; /* テキスト色を白に設定 */
-    display: flex; /* 中央揃えにするためのフレックスボックス */
-    justify-content: center; /* 横方向の中央揃え */
-    align-items: center; /* 縦方向の中央揃え */
 }
 
 
@@ -164,7 +153,7 @@ button{
     height: 150px;
     border-radius: 50%; /* 丸くする */
     object-fit: cover; /* 画像を要素にフィットさせる */
-    border: 2px solid #000000;
+    
   }
 
 /* 質問の文章のスタイル */
@@ -216,4 +205,16 @@ button{
     align-items: center;
     display: flex;
     overflow-y: auto;
+}
+
+.userimage{
+    width: 150px; /* 幅を指定 */
+    height: 150px; /* 高さを指定（幅と同じにすることで丸くする） */
+    border-radius: 50%; /* 丸くするためのプロパティ */
+    object-fit: cover; /* 画像を切り抜いて枠にフィットさせる */
+    border: 2px solid #000000;
+}.userprofile{
+    width:50%;
+    padding: 0 0 10% 0;
+    justify-content: center; /* 横方向に中央揃え */
 }
