@@ -18,7 +18,7 @@
         </div>
         <div class="signup-form">
         
-            <form action="login.php" method="post"> 
+            <form action="./php/signup_dev.php" method="post"> 
             
                 
 

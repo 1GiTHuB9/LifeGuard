@@ -1,3 +1,30 @@
+<?php
+session_start();
+
+if (isset($_SESSION['email']) && isset($_SESSION['pass'])) {
+    require "./php/dbConnect.php"; // データベース接続
+
+    $email = $_SESSION['email'];
+    $password = $_SESSION['pass']; // ハッシュ化前のパスワード
+
+    try {
+        // ユーザーのメールアドレスに基づいてデータベースからハッシュ化されたパスワードを取得
+        $sql = "SELECT password FROM users WHERE mailaddress = ?";
+        $stmt = $pdo->prepare($sql);
+        $stmt->bindValue(1, $email, PDO::PARAM_STR);
+        $stmt->execute();
+        $user = $stmt->fetch(PDO::FETCH_ASSOC);
+
+        if ($user && password_verify($password, $user['password'])) {
+            // パスワードが一致すればホーム画面にリダイレクト
+            header('Location: home.html');
+            exit();
+        }
+    } catch (PDOException $e) {
+        echo "エラーが発生しました: " . $e->getMessage();
+    }
+}
+?>
 <!DOCTYPE html>
 <html lang="ja">
 <head>
@@ -17,7 +44,7 @@
        
         <div class="login-form">
         
-            <form action="home.php" method="post"> 
+            <form action="./php/login_dev.php" method="post"> 
                 
 
                 <label for="email"><h3>メールアドレス</h3></label>
@@ -25,7 +52,7 @@
                 <br>
    
                 <label for="password"><h3>パスワード</h3></label>
-                <input type="password" id="password" name="rd" requpasswoired class="box"><br>
+                <input type="password" id="password" name="pass" requpasswoired class="box"><br>
                 <br><br>
 
                 <button type="submit">ログイン</button>
