@@ -8,7 +8,7 @@ $password = $_POST['pass'];
 
 function logincheck($email, $pass, $pdo){
     try {
-        $sql = "SELECT mailaddress, password FROM users WHERE mailaddress = ?";
+        $sql = "SELECT * FROM users WHERE mailaddress = ?";
         
         $stmt = $pdo->prepare($sql); 
         
@@ -20,9 +20,22 @@ function logincheck($email, $pass, $pdo){
         $user = $stmt->fetch(PDO::FETCH_ASSOC);
 
         // パスワードを検証
-        if ($user && password_verify($pass, $user['password'])) {
+        if  ($user['diagnosis_level'] == 0){
+
+            $_SESSION['id'] = $user['user_id'];
             $_SESSION['email'] = $email;
             $_SESSION['pass'] = $pass;
+            $_SESSION['diagnosis_level'] = $user['diagnosis_level'];
+
+            header('Location:../leveldiagnosis.php');
+            exit;
+        }
+
+        if ($user && password_verify($pass, $user['password'])) {
+            $_SESSION['id'] = $user['user_id'];
+            $_SESSION['email'] = $email;
+            $_SESSION['pass'] = $pass;
+            $_SESSION['diagnosis_level'] = $user['diagnosis_level'];
 
             return true;
         } else {

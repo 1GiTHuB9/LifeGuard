@@ -17,7 +17,7 @@ try {
     $stmt->execute();
     $alert = "<script type='text/javascript'>alert('アカウント登録が完了しました');</script>";
     echo $alert;
-    header('Location:../login.php');
+    header('Location: ../leveldiagnosis.php');
     exit();
 } catch (PDOException $e) {
     // エラーメッセージをキャッチして表示

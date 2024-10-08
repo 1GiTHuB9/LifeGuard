@@ -1,11 +1,18 @@
 <?php
 session_start();
 
+require "./php/dbConnect.php"; // データベース接続
+
 if (isset($_SESSION['email']) && isset($_SESSION['pass'])) {
-    require "./php/dbConnect.php"; // データベース接続
 
     $email = $_SESSION['email'];
     $password = $_SESSION['pass']; // ハッシュ化前のパスワード
+    $level = intval($_SESSION['diagnosis_level']);
+
+    if($level == 0){
+        header('Location: ./leveldiagnosis.php');
+        exit;
+    }
 
     try {
         // ユーザーのメールアドレスに基づいてデータベースからハッシュ化されたパスワードを取得
