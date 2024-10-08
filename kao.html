@@ -1,0 +1,113 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Kaomoji Calendar</title>
+    <link rel="stylesheet" href="./css/kao.css">
+</head>
+<body>
+<div class="fullscreen-image">
+    <img src="haikei4.png" alt="Full Screen Image">
+
+    <!-- カレンダーのコンテナ -->
+    <div class="calendar-container">
+        <!-- 月名を表示 -->
+        <div class="month-header" id="month-header"></div>
+
+        <!-- カレンダー -->
+        <div class="calendar" id="calendar"></div>
+    </div>
+
+    <!-- 顔文字選択モーダル -->
+    <div class="overlay" id="overlay"></div>
+    <div id="kaomoji-modal" class="kaomoji-selector">
+        <p>顔文字を選択してください:</p>
+        <div id="kaomoji-list">
+            <img src="./img/egao.png" alt="Kaomoji 1" data-kaomoji="kaomoji1.png" class="kaomoji-option">
+            <img src="./img/naki.png" alt="Kaomoji 2" data-kaomoji="kaomoji2.png" class="kaomoji-option">
+            <img src="./img/niko.png" alt="Kaomoji 3" data-kaomoji="kaomoji3.png" class="kaomoji-option">
+            <img src="./img/wink.png" alt="Kaomoji 4" data-kaomoji="kaomoji4.png" class="kaomoji-option">
+        </div>
+        
+        <br><br>
+        <button id="cancel-btn">キャンセル</button>
+    </div>
+</div>
+
+<script>
+    const monthHeader = document.getElementById('month-header');
+    const calendar = document.getElementById('calendar');
+
+    // 現在の月情報を取得
+    const currentDate = new Date();
+    const year = currentDate.getFullYear();
+    const month = currentDate.getMonth(); // 0が1月、1が2月、...11が12月
+    const daysInMonth = new Date(year, month + 1, 0).getDate(); // 月の日数を取得
+    const firstDayOfMonth = new Date(year, month, 1).getDay(); // 月の初日の曜日（0:日曜日, 1:月曜日, ...）
+
+    const monthNames = ["1月", "2月", "3月", "4月", "5月", "6月", "7月", "8月", "9月", "10月", "11月", "12月"];
+    const dayNames = ["日", "月", "火", "水", "木", "金", "土"];
+
+    // 月と年のヘッダーを表示
+    monthHeader.textContent = `${year}年 ${monthNames[month]}`;
+
+    // カレンダーの曜日ヘッダーを追加
+    dayNames.forEach(day => {
+        const headerElement = document.createElement('div');
+        headerElement.className = 'header';
+        headerElement.textContent = day;
+        calendar.appendChild(headerElement);
+    });
+
+    // 空のセルを最初に追加して、月初日の曜日位置を調整
+    for (let i = 0; i < firstDayOfMonth; i++) {
+        const emptyCell = document.createElement('div');
+        calendar.appendChild(emptyCell);
+    }
+
+    // カレンダーの日付を生成
+    for (let day = 1; day <= daysInMonth; day++) {
+        const dayElement = document.createElement('div');
+        dayElement.className = 'day';
+        dayElement.innerHTML = `<strong>${day}</strong> <div class="kaomoji" id="kaomoji-${day}"></div>`;
+        dayElement.onclick = () => showKaomojiSelector(dayElement);
+        calendar.appendChild(dayElement);
+    }
+
+    const kaomojiModal = document.getElementById('kaomoji-modal');
+    const overlay = document.getElementById('overlay');
+    const kaomojiOptions = document.querySelectorAll('.kaomoji-option');
+    const cancelBtn = document.getElementById('cancel-btn');
+
+    let selectedDayElement = null;
+
+    function showKaomojiSelector(dayElement) {
+        selectedDayElement = dayElement; // 選択された日付要素を保存
+        overlay.style.display = 'block';
+        kaomojiModal.style.display = 'block';
+    }
+
+    function closeKaomojiSelector() {
+        overlay.style.display = 'none';
+        kaomojiModal.style.display = 'none';
+    }
+
+    // 顔文字をクリックで日付に表示
+    kaomojiOptions.forEach(option => {
+        option.onclick = () => {
+            const selectedKaomoji = option.getAttribute('data-kaomoji');
+            if (selectedKaomoji && selectedDayElement) {
+                const kaomojiDiv = selectedDayElement.querySelector('.kaomoji');
+                kaomojiDiv.innerHTML = `<img src="${selectedKaomoji}" alt="Kaomoji">`;
+                closeKaomojiSelector();
+            }
+        };
+    });
+
+    cancelBtn.onclick = closeKaomojiSelector;
+    overlay.onclick = closeKaomojiSelector;
+</script>
+
+</body>
+</html>
