@@ -21,21 +21,34 @@
                 相談内容
                 <p id="content-display"></p>
             </div>
+
+            <form id="submit-form" method="POST" action="./php/soudannyuryoku_dev.php" style="display:none;">
+                <input type="hidden" name="postStyle" id="postStyleInput">
+                <input type="hidden" name="content" id="contentInput">
+            </form>
+            
             <button class="submit-button">投稿する！</button>
+
         </div>
     </div>
     <script>
         document.addEventListener('DOMContentLoaded', function() {
+            //ローカルストレージからデータを取得
             var postStyle = localStorage.getItem('postStyle');
             var content = localStorage.getItem('content');
+
+            // HTMLに表示
             document.getElementById('post-style').textContent = postStyle;
             document.getElementById('content-display').textContent = content;
-        });
 
+            // フォームのinput要素に値をセット
+            document.getElementById('postStyleInput').value = postStyle;
+            document.getElementById('contentInput').value = content;
+        });
+        // 投稿ボタンのクリック処理
         document.querySelector('.submit-button').addEventListener('click', function() {
-            alert("相談内容を投稿しました。");
+             document.getElementById('submit-form').submit();
         });
-
         function goBack() {
             history.back();
         }
