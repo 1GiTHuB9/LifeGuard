@@ -1,0 +1,201 @@
+/*背景のcss*/
+body, html {
+    margin: 0;
+    padding: 0;
+    width: 100%;
+    height:100%;
+    font-family: Arial, sans-serif;
+    overflow:hidden;
+}
+
+/*body {
+    margin: 0;
+    font-family: Arial, sans-serif;
+}*/
+
+/* 背景画像用の設定 */
+.fullscreen-image {
+    display: flex;
+    justify-content: center; /* 水平方向に中央揃え */
+    align-items: center; /* 垂直方向に中央揃え */
+    position: relative;
+    width: 100%;
+    height: 100vh;
+    overflow: hidden;
+}
+
+.fullscreen-image img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    position: absolute;
+    top: 0;
+    left: 0;
+}
+
+.fullscreen-image::after {
+    content: "";
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: rgba(255, 255, 255, 0.5); /* ここで不透明度を調整 */
+    pointer-events: none; /* オーバーレイがクリックイベントをブロックしないようにする */
+}
+
+.chat-container {
+    position: relative;
+    z-index: 10;
+    width: 400px;
+    height: 550px; /* 高さを少し調整 */
+    border: 1px solid #ddd;
+    border-radius: 15px; /* 角を丸くして柔らかさを演出 */
+    background-color: rgba(255, 255, 255, 0.9); /* 背景を少し透過 */
+    overflow: hidden;
+    box-shadow: 0px 4px 10px rgba(0, 0, 0, 0.1); /* 軽いシャドウを追加して浮かび上がらせる */
+    display: flex;
+    flex-direction: column; /* 縦方向に配置 */
+}
+
+/*
+.chat-container::after {
+    content: "";
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: rgba(255, 255, 255, 0.5); /* ここで不透明度を調整 */
+    /*pointer-events: none; /* 背景がクリックできないようにする */
+    /*z-index: 1; /* 背景が前面の要素に影響しないようにする */
+    /*border-radius: 10px; /* ボックスの角の丸みを維持 */
+/*}
+*/
+
+
+
+.header {
+    background-color: #f5f5f5;
+    padding: 15px; /* パディングを少し広げる */
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    position: relative;
+    border-bottom: 1px solid #ddd;
+}
+
+.back-button {
+    display: block;
+    margin-bottom: 20px;
+    text-decoration: none;
+    color: #000;
+    text-align: left; /* テキストを左揃え */
+    position: absolute;
+    left: 20px; /* 左から20pxの位置に配置 */
+    top: 20px;  /* 上から20pxの位置に配置 */
+    font-size: 16px;
+    margin-left: 10px;
+    margin-bottom: 10px;
+    text-align: left;
+}
+
+.user {
+    font-size: 18px; /* ユーザー名を少し大きく */
+    color: #333;
+}
+
+.chat-window {
+    flex: 1;
+    padding: 15px; /* メッセージの間隔を広げるためにパディングを追加 */
+    overflow-y: auto;
+    display: flex;
+    flex-direction: column;
+    gap: 10px; /* メッセージバブル間のスペースを追加 */
+    background-color: #f9f9f9; /* チャットエリアの背景色 */
+}
+
+.message {
+    max-width: 70%;
+    padding: 10px 15px; /* 余白を調整 */
+    border-radius: 20px;
+    margin-bottom: 10px;
+    font-size: 14px;
+    line-height: 1.6; /* 行間を少し狭める */
+    word-wrap: break-word;
+}
+
+.left {
+    background-color: #e6e6e6; /* メッセージバブルの色をグレーに */
+    align-self: flex-start;
+}
+
+.right {
+    background-color: #ffd280; /* メッセージバブルの色を柔らかいオレンジに */
+    align-self: flex-end;
+    margin-left: auto;
+    
+}
+
+.input-area {
+    display: flex;
+    justify-content: space-between;
+    align-items: center; /* 垂直方向の中央揃え */
+    padding: 10px;
+    border-top: 1px solid #ddd;
+    background-color: #f5f5f5;
+    height: auto; /* 高さを調整して中央揃え */
+}
+
+input[type="text"] {
+    width: 80%;
+    padding: 10px;
+    border: 1px solid #ccc;
+    border-radius: 20px; /* 角を丸くして柔らかさを演出 */
+    font-size: 14px;
+    outline: none;
+    box-shadow: 0px 2px 4px rgba(0, 0, 0, 0.1); /* 影を追加 */
+    height: 40px; /* 高さを固定 */
+    outline:none;
+}
+
+input[type="text"]::placeholder {
+    color: #aaa; /* プレースホルダーの文字色を少し薄く */
+}
+
+.send-btn {
+    background-color: #5cb85c; /* ボタンを強調するために濃いグリーンに */
+    color: white;
+    padding: 10px 15px;
+    border: none;
+    border-radius: 20px; /* 送信ボタンも角を丸く */
+    cursor: pointer;
+    margin-left: 10px;
+    box-shadow: 0px 2px 4px rgba(0, 0, 0, 0.2); /* ボタンに軽い影を追加 */
+    transition: background-color 0.3s ease; /* ホバー時のアニメーションを追加 */
+    height: 40px;
+    display: flex;
+    justify-content: center;
+    align-items: center; /* ボタン内のテキストを中央揃え */
+    white-space: nowrap; /* テキストを1行で表示 */
+}
+
+.send-btn:hover {
+    background-color: #4cae4c; /* ホバー時に少し濃い色に変更 */
+}
+
+/* アスペクト比に応じたレイアウト調整 */
+@media (min-aspect-ratio: 16/9) {
+    .fullscreen-image img {
+        width: 100%;
+        height: auto;
+    }
+}
+
+ 
+@media (max-aspect-ratio: 9/16) {
+    .fullscreen-image img {
+        width: auto;
+        height: 100%;
+    }
+}

@@ -1,0 +1,37 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>ホーム画面</title>
+    <link rel="stylesheet" href="./css/home.css">
+</head>
+<body>
+    <div class="fullscreen-image">
+        <img src="haikei4.png" alt="Full Screen Image">
+        <div class="container">
+            <button class="menu-button">おすすめの投稿</button>
+            <button class="menu-button" id="talk">トーク一覧</button>
+            <button class="menu-button">今日の調子？😊</button>
+        </div>
+        <div class="menu-icon">
+            <span>&#9776;</span>
+        </div>
+    </div>
+    <script>
+        document.querySelector('.menu-icon').addEventListener('click', function() {
+            // メニューアイコンクリック時の機能を追加
+            alert('メニューアイコンがクリックされました！');
+        });
+
+        // JavaScriptで固定のコメント追加ボタンがクリックされたときにページ遷移
+        document.getElementById("talk").addEventListener("click", function() {
+            goToNexttalk();  // ページ遷移関数を呼び出す
+        });
+        function goToNexttalk() {
+            window.location.href = "talkitiran.html";
+        }
+    </script>
+    
+</body>
+</html>
