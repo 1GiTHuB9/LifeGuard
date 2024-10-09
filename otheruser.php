@@ -2,7 +2,8 @@
 session_start();
 
 require "./php/dbConnect.php"; // データベース接続
-
+//テスト用
+$_SESSION['user_id']=2201112;
 if (isset($_SESSION['user_id'])) {
 
     $userid = $_SESSION['user_id'];
@@ -18,8 +19,8 @@ if (isset($_SESSION['user_id'])) {
         if ($user) {
             // データベースから取得した情報をセッションに保存
             $user_name = $user['user_name'];
-            $_profile_img = $user['profile_img'];
-            $_profile = $user['profile'];
+            $profile_img = $user['profile_img'];
+            $profile = $user['profile'];
 
             // header('Location: otheruser.html');
             // exit();
@@ -48,40 +49,35 @@ if (isset($_SESSION['user_id'])) {
 <section class="user-info">
     <div class="user-image">
         <!-- プロフィール画像を表示 -->
-        <?php if (isset($_SESSION['profile_img'])): ?>
-            <img src="<?php echo htmlspecialchars($_SESSION['profile_img']); ?>" alt="プロフィール画像">
-        <?php else: ?>
-            <span>画像がありません</span>
-        <?php endif; ?>
-    </div>
+            <?php if (isset($profile_img)): ?>
+                <img src="userimg/<?php echo htmlspecialchars($profile_img); ?>.jpg" alt="">
+            <?php else: ?>
+                <span>NO Image</span>
+            <?php endif; ?>
+        </div>
 
     <div class="username">
         <!-- ユーザー名を表示 -->
-        <?php if (isset($_SESSION['user_name'])): ?>
-            <h2><?php echo htmlspecialchars($_SESSION['user_name']); ?></h2>
+        <?php if (isset($user_name)): ?>
+            <h2><?php echo htmlspecialchars($user_name); ?></h2>
         <?php else: ?>
-            <h2>ユーザー名がありません</h2>
+            <h2>No Name</h2>
         <?php endif; ?>
     </div>
 </section>
 
 <!-- プロフィール表示エリア -->
-<section class="user-profile">
-    <header><h3>プロフィール</h3></header>
-    <!-- プロフィール内容を表示 -->
-    <?php if (isset($_SESSION['profile'])): ?>
-        <p><?php echo nl2br(htmlspecialchars($_SESSION['profile'])); ?></p>
-    <?php else: ?>
-        <p>プロフィールがありません</p>
-    <?php endif; ?>
-</section>
-
-<!-- 相談内容表示エリア -->
 <section class="consultation-content">
-    <header><h3>相談内容</h3></header>
-    <p>******************************************************</p>
+    <section class="user-profile">
+        <header><h3>相談内容</h3></header>
+        <!-- プロフィール内容を表示 -->
+        <?php if (isset($profile)): ?>
+            <p><?php echo nl2br(htmlspecialchars($profile)); ?></p>
+        <?php else: ?>
+            <p>No Profile</p>
+        <?php endif; ?>
+    </section>
 </section>
-
     <script>
         function goBack() {
             history.back();
