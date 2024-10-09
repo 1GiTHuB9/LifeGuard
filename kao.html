@@ -24,13 +24,13 @@
     <div id="kaomoji-modal" class="kaomoji-selector">
         <p>顔文字を選択してください:</p>
         <div id="kaomoji-list">
-            <img src="./img/egao.png" alt="Kaomoji 1" data-kaomoji="kaomoji1.png" class="kaomoji-option">
-            <img src="./img/naki.png" alt="Kaomoji 2" data-kaomoji="kaomoji2.png" class="kaomoji-option">
-            <img src="./img/niko.png" alt="Kaomoji 3" data-kaomoji="kaomoji3.png" class="kaomoji-option">
-            <img src="./img/wink.png" alt="Kaomoji 4" data-kaomoji="kaomoji4.png" class="kaomoji-option">
+            <img src="./img/niko.png" alt="Kaomoji 1" data-kaomoji="niko.png" class="kaomoji-option">
+            <img src="./img/wink.png" alt="Kaomoji 2" data-kaomoji="wink.png" class="kaomoji-option">
+            <img src="./img/egao.png" alt="Kaomoji 3" data-kaomoji="egao.png" class="kaomoji-option">
+            <img src="./img/naki.png" alt="Kaomoji 4" data-kaomoji="naki.png" class="kaomoji-option">
         </div>
-        
         <br><br>
+        <!--<button id="select-btn">選択</button>-->
         <button id="cancel-btn">キャンセル</button>
     </div>
 </div>
@@ -86,6 +86,15 @@
         selectedDayElement = dayElement; // 選択された日付要素を保存
         overlay.style.display = 'block';
         kaomojiModal.style.display = 'block';
+        kaomojiList.innerHTML = ''; // 選択をリセット
+        
+         // 顔文字画像を再度追加する
+    const kaomojiImages = [
+        "kaomoji1.png",
+        "kaomoji2.png",
+        "kaomoji3.png",
+        "kaomoji4.png"
+    ];
     }
 
     function closeKaomojiSelector() {
@@ -93,17 +102,18 @@
         kaomojiModal.style.display = 'none';
     }
 
-    // 顔文字をクリックで日付に表示
-    kaomojiOptions.forEach(option => {
-        option.onclick = () => {
-            const selectedKaomoji = option.getAttribute('data-kaomoji');
-            if (selectedKaomoji && selectedDayElement) {
-                const kaomojiDiv = selectedDayElement.querySelector('.kaomoji');
-                kaomojiDiv.innerHTML = `<img src="${selectedKaomoji}" alt="Kaomoji">`;
-                closeKaomojiSelector();
-            }
-        };
-    });
+   // 顔文字をクリックで日付に表示
+kaomojiOptions.forEach(option => {
+    option.onclick = () => {
+        const selectedKaomoji = option.getAttribute('data-kaomoji');
+        if (selectedKaomoji && selectedDayElement) {
+            const kaomojiDiv = selectedDayElement.querySelector('.kaomoji');
+            kaomojiDiv.innerHTML = `<img src="./img/${selectedKaomoji}" alt="Kaomoji">`;
+            closeKaomojiSelector();
+        }
+    };
+});
+
 
     cancelBtn.onclick = closeKaomojiSelector;
     overlay.onclick = closeKaomojiSelector;
