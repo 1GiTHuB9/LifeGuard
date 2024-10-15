@@ -86,10 +86,173 @@
                     <label for="Q3-4" class="radio-button-label">3</label>
                 </div>
                 <div class="radio-button-wrapper">
-                    <input type="radio" id="Q3-3" name="Q3" value="4">
+                    <input type="radio" id="Q3-5" name="Q3" value="4">
                     <label for="Q3-5" class="radio-button-label">4</label>
                 </div>
             </div>
+            <div class="question">
+                <h5>Q1.犬派ですか？</h5>
+                <div class="radio-button-wrapper">
+                    <input type="radio" id="Q4-1" name="Q4" value="0">
+                    <label for="Q4-1" class="radio-button-label">0</label>
+                </div>
+                <div class="radio-button-wrapper">
+                    <input type="radio" id="Q4-2" name="Q4" value="1">
+                    <label for="Q4-2" class="radio-button-label">1</label>
+                </div>
+                <div class="radio-button-wrapper">
+                    <input type="radio" id="Q4-3" name="Q4" value="2">
+                    <label for="Q4-3" class="radio-button-label">2</label>
+                </div>
+                <div class="radio-button-wrapper">
+                    <input type="radio" id="Q4-4" name="Q3" value="3">
+                    <label for="Q4-4" class="radio-button-label">3</label>
+                </div>
+                <div class="radio-button-wrapper">
+                    <input type="radio" id="Q4-5" name="Q4" value="4">
+                    <label for="Q4-5" class="radio-button-label">4</label>
+                </div>
+            </div>
+            <div class="question">
+                <h5>Q1.犬派ですか？</h5>
+                <div class="radio-button-wrapper">
+                    <input type="radio" id="Q5-1" name="Q5" value="0">
+                    <label for="Q5-1" class="radio-button-label">0</label>
+                </div>
+                <div class="radio-button-wrapper">
+                    <input type="radio" id="Q5-2" name="Q5" value="1">
+                    <label for="Q5-2" class="radio-button-label">1</label>
+                </div>
+                <div class="radio-button-wrapper">
+                    <input type="radio" id="Q5-3" name="Q5" value="2">
+                    <label for="Q5-3" class="radio-button-label">2</label>
+                </div>
+                <div class="radio-button-wrapper">
+                    <input type="radio" id="Q5-4" name="Q5" value="3">
+                    <label for="Q5-4" class="radio-button-label">3</label>
+                </div>
+                <div class="radio-button-wrapper">
+                    <input type="radio" id="Q5-5" name="Q5" value="4">
+                    <label for="Q5-5" class="radio-button-label">4</label>
+                </div>
+            </div>
+            <div class="question">
+                <h5>Q1.犬派ですか？</h5>
+                <div class="radio-button-wrapper">
+                    <input type="radio" id="Q6-1" name="Q6" value="0">
+                    <label for="Q6-1" class="radio-button-label">0</label>
+                </div>
+                <div class="radio-button-wrapper">
+                    <input type="radio" id="Q6-2" name="Q6" value="1">
+                    <label for="Q6-2" class="radio-button-label">1</label>
+                </div>
+                <div class="radio-button-wrapper">
+                    <input type="radio" id="Q6-3" name="Q6" value="2">
+                    <label for="Q6-3" class="radio-button-label">2</label>
+                </div>
+                <div class="radio-button-wrapper">
+                    <input type="radio" id="Q6-4" name="Q6" value="3">
+                    <label for="Q6-4" class="radio-button-label">3</label>
+                </div>
+                <div class="radio-button-wrapper">
+                    <input type="radio" id="Q6-5" name="Q6" value="4">
+                    <label for="Q6-5" class="radio-button-label">4</label>
+                </div>
+            </div>
+            <div class="question">
+                <h5>Q1.犬派ですか？</h5>
+                <div class="radio-button-wrapper">
+                    <input type="radio" id="Q7-1" name="Q7" value="0">
+                    <label for="Q7-1" class="radio-button-label">0</label>
+                </div>
+                <div class="radio-button-wrapper">
+                    <input type="radio" id="Q7-2" name="Q7" value="1">
+                    <label for="Q7-2" class="radio-button-label">1</label>
+                </div>
+                <div class="radio-button-wrapper">
+                    <input type="radio" id="Q7-3" name="Q7" value="2">
+                    <label for="Q7-3" class="radio-button-label">2</label>
+                </div>
+                <div class="radio-button-wrapper">
+                    <input type="radio" id="Q7-4" name="Q7" value="3">
+                    <label for="Q7-4" class="radio-button-label">3</label>
+                </div>
+                <div class="radio-button-wrapper">
+                    <input type="radio" id="Q7-5" name="Q7" value="4">
+                    <label for="Q7-5" class="radio-button-label">4</label>
+                </div>
+            </div>
+            <div class="question">
+                <h5>Q1.犬派ですか？</h5>
+                <div class="radio-button-wrapper">
+                    <input type="radio" id="Q8-1" name="Q8" value="0">
+                    <label for="Q8-1" class="radio-button-label">0</label>
+                </div>
+                <div class="radio-button-wrapper">
+                    <input type="radio" id="Q8-2" name="Q8" value="1">
+                    <label for="Q8-2" class="radio-button-label">1</label>
+                </div>
+                <div class="radio-button-wrapper">
+                    <input type="radio" id="Q8-3" name="Q8" value="2">
+                    <label for="Q8-3" class="radio-button-label">2</label>
+                </div>
+                <div class="radio-button-wrapper">
+                    <input type="radio" id="Q8-4" name="Q8" value="3">
+                    <label for="Q8-4" class="radio-button-label">3</label>
+                </div>
+                <div class="radio-button-wrapper">
+                    <input type="radio" id="Q8-5" name="Q8" value="4">
+                    <label for="Q8-5" class="radio-button-label">4</label>
+                </div>
+            </div>
+            <div class="question">
+                <h5>Q1.犬派ですか？</h5>
+                <div class="radio-button-wrapper">
+                    <input type="radio" id="Q9-1" name="Q9" value="0">
+                    <label for="Q9-1" class="radio-button-label">0</label>
+                </div>
+                <div class="radio-button-wrapper">
+                    <input type="radio" id="Q9-2" name="Q9" value="1">
+                    <label for="Q9-2" class="radio-button-label">1</label>
+                </div>
+                <div class="radio-button-wrapper">
+                    <input type="radio" id="Q9-3" name="Q9" value="2">
+                    <label for="Q9-3" class="radio-button-label">2</label>
+                </div>
+                <div class="radio-button-wrapper">
+                    <input type="radio" id="Q9-4" name="Q9" value="3">
+                    <label for="Q9-4" class="radio-button-label">3</label>
+                </div>
+                <div class="radio-button-wrapper">
+                    <input type="radio" id="Q9-5" name="Q9" value="4">
+                    <label for="Q9-5" class="radio-button-label">4</label>
+                </div>
+            </div>
+            <div class="question">
+                <h5>Q1.犬派ですか？</h5>
+                <div class="radio-button-wrapper">
+                    <input type="radio" id="Q10-1" name="Q10" value="0">
+                    <label for="Q10-1" class="radio-button-label">0</label>
+                </div>
+                <div class="radio-button-wrapper">
+                    <input type="radio" id="Q10-2" name="Q10" value="1">
+                    <label for="Q10-2" class="radio-button-label">1</label>
+                </div>
+                <div class="radio-button-wrapper">
+                    <input type="radio" id="Q10-3" name="Q10" value="2">
+                    <label for="Q10-3" class="radio-button-label">2</label>
+                </div>
+                <div class="radio-button-wrapper">
+                    <input type="radio" id="Q10-4" name="Q10" value="3">
+                    <label for="Q10-4" class="radio-button-label">3</label>
+                </div>
+                <div class="radio-button-wrapper">
+                    <input type="radio" id="Q10-5" name="Q10" value="4">
+                    <label for="Q10-5" class="radio-button-label">4</label>
+                </div>
+            </div>
+
+            
 
 
 
