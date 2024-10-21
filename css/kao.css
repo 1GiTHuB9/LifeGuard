@@ -41,7 +41,7 @@ body, html {
 /* カレンダーを囲むコンテナのスタイル */
 .calendar-container {
     background: rgba(255, 255, 255, 0.8); /* 半透明の白色背景 */
-    padding: 20px;
+    padding: 40px;
     border-radius: 10px; /* 角を丸くする */
     z-index: 1; /* 背景画像より前に表示 */
     position: absolute;
@@ -154,7 +154,7 @@ body, html {
 #prev-month {
     position: absolute;
     top: 50%; /* カレンダーの中央に配置 */
-    left: 10px; /* 左端に配置 */
+    left: -10px; /* 左端に配置 */
     transform: translateY(-50%); /* 縦方向の中央に合わせる */
     z-index: 100;
     padding: 10px; /* 十分なクリック範囲を確保 */
@@ -163,10 +163,11 @@ body, html {
 #next-month {
     position: absolute;
     top: 50%; /* カレンダーの中央に配置 */
-    right: 10px; /* 右端に配置 */
+    right: -10px; /* 右端に配置 */
     transform: translateY(-50%); /* 縦方向の中央に合わせる */
     z-index: 100;
     padding: 10px; /* 十分なクリック範囲を確保 */
+}
 
 .month-nav-btn:hover {
     opacity: 1;
