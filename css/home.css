@@ -93,7 +93,7 @@ body, html {
     background-color: #333; /* メニュー背景色 */
     color: #fff;
     transition: right 0.3s ease; /* アニメーション効果 */
-    z-index: 11; /* メニューが他の要素の上に表示されるように */
+    z-index: 1000; /* メニューが他の要素の上に表示されるように */
 }
 
 .side-menu.open {

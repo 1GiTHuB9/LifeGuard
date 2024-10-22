@@ -27,11 +27,18 @@
         </div>
     </div>
     <script>
-        document.querySelector('.menu-icon').addEventListener('click', function() {
+        /*document.querySelector('.menu-icon').addEventListener('click', function() {
             document.getElementById('sideMenu').classList.toggle('open');
+            event.stopPropagation(); // バブリングを防ぐ
+        });*/
+
+        document.querySelector('.menu-icon').addEventListener('click', function() {
+        const sideMenu = document.getElementById('sideMenu');
+        sideMenu.classList.toggle('open');
+        console.log(sideMenu.classList); // クラスの状態を確認
         });
 
-
+        
     // ハンバーガーメニュー外をクリックしたら閉じる機能
     document.addEventListener('click', function(event) {
         var sideMenu = document.getElementById('sideMenu');
@@ -42,7 +49,7 @@
             sideMenu.classList.remove('open');
         }
     });
-    
+
          // 各ボタンのページ遷移処理
     document.getElementById("talk").addEventListener("click", function() {
         window.location.href = "talkitiran.html";
