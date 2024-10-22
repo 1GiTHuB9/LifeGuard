@@ -38,12 +38,12 @@ if (isset($_SESSION['email']) && isset($_SESSION['pass'])) {
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>ログイン画面</title>
-    <link rel="stylesheet" href="./css/style1.css">
+    <link rel="stylesheet" href="./css/login.css">
 </head>
 <body>
     <div class="fullscreen-image">
         <img src="./img/haikei4.png" alt="Full Screen Image">
-
+        <div class="container">
         <div class="header">
             <h1>ログイン</h1>
             
@@ -74,8 +74,9 @@ if (isset($_SESSION['email']) && isset($_SESSION['pass'])) {
 
 
 
-        <a href="signup.php">新規登録</a><a href="leveldiagnosis.php">レベル診断</a>
+        <a href="leveldiagnosis.php">レベル診断</a>
         <a href="profilesetting.php">プロフィール</a><a href="diagnosisresult.php">診断結果</a>
+    </div>
     </div>
 
 </body>

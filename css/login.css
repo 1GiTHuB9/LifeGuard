@@ -1,0 +1,60 @@
+/*背景のcss*/
+body, html {
+    margin: 0;
+    padding: 0;
+    width: 100%;
+    height:100%;
+    font-family: Arial, sans-serif;
+    overflow:hidden;
+}
+
+/*body {
+    margin: 0;
+    font-family: Arial, sans-serif;
+}*/
+
+/* 背景画像用の設定 */
+.fullscreen-image {
+    position: relative;
+    width: 100%;
+    height: 100vh;
+    overflow: hidden;
+}
+
+.fullscreen-image img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    position: absolute;
+    top: 0;
+    left: 0;
+}
+
+.fullscreen-image::after {
+    content: "";
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: rgba(255, 255, 255, 0.5); /* ここで不透明度を調整 */
+    pointer-events: none; /* オーバーレイがクリックイベントをブロックしないようにする */
+}
+
+.container {
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    display: flex;
+    transform: translate(-50%, -50%);
+    flex-direction: column;
+   
+    width: 90%;
+    max-width: 400px;
+    height: 70vh; /* 高さを指定 */
+    overflow-y: auto; /* 縦スクロール可能に */
+    background-color: rgba(255, 255, 255, 0.8);
+    padding: 20px;
+    border-radius: 10px;
+    box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+}

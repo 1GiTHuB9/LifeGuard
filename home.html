@@ -17,36 +17,44 @@
         <div class="menu-icon">
             <span>&#9776;</span>
         </div>
+        <!-- ハンバーガーメニューの内容 -->
+        <div class="side-menu" id="sideMenu">
+            <ul>
+                <li><a href="page1.html">プロフィール</a></li>
+                <li><a href="page2.html">レベル診断</a></li>
+                <li><a href="page3.html">ログアウト</a></li>
+            </ul>
+        </div>
     </div>
     <script>
         document.querySelector('.menu-icon').addEventListener('click', function() {
-            // メニューアイコンクリック時の機能を追加
-            alert('メニューアイコンがクリックされました！');
+            document.getElementById('sideMenu').classList.toggle('open');
         });
 
-        // JavaScriptで固定のコメント追加ボタンがクリックされたときにページ遷移
-        document.getElementById("talk").addEventListener("click", function() {
-            goToNexttalk();  // ページ遷移関数を呼び出す
-        });
-        function goToNexttalk() {
-            window.location.href = "talkitiran.html";
-        }
 
-        // JavaScriptで固定のコメント追加ボタンがクリックされたときにページ遷移
-        document.getElementById("chosi").addEventListener("click", function() {
-            goToNexttalk();  // ページ遷移関数を呼び出す
-        });
-        function goToNexttalk() {
-            window.location.href = "kao.html";
-        }
+    // ハンバーガーメニュー外をクリックしたら閉じる機能
+    document.addEventListener('click', function(event) {
+        var sideMenu = document.getElementById('sideMenu');
+        var menuIcon = document.querySelector('.menu-icon');
 
-        // JavaScriptで固定のコメント追加ボタンがクリックされたときにページ遷移
-        document.getElementById("eturan").addEventListener("click", function() {
-            goToNexttalk();  // ページ遷移関数を呼び出す
-        });
-        function goToNexttalk() {
-            window.location.href = "eturan.html";
+        // クリックされた要素がメニューアイコンやメニュー内でなければメニューを閉じる
+        if (!sideMenu.contains(event.target) && !menuIcon.contains(event.target)) {
+            sideMenu.classList.remove('open');
         }
+    });
+    
+         // 各ボタンのページ遷移処理
+    document.getElementById("talk").addEventListener("click", function() {
+        window.location.href = "talkitiran.html";
+    });
+
+    document.getElementById("chosi").addEventListener("click", function() {
+        window.location.href = "kao.html";
+    });
+
+    document.getElementById("eturan").addEventListener("click", function() {
+        window.location.href = "eturan.html";
+    });
     </script>
     
 </body>
