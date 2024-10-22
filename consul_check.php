@@ -1,3 +1,8 @@
+
+<?php 
+session_start();
+?>
+
 <!DOCTYPE html>
 <html lang="ja">
 <head>
@@ -13,8 +18,8 @@
         <div class="container1">
             <a href="#" class="back-button" onclick="goBack()">←戻る</a>
             <div class="user-info">
-                <div class="user-image">画像</div>
-                <div class="user-name">ユーザー名</div>
+                <div class="user-image"></div>
+                <div class="user-name"><?php echo $_SESSION['uname']; ?></div>
             </div>
             <div class="post-style">投稿スタイル：<span id="post-style"></span></div>
             <div class="consultation-content">

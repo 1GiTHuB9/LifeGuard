@@ -12,6 +12,7 @@
         <div class="container">
             <button class="menu-button">おすすめの投稿</button>
             <button class="menu-button" id="talk">トーク一覧</button>
+            <button class="menu-button" id="soudan">相談投稿</button>
             <button class="menu-button">今日の調子？😊</button>
         </div>
         <div class="menu-icon">
@@ -28,8 +29,17 @@
         document.getElementById("talk").addEventListener("click", function() {
             goToNexttalk();  // ページ遷移関数を呼び出す
         });
+
+        document.getElementById("soudan").addEventListener("click", function() {
+            goToNextsoudan();  // ページ遷移関数を呼び出す
+        });
+
         function goToNexttalk() {
             window.location.href = "talkitiran.html";
+        }
+
+        function goToNextsoudan() {
+            window.location.href = "consul.php";
         }
     </script>
     
