@@ -10,9 +10,9 @@
     <div class="fullscreen-image">
         <img src="haikei4.png" alt="Full Screen Image">
         <div class="container">
-            <button class="menu-button">おすすめの投稿</button>
+            <button class="menu-button" id="eturan">おすすめの投稿</button>
             <button class="menu-button" id="talk">トーク一覧</button>
-            <button class="menu-button">今日の調子？😊</button>
+            <button class="menu-button" id="chosi">今日の調子？😊</button>
         </div>
         <div class="menu-icon">
             <span>&#9776;</span>
@@ -30,6 +30,22 @@
         });
         function goToNexttalk() {
             window.location.href = "talkitiran.html";
+        }
+
+        // JavaScriptで固定のコメント追加ボタンがクリックされたときにページ遷移
+        document.getElementById("chosi").addEventListener("click", function() {
+            goToNexttalk();  // ページ遷移関数を呼び出す
+        });
+        function goToNexttalk() {
+            window.location.href = "kao.html";
+        }
+
+        // JavaScriptで固定のコメント追加ボタンがクリックされたときにページ遷移
+        document.getElementById("eturan").addEventListener("click", function() {
+            goToNexttalk();  // ページ遷移関数を呼び出す
+        });
+        function goToNexttalk() {
+            window.location.href = "eturan.html";
         }
     </script>
     
