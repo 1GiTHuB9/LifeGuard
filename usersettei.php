@@ -2,71 +2,96 @@
 session_start();
 
 require "./php/dbConnect.php"; // データベース接続
-//テスト用
-$_SESSION['user_id']=2201112;
-if (isset($_SESSION['user_id'])) {
 
-    $userid = $_SESSION['user_id'];
+// セッションからユーザーIDを取得 (テスト用にIDを指定)
+$_SESSION['user_id'] = 2201112;
+$userid = $_SESSION['user_id'] ?? null;
 
+if ($userid) {
     try {
-        // user_idに基づいて、user_name, profile_img, profileをデータベースから取得
+        // ユーザー情報をデータベースから取得
         $sql = "SELECT user_name, profile_img, profile FROM users WHERE user_id = ?";
         $stmt = $pdo->prepare($sql);
-        $stmt->bindValue(1, $userid, PDO::PARAM_INT);  // セッションのuser_idを利用
+        $stmt->bindValue(1, $userid, PDO::PARAM_INT);
         $stmt->execute();
         $user = $stmt->fetch(PDO::FETCH_ASSOC);
 
         if ($user) {
-            // データベースから取得した情報をセッションに保存
             $user_name = $user['user_name'];
             $profile_img = $user['profile_img'];
             $profile = $user['profile'];
-
-            // header('Location: otheruser.html');
-            // exit();
+        } else {
+            echo "ユーザー情報が見つかりませんでした。";
         }
     } catch (PDOException $e) {
         echo "エラーが発生しました: " . $e->getMessage();
     }
 }
+
+// 更新処理（フォームが送信されたとき）
+if ($_SERVER["REQUEST_METHOD"] == "POST") {
+    $newProfile = $_POST['profile'];
+    $isAnonymous = isset($_POST['anonymous']) ? 1 : 0;
+    
+    // プロフィールと匿名設定を更新するSQL
+    $updateSql = "UPDATE users SET profile = ?, is_anonymous = ? WHERE user_id = ?";
+    $updateStmt = $pdo->prepare($updateSql);
+    $updateStmt->execute([$newProfile, $isAnonymous, $userid]);
+
+    echo "プロフィールが更新されました。";
+}
+
 ?>
 <!DOCTYPE html>
 <html lang="ja">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>相手ユーザー情報表示画面</title>
-    <link rel="stylesheet" href="./css/otheruser.css">
+    <title>プロフィール設定画面</title>
+    <link rel="stylesheet" href="css/usersettei.css">
 </head>
-
 <body>
     <div class="fullscreen-image">
         <img src="img/haikei4.png" alt="Full Screen Image">
-    <div class="container">
-        <a href="#" class="back-button" onclick="goBack()">←戻る</a>
+        <div class="container">
+            <a href="#" class="back-button" onclick="goBack()">←戻る</a>
+            
+            <!-- プロフィール画像選択ボタン -->
+            <div class="user-image">
+                <label for="image-upload" class="image-label">
+                    画像を選択
+                    <input type="file" id="image-upload" name="profile_img" style="display:none;">
+                </label>
+            </div>
 
-<!-- プロフィール表示エリア -->
-<section class="user-info">
-    <div class="user-image">
-        <!-- プロフィール画像を表示 -->
-        <?php if (isset($profile_img)): ?>
-            <img src="userimg/<?php echo htmlspecialchars($profile_img); ?>.jpg" alt="プロフィール画像">
-        <?php else: ?>
-            <label for="profile_img" class="image-label">
-                画像を選択
-                <input type="file" id="profile_img" name="profile_img" style="display:none;">
-            </label>
-        <?php endif; ?>
-    </div>
+            <!-- ユーザープロフィール -->
+            <form action="" method="POST">
+                <div class="username">
+                    <label>ユーザープロフィール</label>
+                    <textarea name="profile" class="user-profile"><?php echo htmlspecialchars($profile ?? ''); ?></textarea>
+                </div>
 
-    <div class="username">
-        <!-- ユーザー名を表示 -->
-        <?php if (isset($user_name)): ?>
-            <h2><?php echo htmlspecialchars($user_name); ?></h2>
-        <?php else: ?>
-            <h2>ユーザープロフィール</h2>
-        <?php endif; ?>
+                <!-- 匿名で公開チェックボックス -->
+                <div>
+                    <label>
+                        匿名で公開する 
+                        <input type="checkbox" name="anonymous" <?php echo isset($isAnonymous) && $isAnonymous ? 'checked' : ''; ?>>
+                    </label>
+                </div>
+
+                <!-- 更新ボタン -->
+                <div>
+                    <button type="submit" class="update-button">更新する！</button>
+                </div>
+            </form>
+        </div>
     </div>
-</section>
-    </body>
+    
+    <!-- 戻るボタンのスクリプト -->
+    <script>
+        function goBack() {
+            history.back();
+        }
+    </script>
+</body>
 </html>
