@@ -70,12 +70,6 @@ if (isset($_SESSION['email']) && isset($_SESSION['pass'])) {
             <p>アカウントをお持ちでない方はこちら</p>
             <a href="signup.php">新規登録</a><br>
         </div>
-        
-
-
-
-        <a href="leveldiagnosis.php">レベル診断</a>
-        <a href="profilesetting.php">プロフィール</a><a href="diagnosisresult.php">診断結果</a>
     </div>
     </div>
 
