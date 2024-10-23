@@ -8,11 +8,6 @@ body, html {
     overflow:hidden;
 }
 
-/*body {
-    margin: 0;
-    font-family: Arial, sans-serif;
-}*/
-
 /* 背景画像用の設定 */
 .fullscreen-image {
     position: relative;
@@ -50,11 +45,72 @@ body, html {
     flex-direction: column;
     width: 90%;
     max-width: 400px;
-    height: 70vh; /* 高さを指定 */
-    overflow-y: auto; /* 縦スクロール可能に */
+    height:auto; /* 高さを指定 */
     background-color: rgba(255, 255, 255, 0.8);
     padding: 20px;
     border-radius: 10px;
     box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
     text-align:center;  
+}
+
+.header {
+    margin-bottom: 20px;
+}
+
+.container form {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+}
+
+.container label, 
+.container input {
+    width: 100%;
+    margin-bottom: 15px;
+}
+
+.container input {
+    padding: 10px;
+    border: 1px solid #ccc;
+    border-radius: 5px;
+    box-sizing: border-box;
+}
+
+.container button {
+    padding: 10px;
+    background-color: orange;
+    color: white;
+    border: none;
+    border-radius: 5px;
+    font-size: 16px;
+    cursor: pointer;
+    width: 100%;
+}
+
+.footer {
+    margin-top: 20px;
+}
+
+.footer a {
+    color: #000;
+    text-decoration: underline;
+}
+
+.footer p {
+    margin-bottom: 10px;
+}
+
+/* アスペクト比に応じたレイアウト調整 */
+@media (min-aspect-ratio: 16/9) {
+    .fullscreen-image img {
+        width: 100%;
+        height: auto;
+    }
+}
+
+@media (max-aspect-ratio: 9/16) {
+    .fullscreen-image img {
+        width: auto;
+        height: 100%;
+    }
 }
