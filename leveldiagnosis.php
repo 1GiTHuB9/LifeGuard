@@ -8,15 +8,25 @@ if (!isset($_SESSION['id'])) {
 }
 // ユーザーIDをセッションから取得
 $user_id = $_SESSION['id'];
+// すでに診断結果があるか確認
+    $sql = "SELECT diagnosis_level FROM users WHERE user_id = :user_id";
+    $stmt = $pdo->prepare($sql);
+    $stmt->bindParam(':user_id', $user_id, PDO::PARAM_INT);
+    $stmt->execute();
+    $result = $stmt->fetch(PDO::FETCH_ASSOC);
 
-
+    if ($result && $result['diagnosis_level'] > 0) {
+        // すでに診断結果がある場合、home.html にリダイレクト
+        // echo "すでに診断結果があります。";
+        header('Location: home.html');
+        exit();
+    }
 $errorMessage = '';//エラーメッセージの変数
 // フォームが送信されたかどうか確認
 if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     // 各質問の値を取得
     $totalScore = 0;
     $allAnswered = true;  // 全ての質問が回答されているかどうかをチェックするフラグ
-
     for ($i = 1; $i <= 10; $i++) {
         if (isset($_POST["Q$i"])) {
             $totalScore += (int)$_POST["Q$i"];  // ラジオボタンの値を合計
@@ -25,7 +35,6 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
             break;  // 回答されていない質問があればループを終了
         }
     }
-
     if ($allAnswered) {
         // レベルの判定
         if ($totalScore <= 5) {
@@ -41,20 +50,15 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         } else {
             $diagnosis_level = 0;  // 異常な場合
         }
-
         // データベースに診断結果を保存
         $sql = "UPDATE users SET diagnosis_level = :diagnosis_level WHERE user_id = :user_id";
         $stmt = $pdo->prepare($sql);
         $stmt->bindParam(':diagnosis_level', $diagnosis_level, PDO::PARAM_INT);
         $stmt->bindParam(':user_id', $user_id, PDO::PARAM_INT);
-
         if ($stmt->execute()) {
-            echo $diagnosis_level,"診断結果の保存に成功しました。";
-            // // 診断結果の保存に成功した場合、結果ページへリダイレクト
-            // header('Cache-Control: no-cache, must-revalidate');
-            // header('Pragma: no-cache');
-            // header('Expires: 0');
-            // header('Location: diagnosisresult.php?level=' . $diagnosis_level);
+            // echo $diagnosis_level,"診断結果の保存に成功しました。";
+            // 診断結果の保存に成功した場合、結果ページへリダイレクト
+            header('Location: diagnosisresult.php?level=' . $diagnosis_level);
             exit();
         } else {
             $errorMessage = "診断結果の保存に失敗しました。";
@@ -63,20 +67,6 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         // 質問にすべて回答していない場合
         $errorMessage = "すべての質問に回答してください。";
     }
-}else{
-    // すでに診断結果があるか確認
-    // $sql = "SELECT diagnosis_level FROM users WHERE user_id = :user_id";
-    // $stmt = $pdo->prepare($sql);
-    // $stmt->bindParam(':user_id', $user_id, PDO::PARAM_INT);
-    // $stmt->execute();
-    // $result = $stmt->fetch(PDO::FETCH_ASSOC);
-
-    // if ($result && $result['diagnosis_level'] > 0) {
-        // すでに診断結果がある場合、home.html にリダイレクト
-        // echo "すでに診断結果があります。";
-    //     header('Location: home.html');
-    //     exit();
-    // }
 }
 ?>
 <!DOCTYPE html>
@@ -350,9 +340,9 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
 
     </div>
     <script>
-        function goBack() {
-            history.back();
-        }
+        // function goBack() {
+        //     history.back();
+        // }
     </script>
 </body>
 </html>

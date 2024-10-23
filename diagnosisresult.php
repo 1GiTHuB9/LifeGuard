@@ -1,7 +1,7 @@
 <?php
 session_start();
 // セッションにログイン情報がない場合はログイン画面にリダイレクト
-if (!isset($_SESSION['user_id'])) {
+if (!isset($_SESSION['id'])) {
     header('Location: login.php');
     exit();
 }
@@ -43,7 +43,7 @@ switch ($diagnosis_level) {
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>診断結果</title>
-    <link rel="stylesheet" href="./css/style1.css">
+    <link rel="stylesheet" href="./css/style1.css?241023">
 </head>
 <body>
     <div class="fullscreen-image">
