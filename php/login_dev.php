@@ -19,20 +19,15 @@ function logincheck($email, $pass, $pdo){
         $stmt->execute();
         $user = $stmt->fetch(PDO::FETCH_ASSOC);
 
-        // パスワードを検証
-        if  ($user['diagnosis_level'] == 0){
-
-            $_SESSION['id'] = $user['user_id'];
-            $_SESSION['email'] = $email;
-            $_SESSION['pass'] = $pass;
-            $_SESSION['uname'] = $user['user_name'];
-            $_SESSION['pimg'] = $user['profile_img'];
-            $_SESSION['diagnosis_level'] = $user['diagnosis_level'];
-
-            header('Location:../leveldiagnosis.php');
+        //メールアドレス検証
+        if(isset($user)){
+        } else {
+            $error = "メールアドレスまたはパスワードが間違っています。";
+            return $error;
             exit;
         }
 
+        // パスワードを検証
         if ($user && password_verify($pass, $user['password'])) {
             $_SESSION['id'] = $user['user_id'];
             $_SESSION['email'] = $email;
@@ -41,21 +36,35 @@ function logincheck($email, $pass, $pdo){
             $_SESSION['pimg'] = $user['profile_img'];
             $_SESSION['diagnosis_level'] = $user['diagnosis_level'];
 
-            return true;
+            if  ($user['diagnosis_level'] == 0){
+                header('Location:../leveldiagnosis.php');
+                exit;
+            }
+
+            $success = "ログインに成功しました。";
+            return $success;
         } else {
-            return false; // パスワードが間違っている場合
+            $error = "メールアドレスまたはパスワードが間違っています。";
+            return $error;
         }
     } catch (PDOException $e) {
         // エラーメッセージをキャッチして表示
         echo "ログインに失敗しました。 " . $e->getMessage();
-        return false;
+        return $e;
     }
 }
 
+$result = logincheck($mailaddress,$password,$pdo);
+$success = "ログインに成功しました。";
+$error = "メールアドレスまたはパスワードが間違っています。";
 
-if(logincheck($mailaddress,$password,$pdo)){
+if($result == $success){
     header('Location:../home.html');
+} else if($result == $error){
+    $_SESSION['error'] = $error;
+    header('Location:../login.php');
 } else {
+    $_SESSION['e'] = $e;
     header('Location:../login.php');
 }
 ?>
