@@ -12,7 +12,8 @@
         <div class="container">
             <button class="menu-button" id="eturan">おすすめの投稿</button>
             <button class="menu-button" id="talk">トーク一覧</button>
-            <button class="menu-button" id="chosi">今日の調子？😊</button>
+            <button class="menu-button" id="soudan">相談投稿</button>
+            <button class="menu-button">今日の調子？😊</button>
         </div>
         <div class="menu-icon">
             <span>&#9776;</span>
@@ -38,30 +39,22 @@
         console.log(sideMenu.classList); // クラスの状態を確認
         });
 
-        
-    // ハンバーガーメニュー外をクリックしたら閉じる機能
-    document.addEventListener('click', function(event) {
-        var sideMenu = document.getElementById('sideMenu');
-        var menuIcon = document.querySelector('.menu-icon');
+        // JavaScriptで固定のコメント追加ボタンがクリックされたときにページ遷移
+        document.getElementById("talk").addEventListener("click", function() {
+            goToNexttalk();  // ページ遷移関数を呼び出す
+        });
 
-        // クリックされた要素がメニューアイコンやメニュー内でなければメニューを閉じる
-        if (!sideMenu.contains(event.target) && !menuIcon.contains(event.target)) {
-            sideMenu.classList.remove('open');
+        document.getElementById("soudan").addEventListener("click", function() {
+            goToNextsoudan();  // ページ遷移関数を呼び出す
+        });
+
+        function goToNexttalk() {
+            window.location.href = "talkitiran.html";
         }
-    });
 
-         // 各ボタンのページ遷移処理
-    document.getElementById("talk").addEventListener("click", function() {
-        window.location.href = "talkitiran.html";
-    });
-
-    document.getElementById("chosi").addEventListener("click", function() {
-        window.location.href = "kao.html";
-    });
-
-    document.getElementById("eturan").addEventListener("click", function() {
-        window.location.href = "eturan.html";
-    });
+        function goToNextsoudan() {
+            window.location.href = "consul.php";
+        }
     </script>
     
 </body>

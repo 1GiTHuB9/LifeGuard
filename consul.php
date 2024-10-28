@@ -39,7 +39,7 @@
             var postStyle = anonymous ? '匿名' : '公開';
             localStorage.setItem('postStyle', postStyle);
             localStorage.setItem('content', content);
-            window.location.href = 'soudankakunin.html';
+            window.location.href = 'consul_check.php';
         });
 
         function goBack() {
