@@ -1,3 +1,32 @@
+<?php
+// DB接続のための設定を含む
+require "./php/dbConnect.php";
+
+if ($_SERVER['REQUEST_METHOD'] === 'POST') {
+    // POSTデータを取得
+    $calendar_id = $_POST['calendar_id'];
+    $user_id = $_POST['user_id'];
+    $reaction = $_POST['reaction']; // VARCHARなのでそのまま
+    $reaction_date = $_POST['reaction_date']; // DATE型
+
+    // SQL文を準備して実行
+    $sql = "INSERT INTO calendars (calendar_id, user_id, reaction, reaction_date) VALUES (?, ?, ?, ?)";
+    $stmt = $conn->prepare($sql);
+    $stmt->bind_param("iiss", $calendar_id, $user_id, $reaction, $reaction_date); // VARCHARにはsを使用
+
+    if ($stmt->execute()) {
+        echo "Record saved successfully";
+    } else {
+        echo "Error: " . $stmt->error;
+    }
+
+    // 接続を閉じる
+    $stmt->close();
+    $conn->close();
+    exit; // POSTリクエスト処理後はスクリプトを終了
+}
+?>
+
 <!DOCTYPE html>
 <html lang="ja">
 <head>
@@ -35,7 +64,7 @@
             <img src="./img/okokan.png" alt="Kaomoji 3" data-kaomoji="okokan.png" class="kaomoji-option">
         </div>
         <br><br>
-        <button id="confirm-btn">決定</button> <!-- 決定ボタンを追加 -->
+        <button id="confirm-btn">決定</button>
         <button id="cancel-btn">キャンセル</button>
     </div>
 </div>
@@ -167,7 +196,7 @@ confirmBtn.onclick = () => {
 
 function saveReaction(calendarId, userId, reaction, reactionDate) {
     const xhr = new XMLHttpRequest();
-    xhr.open("POST", "save_reaction.php", true);
+    xhr.open("POST", "", true); // 同じページにPOST
     xhr.setRequestHeader("Content-Type", "application/x-www-form-urlencoded");
     xhr.onreadystatechange = function() {
         if (xhr.readyState === 4 && xhr.status === 200) {

@@ -1,34 +1,24 @@
 <?php
-// MySQLの接続設定
-$servername = "localhost";
-$username = "lifeguard_user";  // MySQLユーザー名
-$password = "Liguardfe712";      // MySQLパスワード
-$dbname = "lifeguard";  // データベース名
+require "./dbConnect.php";
 
-$conn = new mysqli($servername, $username, $password, $dbname);
+// POSTデータを取得
+$calendar_id = $_POST['calendar_id'];
+$user_id = $_POST['user_id'];
+$reaction = $_POST['reaction']; // VARCHARなのでそのまま
+$reaction_date = $_POST['reaction_date']; // DATE型
 
-// 接続エラーチェック
-if ($conn->connect_error) {
-    die("接続失敗: " . $conn->connect_error);
-}
-
-// POSTリクエストからデータを取得
-$date = $_POST['date'];
-$reaction = $_POST['reaction'];
-
-// 反応を保存または更新するSQL文
-$sql = "INSERT INTO calendar (user_id,reaction_date, reaction) VALUES (1,?, ?)
-        ON DUPLICATE KEY UPDATE reaction = ?";
-
+// SQL文を準備して実行
+$sql = "INSERT INTO calendars (calendar_id, user_id, reaction, reaction_date) VALUES (?, ?, ?, ?)";
 $stmt = $conn->prepare($sql);
-$stmt->bind_param("sss", $date, $reaction, $reaction);
+$stmt->bind_param("iiss", $calendar_id, $user_id, $reaction, $reaction_date); // VARCHARにはsを使用
 
 if ($stmt->execute()) {
-    echo "反応が保存されました";
+    echo "Record saved successfully";
 } else {
-    echo "エラー: " . $conn->error;
+    echo "Error: " . $stmt->error;
 }
 
-// MySQL接続を閉じる
+// 接続を閉じる
+$stmt->close();
 $conn->close();
 ?>
