@@ -158,6 +158,10 @@
             chatArea.style.width = "100%";
         }
 
+        function goBack() {
+            history.back();
+        }
+
         // JavaScriptで固定のコメント追加ボタンがクリックされたときにページ遷移
         document.getElementById("commentButton").addEventListener("click", function() {
             goToNextcommet();  // ページ遷移関数を呼び出す
