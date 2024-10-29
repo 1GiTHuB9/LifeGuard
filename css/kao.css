@@ -89,6 +89,10 @@ body, html {
     box-shadow: 0 2px 10px rgba(0, 0, 0, 0.5); /* 影を追加 */
 }
 
+.kaomoji-selector .kaomoji-option:hover {
+    background-color: rgba(255, 255, 255, 0.7) !important; /* 例 */
+}
+
 .overlay {
     display: none;
     position: fixed;
@@ -117,15 +121,25 @@ body, html {
     overflow: hidden;
 }
 
+
 /* 顔文字選択リストの画像スタイル */
 .kaomoji-option {
-    max-width: 80px;             /* 画像の最大幅を100pxに設定 */
-    max-height: 80px;            /* 画像の最大高さを100pxに設定 */
-    width: auto;                  /* アスペクト比を保ちながら幅を自動調整 */
-    height: auto;                 /* アスペクト比を保ちながら高さを自動調整 */
-    object-fit: contain;          /* 画像が枠に収まるようにする */
-    cursor: pointer;              /* クリック可能にする */
-    display: block;               /* 画像をブロック要素にして独立表示 */
+    max-width: 80px;             
+    max-height: 80px;            
+    width: auto;                  
+    height: auto;                 
+    object-fit: contain;          
+    cursor: pointer;              
+    display: block;               
+    transition: background-color 0.2s ease, transform 0.2s ease, box-shadow 0.2s ease; 
+    border-radius: 5px; /* 角を丸める */
+}
+
+/* マウスオーバー時のスタイル */
+.kaomoji-option:hover {
+    background-color: rgba(255, 255, 255, 0.7); /* マウスオーバー時の背景色 */
+    box-shadow: 0 0 10px rgba(0, 0, 0, 0.3); /* シャドウを追加 */
+    transform: scale(1.05); /* ほんの少し大きくする */
 }
 
 /* カレンダー内の顔文字画像のスタイル */

@@ -70,6 +70,11 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
             <img src="./img/nakikan.png" alt="Kaomoji 2" data-kaomoji="nakikan.png" class="kaomoji-option">
             <img src="./img/okokan.png" alt="Kaomoji 3" data-kaomoji="okokan.png" class="kaomoji-option">
         </div>
+        <!--<div id="kaomoji-list">
+            <img src="./img/nicokan.png" alt="Kaomoji 1" data-kaomoji="nicokan.png" class="kaomoji-option">
+            <img src="./img/nakikan.png" alt="Kaomoji 2" data-kaomoji="nakikan.png" class="kaomoji-option">
+            <img src="./img/okokan.png" alt="Kaomoji 3" data-kaomoji="okokan.png" class="kaomoji-option">
+        </div>-->
         <br><br>
         <button id="confirm-btn">決定</button>
         <button id="cancel-btn">キャンセル</button>
