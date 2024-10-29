@@ -25,6 +25,8 @@ function logincheck($email, $pass, $pdo){
             $_SESSION['id'] = $user['user_id'];
             $_SESSION['email'] = $email;
             $_SESSION['pass'] = $pass;
+            $_SESSION['uname'] = $user['user_name'];
+            $_SESSION['pimg'] = $user['profile_img'];
             $_SESSION['diagnosis_level'] = $user['diagnosis_level'];
 
             header('Location:../leveldiagnosis.php');
@@ -35,6 +37,8 @@ function logincheck($email, $pass, $pdo){
             $_SESSION['id'] = $user['user_id'];
             $_SESSION['email'] = $email;
             $_SESSION['pass'] = $pass;
+            $_SESSION['uname'] = $user['user_name'];
+            $_SESSION['pimg'] = $user['profile_img'];
             $_SESSION['diagnosis_level'] = $user['diagnosis_level'];
 
             return true;
