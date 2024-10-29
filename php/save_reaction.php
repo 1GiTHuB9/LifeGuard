@@ -1,34 +1,23 @@
 <?php
-// MySQLの接続設定
-$servername = "localhost";
-$username = "lifeguard_user";  // MySQLユーザー名
-$password = "Liguardfe712";      // MySQLパスワード
-$dbname = "lifeguard";  // データベース名
+require "./php/dbConnect.php"; 
 
-$conn = new mysqli($servername, $username, $password, $dbname);
+if ($_SERVER['REQUEST_METHOD'] === 'POST') {
+    $calendar_id = $_POST['calendar_id'];
+    $user_id = $_POST['user_id'];
+    $reaction = $_POST['reaction'];
+    $reaction_date = $_POST['reaction_date'];
 
-// 接続エラーチェック
-if ($conn->connect_error) {
-    die("接続失敗: " . $conn->connect_error);
+    $sql = "INSERT INTO Calendars (calendar_id, user_id, reaction, reaction_date) VALUES (:calendar_id, :user_id, :reaction, :reaction_date)";
+    $stmt = $conn->prepare($sql);
+    $stmt->bindParam(':calendar_id', $calendar_id, PDO::PARAM_INT);
+    $stmt->bindParam(':user_id', $user_id, PDO::PARAM_INT);
+    $stmt->bindParam(':reaction', $reaction, PDO::PARAM_STR);
+    $stmt->bindParam(':reaction_date', $reaction_date, PDO::PARAM_STR);
+
+    if ($stmt->execute()) {
+        echo "Record saved successfully";
+    } else {
+        echo "Error: " . $stmt->errorInfo()[2];
+    }
 }
-
-// POSTリクエストからデータを取得
-$date = $_POST['date'];
-$reaction = $_POST['reaction'];
-
-// 反応を保存または更新するSQL文
-$sql = "INSERT INTO calendar (user_id,reaction_date, reaction) VALUES (1,?, ?)
-        ON DUPLICATE KEY UPDATE reaction = ?";
-
-$stmt = $conn->prepare($sql);
-$stmt->bind_param("sss", $date, $reaction, $reaction);
-
-if ($stmt->execute()) {
-    echo "反応が保存されました";
-} else {
-    echo "エラー: " . $conn->error;
-}
-
-// MySQL接続を閉じる
-$conn->close();
 ?>
