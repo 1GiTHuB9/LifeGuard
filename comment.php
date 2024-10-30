@@ -1,8 +1,13 @@
 <?php
 session_start();
 require "./php/dbConnect.php";
-$post_id=1;
-// $post_id=$_GET['post_id'];
+// セッションにログイン情報がない場合はログイン画面にリダイレクト
+if (!isset($_SESSION['id'])) {
+    header('Location: login.php');
+    exit();
+}
+// $post_id=1;
+$post_id=$_GET['post_id'];
 try {
     // postsテーブルとusersテーブルを結合して、post_detailとuser_name, profile_imgを取得
     $stmt = $pdo->prepare("

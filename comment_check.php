@@ -1,8 +1,14 @@
 <?php
 session_start();
+require "./php/dbConnect.php";
+
+// セッションにログイン情報がない場合はログイン画面にリダイレクト
+if (!isset($_SESSION['id'])) {
+    header('Location: login.php');
+    exit();
+}
 // ログインしているユーザーのIDを取得
 $user_id = $_SESSION['id'];
-require "./php/dbConnect.php";
 try {
     // ログインしているユーザーの user_name と profile_img を取得
     $stmt = $pdo->prepare("
@@ -28,9 +34,12 @@ try {
 }
 // データがPOSTされているか確認
 if ($_SERVER['REQUEST_METHOD'] === 'POST') {
+    // コメント内容を取得
     $content = $_POST['content'];
     $anonymous = isset($_POST['anonymous']) ? '匿名' : '公開';
+    // 投稿内容を取得
     $post_detail = $_POST['post_detail'];
+    // 投稿先ユーザー名と画像を取得
     $user_name = $_POST['user_name'];
     $profile_img = $_POST['profile_img'];
     $post_id = $_POST['post_id'];
@@ -83,7 +92,9 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     //     });
 
     function goBack() {
-        history.back();
+        // PHPで取得したpost_idをURLに含めてリダイレクト
+        const postId = <?php echo json_encode($post_id); ?>;
+        window.location.href = 'comment.php?post_id=' + postId;
     }    
     </script>
 </body>
