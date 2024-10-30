@@ -43,17 +43,18 @@ switch ($diagnosis_level) {
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>診断結果</title>
-    <link rel="stylesheet" href="./css/style1.css?241023">
+    <link rel="stylesheet" href="./css/result.css?241023">
 </head>
 <body>
     <div class="fullscreen-image">
-        <img src="img/haikei4.png" alt="Full Screen Image">
+        <img src="img/haikei4.png" alt="Full Screen Image" class="background">
       
         <div class="header">
             <h1>診断結果</h1>
-            
         </div>
 
+         <!-- フレームワーク画像 -->
+    <img src="img/obi.png" alt="フレームワーク画像" class="framework">
         <div class="diagnosisresult">
             <h5>あなたのレベルは．．．</h5>
             <h1>レベル<?php echo htmlspecialchars($diagnosis_level, ENT_QUOTES, 'UTF-8'); ?>！</h1>

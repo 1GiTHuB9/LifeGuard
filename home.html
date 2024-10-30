@@ -22,7 +22,7 @@
             <ul>
                 <li><a href="page1.html">プロフィール</a></li>
                 <li><a href="page2.html">レベル診断</a></li>
-                <li><a href="page3.html">ログアウト</a></li>
+                <li><a href="#" id="logout">ログアウト</a></li>
             </ul>
         </div>
     </div>
@@ -56,12 +56,20 @@
     });
 
     document.getElementById("chosi").addEventListener("click", function() {
-        window.location.href = "kao.html";
+        window.location.href = "kao.php";
     });
 
     document.getElementById("eturan").addEventListener("click", function() {
         window.location.href = "eturan.html";
     });
+
+    // ログアウトボタンのクリックイベント
+    document.getElementById("logout").addEventListener("click", function(event) {
+            event.preventDefault(); // デフォルトのリンク動作を防止
+            if (confirm("ログアウトしますか？")) {
+                window.location.href = "logout.php"; // ログアウト処理ページへ遷移
+            }
+        });
     </script>
     
 </body>
