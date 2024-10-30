@@ -67,6 +67,7 @@ body, html {
 }
 
 /* プロフィール画像選択部分 */
+/* プロフィール画像選択部分 */
 .user-image {
     width: 100px;
     height: 100px;
@@ -80,7 +81,27 @@ body, html {
     cursor: pointer;
     background-size: cover;
     background-position: center;
+    position: relative; /* 相対位置を設定 */
 }
+
+/* プラスアイコンスタイル */
+.image-label .plus-icon {
+    position: absolute;
+    bottom: 0px; /* 画像の右下に表示 */
+    right: 0px;
+    width: 24px;
+    height: 24px;
+    background-color: #ffa500;
+    color: white;
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 20px;
+    font-weight: bold;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+}
+
 
 .image-label {
     display: flex;
