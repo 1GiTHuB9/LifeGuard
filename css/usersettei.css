@@ -7,7 +7,7 @@ body, html {
     font-family: Arial, sans-serif;
     overflow: hidden;
 }
-
+ 
 /* 背景画像用の設定 */
 .fullscreen-image {
     position: relative;
@@ -15,7 +15,7 @@ body, html {
     height: 100vh;
     overflow: hidden;
 }
-
+ 
 .fullscreen-image img {
     width: 100%;
     height: 100%;
@@ -24,7 +24,7 @@ body, html {
     top: 0;
     left: 0;
 }
-
+ 
 .fullscreen-image::after {
     content: "";
     position: absolute;
@@ -35,7 +35,7 @@ body, html {
     background: rgba(255, 255, 255, 0.5); /* ここで不透明度を調整 */
     pointer-events: none; /* オーバーレイがクリックイベントをブロックしないようにする */
 }
-
+ 
 .container {
     position: absolute;
     top: 50%;
@@ -53,7 +53,7 @@ body, html {
     display: flex;
     overflow-y: auto;
 }
-
+ 
 .back-button {
     display: block;
     margin-bottom: 20px;
@@ -65,7 +65,8 @@ body, html {
     left: 20px; /* 左から20pxの位置に配置 */
     top: 20px;  /* 上から20pxの位置に配置 */
 }
-
+ 
+/* プロフィール画像選択部分 */
 /* プロフィール画像選択部分 */
 .user-image {
     width: 100px;
@@ -80,15 +81,35 @@ body, html {
     cursor: pointer;
     background-size: cover;
     background-position: center;
+    position: relative; /* 相対位置を設定 */
 }
-
+ 
+/* プラスアイコンスタイル */
+.image-label .plus-icon {
+    position: absolute;
+    bottom: 0px; /* 画像の右下に表示 */
+    right: 0px;
+    width: 24px;
+    height: 24px;
+    background-color: #ffa500;
+    color: white;
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 20px;
+    font-weight: bold;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+}
+ 
+ 
 .image-label {
     display: flex;
     flex-direction: column;
     align-items: center;
     cursor: pointer;
 }
-
+ 
 /* ユーザー名入力フィールド */
 .username {
     font-size: 18px;
@@ -96,7 +117,7 @@ body, html {
     margin-bottom: 10px;
     text-align: center;
 }
-
+ 
 /* プロフィールテキストエリア */
 .user-profile {
     width: 100%;
@@ -109,12 +130,12 @@ body, html {
     resize: none;
     box-sizing: border-box;
 }
-
+ 
 /* 匿名で公開チェックボックス */
 input[type="checkbox"] {
     margin-right: 10px;
 }
-
+ 
 /* 更新ボタン */
 .update-button {
     background-color: #ffa500;
@@ -125,23 +146,25 @@ input[type="checkbox"] {
     cursor: pointer;
     font-size: 16px;
 }
-
+ 
 .update-button:hover {
     background-color: #ff8c00;
 }
-
+ 
 @media screen and (max-width: 480px) {
     .container {
         width: 95vw;
         padding: 15px;
     }
-
+ 
     .user-profile {
         height: 60px;
     }
-
+ 
     .update-button {
         width: 100%;
         font-size: 14px;
     }
 }
+ 
+ 
