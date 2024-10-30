@@ -86,6 +86,7 @@
                 if ($_SERVER["REQUEST_METHOD"] == "POST") {
                     if (isset($_POST['data'])) {
 
+
                         $data = $_POST['data'];
                     
                         // SQL文を準備
@@ -95,12 +96,14 @@
                         $stmt->bind_param("s", $data);
                     
                         if ($stmt->execute()) {
-                            echo "<script>setTimeout(scrollToBottom, 0);</script>";
+                            header("Location: " . $_SERVER['PHP_SELF'] . "?room_id=" . $room_id);
+                            exit();
                         } else {
                             echo "<p>エラー: " . $stmt->error . "</p>";
                         }
                     }
                 }
+                
             ?>
         </form>
     </div>
