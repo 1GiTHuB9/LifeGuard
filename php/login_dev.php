@@ -34,7 +34,7 @@ function logincheck($email, $pass, $pdo){
             $_SESSION['pass'] = $pass;
             $_SESSION['uname'] = $user['user_name'];
             $_SESSION['pimg'] = $user['profile_img'];
-            $_SESSION['diagnosis_level'] = $user['diagnosis_level'];
+            $_SESSION['dlevel'] = $user['diagnosis_level'];
 
             if  ($user['diagnosis_level'] == 0){
                 header('Location:../leveldiagnosis.php');

@@ -10,7 +10,7 @@ function post_func($id,$detail,$anonymous,$pdo){
 
         // 値をバインド
         $smtp -> bindValue(1,$detail,PDO::PARAM_STR);
-        $smtp -> bindValue(2,date('Y/m/d'),PDO::PARAM_STR);
+        $smtp -> bindValue(2,date('Y/m/d H:i:s'),PDO::PARAM_STR);
         $smtp -> bindValue(3,$anonymous,PDO::PARAM_STR);
         $smtp -> bindValue(4,$id,PDO::PARAM_STR);
 

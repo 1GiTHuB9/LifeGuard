@@ -7,7 +7,7 @@ if (isset($_SESSION['email']) && isset($_SESSION['pass'])) {
 
     $email = $_SESSION['email'];
     $password = $_SESSION['pass']; // ハッシュ化前のパスワード
-    $level = intval($_SESSION['diagnosis_level']);
+    $level = intval($_SESSION['dlevel']);
 
     if($level == 0){
         header('Location: ./leveldiagnosis.php');

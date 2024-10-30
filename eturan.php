@@ -1,3 +1,26 @@
+<?php
+session_start();
+require "./php/dbConnect.php"; // データベース接続
+
+if(isset($_SESSION['id'])){
+}else{
+    header('Location: ./login.php');
+}
+
+
+//データ取得
+$sql = "SELECT u.user_id,u.user_name,u.diagnosis_level,p.post_id,p.post_detail,p.post_date,p.post_flag FROM posts as p LEFT OUTER JOIN users as u ON p.user_id = u.user_id WHERE u.diagnosis_level = ? ORDER BY post_date ASC";
+        
+        $stmt = $pdo->prepare($sql); 
+        
+        $stmt->bindValue(1, $_SESSION['dlevel'], PDO::PARAM_INT);
+        // クエリ実行
+        $stmt->execute();
+        $post = $stmt->fetchAll(PDO::FETCH_ASSOC);
+
+        
+?>
+
 <!DOCTYPE html>
 <html lang="ja">
 <head>
@@ -37,29 +60,40 @@
             <div class="content">
                 <!-- メッセージ一覧 -->
                 <main class="chat-area" id="chatArea" onclick="resetLayout()">
-                    <div class="message">
-                        <div class="profile-pic"></div>
-                        <div class="message-content">
-                            <p class="username">ユーザー名</p>
-                            <p class="text" onclick="showDetail('相談内容の詳細1'); event.stopPropagation();">相談内容: ああああああああああああああああ</p>
-                        </div>
-                    </div>
 
-                    <div class="message">
-                        <div class="profile-pic"></div>
-                        <div class="message-content">
-                            <p class="username">ユーザー名</p>
-                            <p class="text" onclick="showDetail('相談内容の詳細2'); event.stopPropagation();">相談内容: いいいいいいいいいいいいい</p>
+                    <?php 
+                    #投稿表示用ループ（10件のみ）
+                    $count = 0;
+                    foreach ($post as $row){
+                        if ($count >= 10){
+                            break;
+                        }
+                    ?>
+                        <div class="message">
+                            <div class="profile-pic"></div>
+                            <div class="message-content">
+                                <p class="username">
+                                <!-- 匿名判別 -->
+                                    <?php 
+                                    if($row['post_flag'] == 1){
+                                        echo "匿名";
+                                    } else {
+                                        echo $row['user_name'];
+                                    }
+                                    ?>
+                                </p>
+                                <!-- 投稿内容表示 -->
+                                <p class="text" onclick="showDetail('<?php echo $row['post_id'] ?>','<?php echo $row['user_name']?>','<?php echo $row['post_detail']?>'); event.stopPropagation();">
+                                    <?php
+                                    echo $row['post_detail'];
+                                    ?>
+                                </p>
+                            </div>
                         </div>
-                    </div>
-
-                    <div class="message">
-                        <div class="profile-pic"></div>
-                        <div class="message-content">
-                            <p class="username">ユーザー名</p>
-                            <p class="text" onclick="showDetail('相談内容の詳細3'); event.stopPropagation();">相談内容: ううううううううううううう</p>
-                        </div>
-                    </div>
+                    <?php 
+                    $count++;
+                    } 
+                    ?>
                 </main>
 
                 <!-- 詳細エリア（最初は非表示） -->
@@ -98,7 +132,7 @@
     </div>
 
     <script>
-        function showDetail(content) {
+        function showDetail(id,name,content) {
             // 詳細エリアをスライドインで表示
             const detailArea = document.getElementById("detailArea");
             detailArea.style.display = "block";  // 詳細エリアを表示
@@ -110,7 +144,7 @@
                     <div class="comment">
                         <div class="profile-pic"></div>
                         <div class="comment-content">
-                            <p class="username">ユーザー名</p>
+                            <p class="username">${name}</p>
                             <p class="text">${content}</p>
                         </div>
                     </div>
@@ -135,9 +169,11 @@
             // コンテンツ全体を2分割レイアウトに変更
             document.getElementById("chatArea").style.width = "50%";
         }
+        
 
+        
         function goToNextPage() {
-            window.location.href = "soudannyuryoku.html";
+            window.location.href = "consul.php";
         }
 
         function goToNextcommet() {
