@@ -132,7 +132,7 @@ $sql = "SELECT u.user_id,u.user_name,u.diagnosis_level,p.post_id,p.post_detail,p
     </div>
 
     <script>
-        function showDetail(id,name,content) {
+        function showDetail(postId,name,content) {
             // 詳細エリアをスライドインで表示
             const detailArea = document.getElementById("detailArea");
             detailArea.style.display = "block";  // 詳細エリアを表示
@@ -149,18 +149,35 @@ $sql = "SELECT u.user_id,u.user_name,u.diagnosis_level,p.post_id,p.post_detail,p
                         </div>
                     </div>
                     <button class="comment-button" id="dynamicCommentButton">コメント追加</button>
-                    <div class="commenter">
-                        <div class="profile-commenter"></div>
-                        <div class="comment-content">
-                            <p class="username">ユーザー名</p>
-                            <p class="text">コメント内容:${content}</p>
-                        </div>
+                    <div class="comment_area" id="comment_area">
+                        <!-- ここにコメントが挿入されます -->
                     </div>
 
                     <button class="view-more-button">もっと見る</button>
                 </div>
             `;
-
+              // 動的に生成されたボタンにクリックイベントを追加
+              // コメント追加ボタンがクリックされたときにページ遷移
+            document.getElementById("dynamicCommentButton").addEventListener("click", function() {
+                goToNextComment(postId);  // postIdを渡してページ遷移関数を呼び出す
+            });
+                    // コメント情報を取得
+            fetch(`./php/comment_get.php?post_id=${postId}`)
+                .then(response => response.json())
+                .then(comments => {
+                    // comment_areaにコメントを挿入
+                    const comment_area = document.getElementById("comment_area");
+                    comment_area.innerHTML = comments.map(comment => `
+                        <div class="commenter">
+                            <div class="profile-commenter"></div>
+                            <div class="comment-content">
+                                <p class="username">${comment.user_name}</p>
+                                <p class="text">コメント内容:${comment.comment_detail}</p>
+                            </div>
+                        </div>
+                    `).join('');
+                })
+                .catch(error => console.error('Error:', error));
             // 動的に生成されたボタンにクリックイベントを追加
             document.getElementById("dynamicCommentButton").addEventListener("click", function() {
                 goToNextcommet();  // ページ遷移関数を呼び出す
@@ -176,8 +193,9 @@ $sql = "SELECT u.user_id,u.user_name,u.diagnosis_level,p.post_id,p.post_detail,p
             window.location.href = "consul.php";
         }
 
-        function goToNextcommet() {
-            window.location.href = "commentnyuryoku.html";
+        // ページ遷移関数でpostIdを受け取り、comment.phpに渡す
+        function goToNextComment(postId) {
+            window.location.href = `comment.php?post_id=${postId}`; // postIdをGETパラメータとして遷移
         }
 
         function resetLayout() {

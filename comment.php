@@ -32,7 +32,7 @@ try {
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>コメント入力画面</title>
-    <link rel="stylesheet" href="./css/commentnyuryoku.css">
+    <link rel="stylesheet" href="./css/commentnyuryoku.css?1">
 </head>
 <body>
     <div class="fullscreen-image">
@@ -42,7 +42,7 @@ try {
         <div class="user-image"><span>画像</span></div>
         <!-- ユーザー名 -->
         <div class="user-name"> <?php echo htmlspecialchars($result['user_name'], ENT_QUOTES, 'UTF-8'); ?></div>
-        <p>相談内容:<?php echo htmlspecialchars($result['post_detail'], ENT_QUOTES, 'UTF-8'); ?></p>
+        <p id="post_detail">相談内容:<?php echo htmlspecialchars($result['post_detail'], ENT_QUOTES, 'UTF-8'); ?></p>
         <a href="#" class="tuduki">続きを読む</a>
 
         <form id="consultation-form" action="comment_check.php" method="POST">

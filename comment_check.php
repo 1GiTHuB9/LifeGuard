@@ -37,6 +37,8 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     // コメント内容を取得
     $content = $_POST['content'];
     $anonymous = isset($_POST['anonymous']) ? '匿名' : '公開';
+    //匿名フラグを数値で設定 データベースには0か1で保存
+    $comment_flag = isset($_POST['anonymous']) ? 1 : 0;
     // 投稿内容を取得
     $post_detail = $_POST['post_detail'];
     // 投稿先ユーザー名と画像を取得
@@ -54,7 +56,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>コメント確認画面</title>
-    <link rel="stylesheet" href="./css/commentkakunin.css">
+    <link rel="stylesheet" href="./css/commentkakunin.css?1">
 </head>
 <body>
     <div class="fullscreen-image">
@@ -71,11 +73,11 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         <!-- 投稿先ユーザー名 -->
         <div class="user-name"><?php echo htmlspecialchars($user_name); ?></div>
         <!-- 投稿先相談内容 -->
-        <p><?php echo htmlspecialchars($post_detail); ?></p>
+        <p id="post_detail"><?php echo htmlspecialchars($post_detail); ?></p>
         <!-- コメント挿入用のフォーム -->
         <form action="./php/comment_insert.php" method="POST">
             <input type="hidden" name="comment_detail" value="<?php echo htmlspecialchars($content); ?>">
-            <input type="hidden" name="comment_flag" value="<?php echo $anonymous; ?>">
+            <input type="hidden" name="comment_flag" value="<?php echo htmlspecialchars($comment_flag); ?>">
             <input type="hidden" name="post_id" value="<?php echo htmlspecialchars($post_id); ?>">
             <input type="hidden" name="user_id" value="<?php echo htmlspecialchars($user_id); ?>">
             <button type="submit" class="submit-button">投稿する！</button>
