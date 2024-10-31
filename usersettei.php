@@ -11,7 +11,7 @@
         <img src="img/haikei4.png" alt="Full Screen Image">
         <div class="container">
             <a href="#" class="back-button" onclick="goBack()">←戻る</a>
-
+ 
             <!-- プロフィール画像表示と選択ボタン -->
             <div class="user-image" id="profile-image-preview" style="background-image: url('<?php echo htmlspecialchars($profile_img ?? 'default.png'); ?>');">
                 <label for="image-upload" class="image-label">
@@ -19,24 +19,25 @@
                     <input type="file" id="image-upload" name="profile_img" style="display:none;" accept="image/*" onchange="previewAndUploadImage(event)">
                 </label>
             </div>
-
+ 
             <!-- ユーザープロフィール -->
-            <form action="" method="POST" id="profile-form">
+            <form action="upload.php" method="POST" id="profile-form" enctype="multipart/form-data">
+                <input type="hidden" name="user_id" value="<?php echo htmlspecialchars($user_id); ?>">
                 <input type="hidden" name="uploaded_image" id="uploaded_image" value="<?php echo htmlspecialchars($profile_img ?? ''); ?>">
-
+ 
                 <div class="username">
                     <label>ユーザープロフィール</label>
                     <textarea name="profile" class="user-profile"><?php echo htmlspecialchars($profile ?? ''); ?></textarea>
                 </div>
-
+ 
                 <!-- 匿名で公開チェックボックス -->
                 <div>
                     <label>
-                        匿名で公開する 
+                        匿名で公開する
                         <input type="checkbox" name="anonymous" <?php echo isset($isAnonymous) && $isAnonymous ? 'checked' : ''; ?>>
                     </label>
                 </div>
-
+ 
                 <!-- 更新ボタン -->
                 <div>
                     <button type="submit" class="update-button">更新する！</button>
@@ -44,28 +45,24 @@
             </form>
         </div>
     </div>
-
+ 
     <script>
         function goBack() {
             history.back();
         }
-
-        // 画像のプレビューを表示し、その後サーバーにアップロード
+ 
         function previewAndUploadImage(event) {
             const file = event.target.files[0];
-
-            // プレビューのためのFileReaderを使用
             const reader = new FileReader();
             reader.onload = function(e) {
                 const previewContainer = document.getElementById("profile-image-preview");
-                previewContainer.style.backgroundImage = `url(${e.target.result})`; // 即時プレビュー更新
+                previewContainer.style.backgroundImage = `url(${e.target.result})`;
             }
-            reader.readAsDataURL(file);  // 画像のデータURLを読み込み
-
-            // アップロード処理
+            reader.readAsDataURL(file);
+ 
             const formData = new FormData();
             formData.append('profile_img', file);
-
+ 
             fetch('upload.php', {
                 method: 'POST',
                 body: formData
@@ -83,11 +80,10 @@
                 console.error("エラー:", error);
             });
         }
-
+ 
         window.onload = function() {
             const uploadedImage = document.getElementById('uploaded_image').value;
             if (uploadedImage) {
-                // すでに画像が選択されていた場合、プロフィール画像を表示
                 const previewContainer = document.getElementById("profile-image-preview");
                 previewContainer.style.backgroundImage = `url(uploads/${uploadedImage})`;
             }
