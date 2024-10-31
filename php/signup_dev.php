@@ -32,7 +32,7 @@ try {
     // クエリ実行
     $stmt->execute();
     $alert = "<script type='text/javascript'>alert('アカウント登録が完了しました');</script>";
-    echo $alert;
+    // echo $alert;
     header('Location: ../leveldiagnosis.php');
     exit();
 } catch (PDOException $e) {

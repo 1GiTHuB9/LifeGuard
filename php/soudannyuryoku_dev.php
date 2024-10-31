@@ -33,13 +33,13 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
     if($postStyle == "公開"){
         $flag = 0;
         post_func($_SESSION['id'],$content,$flag,$pdo);
-        echo "投稿完了(公開)";
+        // echo "投稿完了(公開)";
         header('Location: ../home.html');
         exit;
     } else if($postStyle == "匿名"){
         $flag = 1;
         post_func($_SESSION['id'],$content,$flag,$pdo);
-        echo "投稿完了(匿名)";
+        // echo "投稿完了(匿名)";
         header('Location: ../home.html');
         exit;
     } else {

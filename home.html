@@ -38,22 +38,21 @@
         console.log(sideMenu.classList); // クラスの状態を確認
         });
 
-        // JavaScriptで固定のコメント追加ボタンがクリックされたときにページ遷移
-        document.getElementById("talk").addEventListener("click", function() {
-            goToNexttalk();  // ページ遷移関数を呼び出す
-        });
+        
+    // ハンバーガーメニュー外をクリックしたら閉じる機能
+    document.addEventListener('click', function(event) {
+        var sideMenu = document.getElementById('sideMenu');
+        var menuIcon = document.querySelector('.menu-icon');
 
-        document.getElementById("soudan").addEventListener("click", function() {
-            goToNextsoudan();  // ページ遷移関数を呼び出す
-        });
-
-        function goToNexttalk() {
-            window.location.href = "talkitiran.php";
+        // クリックされた要素がメニューアイコンやメニュー内でなければメニューを閉じる
+        if (!sideMenu.contains(event.target) && !menuIcon.contains(event.target)) {
+            sideMenu.classList.remove('open');
         }
+    });
 
          // 各ボタンのページ遷移処理
     document.getElementById("talk").addEventListener("click", function() {
-        window.location.href = "talkitiran.html";
+        window.location.href = "talkitiran.php";
     });
 
     document.getElementById("chosi").addEventListener("click", function() {

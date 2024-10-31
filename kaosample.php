@@ -9,7 +9,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     $reaction_date = $_POST['reaction_date']; // DATE型
 
     // SQL文を準備
-    $sql = "INSERT INTO Calendars (user_id, reaction, reaction_date) VALUES (:user_id, :reaction, :reaction_date)";
+    $sql = "INSERT INTO calendars (user_id, reaction, reaction_date) VALUES (:user_id, :reaction, :reaction_date)";
     
     try {
         // ステートメントを準備
