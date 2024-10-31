@@ -3,7 +3,10 @@
     $username = 'lifeguard_user'; // ユーザー名
     $password = 'Liguardfe712'; // パスワード
     $dbname = 'lifeguard'; // データベース名
-
+    //本番環境
+    // $host = 'mysql-3.mc.lolipop.lan';
+    // $dbname = '3caf596e27571a5610d17d2e8bf5e786';
+    // $username = '3caf596e27571a5610d17d2e8bf5e786';
     // データベースに接続
     $connection = new mysqli($host, $username, $password, $dbname);
 
