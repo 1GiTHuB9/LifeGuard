@@ -4,11 +4,11 @@ require './php/dbConnect.php'; // データベース接続ファイルをイン�
 if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     // フォームからのデータ取得
     $user_id = $_POST['user_id'];
-    $profile = $_POST['profile'];
+    $profile = !empty($_POST['profile']) ? $_POST['profile'] : ''; // 空の場合は空文字列にする
     $isAnonymous = isset($_POST['anonymous']) ? 1 : 0; // チェックボックスの値を整数に変換
-    $uploaded_image = $_POST['uploaded_image'];
+    $uploaded_image = !empty($_POST['uploaded_image']) ? $_POST['uploaded_image'] : ''; // 空の場合は空文字列にする
 
-    // 新しい画像がアップロードされたか確認
+    // 画像がアップロードされたかどうか確認
     if (!empty($_FILES['profile_img']['name'])) {
         // ファイルアップロード処理
         $targetDir = "uploads/";
@@ -30,15 +30,13 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         }
 
         // 特定のファイル形式を許可
-        if ($imageFileType != "jpg" && $imageFileType != "png" && $imageFileType != "jpeg" && $imageFileType != "gif") {
+        if (!in_array($imageFileType, ['jpg', 'jpeg', 'png', 'gif'])) {
             echo json_encode(['success' => false, 'error' => 'JPG、JPEG、PNG、GIFファイルのみが許可されています。']);
             $uploadOk = 0;
         }
 
         // エラーがない場合、ファイルをアップロード
-        if ($uploadOk == 0) {
-            echo json_encode(['success' => false, 'error' => '画像のアップロードに失敗しました。']);
-        } else {
+        if ($uploadOk === 1) {
             if (move_uploaded_file($_FILES["profile_img"]["tmp_name"], $targetFile)) {
                 $uploaded_image = basename($_FILES["profile_img"]["name"]); // アップロードされた画像名を保存
             } else {
@@ -53,8 +51,8 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         $stmt = $pdo->prepare($sql);
         
         // プレースホルダーに値をバインド
-        $stmt->bindParam(':profile_img', $uploaded_image);
-        $stmt->bindParam(':profile', $profile);
+        $stmt->bindParam(':profile_img', $uploaded_image, PDO::PARAM_STR);
+        $stmt->bindParam(':profile', $profile, PDO::PARAM_STR);
         $stmt->bindParam(':is_anonymous', $isAnonymous, PDO::PARAM_INT);
         $stmt->bindParam(':user_id', $user_id, PDO::PARAM_INT);
 
@@ -68,4 +66,5 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         echo json_encode(['success' => false, 'error' => 'データベースエラー: ' . $e->getMessage()]);
     }
 }
+
 ?>
