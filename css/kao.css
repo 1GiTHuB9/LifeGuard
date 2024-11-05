@@ -1,0 +1,214 @@
+body, html {
+    margin: 0;
+    padding: 0;
+    width: 100%;
+    height:100%;
+    font-family: Arial, sans-serif;
+    overflow:hidden;
+}
+
+/* 背景画像用の設定 */
+.fullscreen-image {
+    display: flex;
+    justify-content: center; /* 水平方向に中央揃え */
+    align-items: center; /* 垂直方向に中央揃え */
+    position: relative;
+    width: 100%;
+    height: 100vh;
+    overflow: hidden;
+}
+
+.fullscreen-image img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+   
+    top: 0;
+    left: 0;
+}
+
+.fullscreen-image::after {
+    content: "";
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: rgba(255, 255, 255, 0.5); /* 背景の白いオーバーレイ */
+    pointer-events: none; /* オーバーレイがクリックイベントをブロックしないようにする */
+}
+
+/* カレンダーを囲むコンテナのスタイル */
+.calendar-container {
+    background: rgba(255, 255, 255, 0.8); /* 半透明の白色背景 */
+    padding: 40px;
+    border-radius: 10px; /* 角を丸くする */
+    z-index: 1; /* 背景画像より前に表示 */
+    position: absolute;
+    overflow: hidden; /* スライド時にカレンダーが見切れるようにする */
+}
+
+.calendar {
+    width: 400px;
+    display: grid;
+    grid-template-columns: repeat(7, 1fr);
+    gap: 5px;
+    text-align: center;
+    transition: transform 0.5s ease-in-out; /* スライドアニメーション */
+}
+
+.header {
+    padding: 10px;
+    position: relative;
+}
+
+.day {
+    cursor: pointer;
+    border: 1px solid #ccc;
+    padding: 10px;
+    position: relative;
+    height: 50px;
+}
+
+.kaomoji {
+    margin-top: 10px;
+    font-size: 20px;
+}
+
+/* モーダルウィンドウのスタイル */
+.kaomoji-selector {
+    display: none;
+    position: fixed;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    background-color: white;
+    border: 1px solid #ccc;
+    padding: 20px;                   /* パディングを追加 */
+    z-index: 1000;
+    box-shadow: 0 2px 10px rgba(0, 0, 0, 0.5); /* 影を追加 */
+}
+
+.kaomoji-selector .kaomoji-option:hover {
+    background-color: rgba(255, 255, 255, 0.7) !important; /* 例 */
+}
+
+.overlay {
+    display: none;
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: rgba(0, 0, 0, 0.5);
+    z-index: 999;
+}
+
+.month-header {
+    font-size: 24px;
+    margin-bottom: 20px;
+}
+
+/* 顔文字選択リストのスタイル */
+#kaomoji-list {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    gap: 20px;
+    flex-wrap: nowrap;            /* 要素を横に強制的に並べる */
+    width: 100%;
+    max-width: 400px;             /* リストの最大幅を指定（任意で調整可能） */
+    overflow: hidden;
+}
+
+
+/* 顔文字選択リストの画像スタイル */
+.kaomoji-option {
+    max-width: 80px;             
+    max-height: 80px;            
+    width: auto;                  
+    height: auto;                 
+    object-fit: contain;          
+    cursor: pointer;              
+    display: block;               
+    transition: background-color 0.2s ease, transform 0.2s ease, box-shadow 0.2s ease; 
+    border-radius: 5px; /* 角を丸める */
+}
+
+/* マウスオーバー時のスタイル */
+.kaomoji-option:hover {
+    background-color: rgba(255, 255, 255, 0.7); /* マウスオーバー時の背景色 */
+    box-shadow: 0 0 10px rgba(0, 0, 0, 0.3); /* シャドウを追加 */
+    transform: scale(1.05); /* ほんの少し大きくする */
+}
+
+/* カレンダー内の顔文字画像のスタイル */
+.kaomoji img {
+    width: 100%; /* 幅を100%にして親要素に収まるように */
+    height: auto; /* 高さは自動調整 */
+    object-fit: contain; /* アスペクト比を保つ */
+    display: block; /* ブロック要素にして独立表示 */
+    margin: 0 auto; /* 中央揃え */
+}
+
+/* 月ナビゲーションボタンのスタイル */
+.month-nav-btn {
+    background: none;
+    border: none;
+    font-size: 30px;
+    cursor: pointer;
+    position: absolute;
+    top: 50%;
+    transform: translateY(-50%);
+    z-index: 10;
+    color: #333;
+    opacity: 0.7;
+}
+
+#prev-month {
+    position: absolute;
+    top: 50%; /* カレンダーの中央に配置 */
+    left: -10px; /* 左端に配置 */
+    transform: translateY(-50%); /* 縦方向の中央に合わせる */
+    z-index: 100;
+    padding: 10px; /* 十分なクリック範囲を確保 */
+}
+
+#next-month {
+    position: absolute;
+    top: 50%; /* カレンダーの中央に配置 */
+    right: -10px; /* 右端に配置 */
+    transform: translateY(-50%); /* 縦方向の中央に合わせる */
+    z-index: 100;
+    padding: 10px; /* 十分なクリック範囲を確保 */
+}
+
+.month-nav-btn:hover {
+    opacity: 1;
+}
+
+/* カレンダーの移動中のアニメーション */
+.slide-left {
+    transform: translateX(-100%);
+}
+
+.slide-right {
+    transform: translateX(100%);
+}
+
+
+
+/* アスペクト比に応じたレイアウト調整 */
+@media (min-aspect-ratio: 16/9) {
+    .fullscreen-image img {
+        width: 100%;
+        height: auto;
+    }
+}
+
+@media (max-aspect-ratio: 9/16) {
+    .fullscreen-image img {
+        width: auto;
+        height: 100%;
+    }
+}

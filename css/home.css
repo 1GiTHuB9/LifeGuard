@@ -84,6 +84,42 @@ body, html {
     color:black;
     z-index: 10; /* メニューアイコンが他の要素の上に表示されるようにする */
 }
+.side-menu {
+    position: fixed;
+    top: 0;
+    right: -250px; /* 初期状態で画面外 */
+    width: 250px;
+    height: 100%;
+    background-color: #333; /* メニュー背景色 */
+    color: #fff;
+    transition: right 0.3s ease; /* アニメーション効果 */
+    z-index: 1000; /* メニューが他の要素の上に表示されるように */
+}
+
+.side-menu.open {
+    right: 0; /* メニューが表示される */
+}
+
+.side-menu ul {
+    list-style: none; /* リストのマーカーを削除 */
+    padding: 0;
+    margin: 0;
+}
+
+.side-menu ul li {
+    padding: 15px 20px; /* リストアイテムの余白 */
+    border-bottom: 1px solid #444; /* 区切り線 */
+}
+
+.side-menu ul li a {
+    color: #fff; /* リンクの文字色 */
+    text-decoration: none; /* 下線を削除 */
+    font-size: 18px; /* 文字サイズ */
+}
+
+.side-menu ul li a:hover {
+    background-color: #444; /* ホバー時の背景色 */
+}
 
 /* アスペクト比に応じたレイアウト調整 */
 @media (min-aspect-ratio: 16/9) {

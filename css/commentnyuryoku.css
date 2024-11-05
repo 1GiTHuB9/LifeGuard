@@ -157,6 +157,10 @@ textarea {
     margin-bottom: 20px; /* 余白を20pxに設定、値は必要に応じて変更してください */
     display: block; /* aタグはインライン要素なので、blockに変更 */
 }
+#post_detail{
+    /* 文字のはみ出しを抑える*/
+    overflow-wrap: anywhere;
+}
 /* アスペクト比に応じたレイアウト調整 */
 @media (min-aspect-ratio: 16/9) {
     .fullscreen-image img {
