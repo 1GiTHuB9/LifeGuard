@@ -21,6 +21,9 @@
             <form action="./php/signup_dev.php" method="post"> 
             
                 
+                <label for="name"><h3>ユーザー名</h3></label>
+                <input type="name" id="name" name="name" required class="box"><br>
+                <br>
 
                 <label for="email"><h3>メールアドレス</h3></label>
                 <input type="email" id="email" name="email" required class="box"><br>
