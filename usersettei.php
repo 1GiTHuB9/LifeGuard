@@ -1,3 +1,53 @@
+<?php
+session_start();
+require "./php/dbConnect.php"; // データベース接続
+
+// セッションからユーザーIDを取得
+$_SESSION['user_id'] = 2201112;
+$userid = $_SESSION['user_id'] ?? null;
+
+if ($userid) {
+    try {
+        // ユーザー情報をデータベースから取得
+        $sql = "SELECT user_name, profile_img, profile FROM users WHERE user_id = ?";
+        $stmt = $pdo->prepare($sql);
+        $stmt->bindValue(1, $userid, PDO::PARAM_INT);
+        $stmt->execute();
+        $user = $stmt->fetch(PDO::FETCH_ASSOC);
+
+        if ($user) {
+            $user_name = $user['user_name'];
+            $profile_img = $user['profile_img'] ?? 'default.png';
+            $profile = $user['profile'];
+        } else {
+            echo json_encode(['error' => 'ユーザー情報が見つかりませんでした。']);
+            exit;
+        }
+    } catch (PDOException $e) {
+        echo json_encode(['error' => 'エラーが発生しました: ' . $e->getMessage()]);
+        exit;
+    }
+}
+
+// 更新処理（Ajaxからのリクエストがあるとき）
+if ($_SERVER["REQUEST_METHOD"] == "POST" && isset($_POST['ajax'])) {
+    $newProfile = $_POST['profile'];
+    $isAnonymous = isset($_POST['anonymous']) ? 1 : 0;
+    $imageName = $_POST['uploaded_image'] ?? $profile_img;
+
+    try {
+        $updateSql = "UPDATE users SET profile = ?, profile_img = ?, is_anonymous = ? WHERE user_id = ?";
+        $updateStmt = $pdo->prepare($updateSql);
+        $updateStmt->execute([$newProfile, $imageName, $isAnonymous, $userid]);
+        echo json_encode(['success' => true, 'image' => $imageName]);
+        exit;
+    } catch (PDOException $e) {
+        echo json_encode(['error' => 'エラーが発生しました: ' . $e->getMessage()]);
+        exit;
+    }
+}
+?>
+
 <!DOCTYPE html>
 <html lang="ja">
 <head>
@@ -12,24 +62,20 @@
         <div class="container">
             <a href="#" class="back-button" onclick="goBack()">←戻る</a>
 
-            <!-- プロフィール画像表示と選択ボタン -->
-            <div class="user-image" id="profile-image-preview" style="background-image: url('<?php echo htmlspecialchars($profile_img ?? 'default.png'); ?>');">
+            <div class="user-image" id="profile-image-preview" style="background-image: url('<?php echo htmlspecialchars("uploads/$profile_img"); ?>');">
                 <label for="image-upload" class="image-label">
                     <span class="plus-icon">+</span>
-                    <input type="file" id="image-upload" name="profile_img" style="display:none;" accept="image/*" onchange="previewAndUploadImage(event)">
+                    <input type="file" id="image-upload" name="profile_img" style="display:none;" accept="image/*" onchange="uploadImage(event)">
                 </label>
             </div>
 
-            <!-- ユーザープロフィール -->
-            <form action="" method="POST" id="profile-form">
-                <input type="hidden" name="uploaded_image" id="uploaded_image" value="<?php echo htmlspecialchars($profile_img ?? ''); ?>">
-
+            <form id="profile-form" method="POST">
+                <input type="hidden" name="uploaded_image" id="uploaded_image" value="<?php echo htmlspecialchars($profile_img); ?>">
                 <div class="username">
                     <label>ユーザープロフィール</label>
                     <textarea name="profile" class="user-profile"><?php echo htmlspecialchars($profile ?? ''); ?></textarea>
                 </div>
 
-                <!-- 匿名で公開チェックボックス -->
                 <div>
                     <label>
                         匿名で公開する 
@@ -37,9 +83,8 @@
                     </label>
                 </div>
 
-                <!-- 更新ボタン -->
                 <div>
-                    <button type="submit" class="update-button">更新する！</button>
+                    <button type="button" class="update-button" onclick="updateProfile()">更新する！</button>
                 </div>
             </form>
         </div>
@@ -50,19 +95,9 @@
             history.back();
         }
 
-        // 画像のプレビューを表示し、その後サーバーにアップロード
-        function previewAndUploadImage(event) {
+        // 画像のアップロード処理
+        function uploadImage(event) {
             const file = event.target.files[0];
-
-            // プレビューのためのFileReaderを使用
-            const reader = new FileReader();
-            reader.onload = function(e) {
-                const previewContainer = document.getElementById("profile-image-preview");
-                previewContainer.style.backgroundImage = `url(${e.target.result})`; // 即時プレビュー更新
-            }
-            reader.readAsDataURL(file);  // 画像のデータURLを読み込み
-
-            // アップロード処理
             const formData = new FormData();
             formData.append('profile_img', file);
 
@@ -73,8 +108,9 @@
             .then(response => response.json())
             .then(data => {
                 if (data.success) {
-                    // 新しい画像のファイル名をhidden inputに設定
                     document.getElementById('uploaded_image').value = data.image;
+                    const previewContainer = document.getElementById("profile-image-preview");
+                    previewContainer.style.backgroundImage = `url(uploads/${data.image})`;
                 } else {
                     alert(data.error || "画像のアップロードに失敗しました。");
                 }
@@ -84,13 +120,28 @@
             });
         }
 
-        window.onload = function() {
-            const uploadedImage = document.getElementById('uploaded_image').value;
-            if (uploadedImage) {
-                // すでに画像が選択されていた場合、プロフィール画像を表示
-                const previewContainer = document.getElementById("profile-image-preview");
-                previewContainer.style.backgroundImage = `url(uploads/${uploadedImage})`;
-            }
+        // プロフィール更新処理
+        function updateProfile() {
+            const formData = new FormData(document.getElementById('profile-form'));
+            formData.append('ajax', true); // Ajax送信を示すパラメータ
+
+            fetch('', {
+                method: 'POST',
+                body: formData
+            })
+            .then(response => response.json())
+            .then(data => {
+                if (data.success) {
+                    const previewContainer = document.getElementById("profile-image-preview");
+                    previewContainer.style.backgroundImage = `url(uploads/${data.image})`;
+                    alert("プロフィールが更新されました！");
+                } else {
+                    alert(data.error || "プロフィールの更新に失敗しました。");
+                }
+            })
+            .catch(error => {
+                console.error("エラー:", error);
+            });
         }
     </script>
 </body>
