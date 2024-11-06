@@ -4,12 +4,12 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>新規登録</title>
-    <link rel="stylesheet" href="./css/style1.css">
+    <link rel="stylesheet" href="./css/signup.css">
 </head>
 <body>
     <div class="fullscreen-image">
         <img src="img/haikei4.png" alt="Full Screen Image">
-
+        <div class="container">
         <a href="#" class="back-button" onclick="goBack()">←戻る</a>
 
         <div class="header">
@@ -18,7 +18,7 @@
         </div>
         <div class="signup-form">
         
-            <form action="login.php" method="post"> 
+            <form action="./php/signup_dev.php" method="post"> 
             
                 
 
@@ -34,6 +34,7 @@
                 <button type="submit" class="Regist">登録</button>
             </form>
         </div>
+</div>
     </div>
 
     <script>
