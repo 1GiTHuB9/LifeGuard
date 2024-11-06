@@ -3,10 +3,10 @@ session_start();
 
 require "./php/dbConnect.php"; // データベース接続
 //テスト用
-$_SESSION['user_id']=2201112;
-if (isset($_SESSION['user_id'])) {
+//$_SESSION['user_id']=2201112;
+//if (isset($_SESSION['user_id'])) {
 
-    $userid = $_SESSION['user_id'];
+  //  $userid = $_SESSION['user_id'];
 
     try {
         // user_idに基づいて、user_name, profile_img, profileをデータベースから取得
@@ -28,7 +28,7 @@ if (isset($_SESSION['user_id'])) {
     } catch (PDOException $e) {
         echo "エラーが発生しました: " . $e->getMessage();
     }
-}
+//}
 ?>
 <!DOCTYPE html>
 <html lang="ja">
