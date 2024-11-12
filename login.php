@@ -4,7 +4,6 @@ session_start();
 require "./php/dbConnect.php"; // データベース接続
 
 if (isset($_SESSION['email']) && isset($_SESSION['pass'])) {
-
     $email = $_SESSION['email'];
     $password = $_SESSION['pass']; // ハッシュ化前のパスワード
     $level = intval($_SESSION['diagnosis_level']);
@@ -23,9 +22,15 @@ if (isset($_SESSION['email']) && isset($_SESSION['pass'])) {
         $user = $stmt->fetch(PDO::FETCH_ASSOC);
 
         if ($user && password_verify($password, $user['password'])) {
+            // ユーザーIDをセッションに格納
+            $_SESSION['user_id'] = $user_id;
+            
             // パスワードが一致すればホーム画面にリダイレクト
             header('Location: home.html');
             exit();
+        } else {
+            // パスワードが一致しない場合
+            echo "メールアドレスまたはパスワードが間違っています。";
         }
     } catch (PDOException $e) {
         echo "エラーが発生しました: " . $e->getMessage();
