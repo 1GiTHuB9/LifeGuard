@@ -11,4 +11,5 @@ function commentSelectById($id){
 
         return $post;
 }
+
 ?>

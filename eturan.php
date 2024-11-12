@@ -62,7 +62,7 @@ $sql = "SELECT u.user_id,u.user_name,u.diagnosis_level,p.post_id,p.post_detail,p
                 <main class="chat-area" id="chatArea" onclick="resetLayout()">
 
                     <?php 
-                    #投稿表示用ループ（10件のみ）
+                    #投稿表示用ループ（20件のみ）
                     $count = 0;
                     foreach ($post as $row){
                         if ($count >= 10){
@@ -94,6 +94,7 @@ $sql = "SELECT u.user_id,u.user_name,u.diagnosis_level,p.post_id,p.post_detail,p
                     $count++;
                     } 
                     ?>
+                    <button class="loadPost-button" id="loadPostButton">さらに表示</button>
                 </main>
 
                 <!-- 詳細エリア（最初は非表示） -->
@@ -220,6 +221,47 @@ $sql = "SELECT u.user_id,u.user_name,u.diagnosis_level,p.post_id,p.post_detail,p
         document.getElementById("commentButton").addEventListener("click", function() {
             goToNextcommet();  // ページ遷移関数を呼び出す
         });
+
+        let currentPage = 0; // 現在のページ番号
+
+        // さらに表示ボタンがクリックされたときの処理
+        document.getElementById("loadPostButton").addEventListener("click", loadMorePosts);
+
+        function loadMorePosts() {
+            currentPage++; // 次のページ番号に進む
+
+            // fetchを使用して、次の10件の投稿を非同期で取得
+            fetch(`./php/fetchPosts.php?page=${currentPage}`)
+                .then(response => response.json())
+                .then(posts => {
+                    const chatArea = document.getElementById("chatArea"); // チャットエリアを取得
+                    const loadButton = document.getElementById("loadPostButton"); // さらに表示ボタンを取得
+
+                    // 取得した投稿をチャットエリアの上部に追加
+                    posts.forEach(row => {
+                        const messageDiv = document.createElement("div");
+                        messageDiv.classList.add("message");
+
+                        // 匿名判定
+                        const username = row.post_flag == 1 ? "匿名" : row.user_name;
+
+                        // 新しい投稿のHTMLを生成
+                        messageDiv.innerHTML = `
+                            <div class="profile-pic"></div>
+                            <div class="message-content">
+                                <p class="username">${username}</p>
+                                <p class="text" onclick="showDetail('${row.post_id}', '${username}', '${row.post_detail}'); event.stopPropagation();">
+                                    ${row.post_detail}
+                                </p>
+                            </div>
+                        `;
+
+                        // loadButtonの上に新しいメッセージを挿入
+                        chatArea.insertBefore(messageDiv, loadButton);
+                    });
+                })
+                .catch(error => console.error('エラーが発生しました:', error));
+        }
 
     </script>
 </body>

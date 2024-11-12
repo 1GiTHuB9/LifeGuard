@@ -26,7 +26,7 @@ if(isset($_SESSION['id'])){
             <div class="suggestion">
                 周りの人はこんなことを書き込んでるよ！
                 <div class="other-posts">
-                    他の人の投稿を表示
+                    他の人の投稿を表示  
                     リンクか最新or共感の多い投稿をいくつか表示
                 </div>
             </div>
