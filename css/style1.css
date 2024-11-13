@@ -97,6 +97,7 @@ button{
     margin: 10% auto 10%;
     /* transform: translate(-50%, -50%); */
     text-align: center;
+    height: 50px;
     width: 100%;    
 }.login-form input{
     padding:0.5%;
@@ -137,7 +138,8 @@ button{
     background-repeat: no-repeat; /* 画像を繰り返さない */
     background-position: center; /* 画像を中央に配置 */
     width: 100%; /* 幅を100%に設定 */
-    height: 400px; /* 高さを400pxに設定 */
+    /* height: 400px; */
+     /* 高さを400pxに設定 */
     color: white; /* テキスト色を白に設定 */
     display: flex; /* 中央揃えにするためのフレックスボックス */
     justify-content: center; /* 横方向の中央揃え */

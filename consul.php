@@ -1,3 +1,12 @@
+<?php
+session_start();
+
+if(isset($_SESSION['id'])){
+}else{
+    header('Location: ./login.php');
+}
+
+?>
 <!DOCTYPE html>
 <html lang="ja">
 <head>
@@ -39,7 +48,7 @@
             var postStyle = anonymous ? '匿名' : '公開';
             localStorage.setItem('postStyle', postStyle);
             localStorage.setItem('content', content);
-            window.location.href = 'soudankakunin.html';
+            window.location.href = 'consul_check.php';
         });
 
         function goBack() {
