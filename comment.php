@@ -60,7 +60,8 @@ try {
             <input type="hidden" name="user_name" value="<?php echo htmlspecialchars($result['user_name']); ?>">
             <input type="hidden" name="profile_img" value="<?php echo htmlspecialchars($result['profile_img']); ?>">
             <input type="hidden" name="post_id" value="<?php echo htmlspecialchars($post_id); ?>">
-
+            <!-- 投稿者のuser_id -->
+            <input type="hidden" name="post_user_id" value="<?php echo htmlspecialchars($result['user_id']); ?>">
             <button class="submit-button">確認する！</button>
         </form>
     </div>  

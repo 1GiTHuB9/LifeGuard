@@ -45,7 +45,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     $user_name = $_POST['user_name'];
     $profile_img = $_POST['profile_img'];
     $post_id = $_POST['post_id'];
-
+    $post_user_id=$_POST['post_user_id'];
 } else {
     echo "<p>データが送信されていません。</p>";
 }
@@ -79,7 +79,8 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
             <input type="hidden" name="comment_detail" value="<?php echo htmlspecialchars($content); ?>">
             <input type="hidden" name="comment_flag" value="<?php echo htmlspecialchars($comment_flag); ?>">
             <input type="hidden" name="post_id" value="<?php echo htmlspecialchars($post_id); ?>">
-            <input type="hidden" name="user_id" value="<?php echo htmlspecialchars($user_id); ?>">
+            <!-- 投稿先のユーザーID -->
+            <input type="hidden" name="post_user_id" value="<?php echo htmlspecialchars($post_user_id); ?>">
             <button type="submit" class="submit-button">投稿する！</button>
         </form>
         <!-- <button class="submit-button">投稿する！</button> -->
