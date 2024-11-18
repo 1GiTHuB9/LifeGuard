@@ -3,8 +3,11 @@ session_start();
 // DB接続のための設定
 require "./php/db.php"; // db.php のパスを確認してください
 
- // ユーザーIDを取得（ログインしている場合）
- $user_id = $_SESSION['user_id'] ?? 1; // デフォルト値は1
+$user_id = $_SESSION['user_id'] ?? null; // デフォルト値を削除し、必ずセッションから取得
+if (!$user_id) {
+    die("ログインが必要です。");
+}
+
 // データベースから顔文字を取得する関数
 function getReactions($conn, $user_id) {
     $sql = "SELECT reaction, reaction_date FROM calendars WHERE user_id = :user_id";
@@ -19,7 +22,7 @@ function getReactions($conn, $user_id) {
 $reactions = getReactions($conn, $user_id);// データベースから顔文字を取得
 
 if ($_SERVER['REQUEST_METHOD'] === 'POST') {
-    $user_id = $_POST['user_id'] ?? 1;  // POSTデータからユーザーIDを取得
+    $user_id = $_SESSION['user_id'];
     $reaction = $_POST['reaction'] ?? '';
     $reaction_date = $_POST['reaction_date'] ?? '';
 
@@ -27,17 +30,16 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         echo "顔文字または日付が無効です。";
         exit;
     }
-
-    $sql = "INSERT INTO calendars (user_id, reaction, reaction_date) VALUES (:user_id, :reaction, :reaction_date)";
     
     try {
+        $sql = "INSERT INTO calendars (user_id, reaction, reaction_date) VALUES (:user_id, :reaction, :reaction_date)";
         $stmt = $conn->prepare($sql);
         $stmt->bindValue(':user_id', $user_id, PDO::PARAM_INT);
         $stmt->bindValue(':reaction', $reaction, PDO::PARAM_STR);
         $stmt->bindValue(':reaction_date', $reaction_date, PDO::PARAM_STR);
         $stmt->execute();
 
-        echo "レコードが正常に保存されました。";
+        echo "データベースに正常に保存されました。";
     } catch (PDOException $e) {
         error_log($e->getMessage()); // エラーログに記録
         echo "エラーが発生しました。";
@@ -98,11 +100,12 @@ function renderCalendar(date) {
     const dayNames = ["日", "月", "火", "水", "木", "金", "土"];
 
     // 反応に対する顔文字画像のマッピング
-    const reactionToImageMap = {
-        "にっこり": "nicokan.png",
-        "泣き": "nakikan.png",
-        "怒り": "okokan.png"
-    };
+    const reactionMap = {
+    "nicokan.png": "niconico",
+    "nakikan.png": "naki",
+    "okokan.png": "okori"
+};
+
 
     monthHeader.textContent = `${year}年 ${monthNames[month]}`;
     calendar.innerHTML = '';
@@ -234,7 +237,8 @@ function saveReaction(userId, reaction, reactionDate) {
             console.log("保存結果:", xhr.responseText);
         }
     };
-    xhr.send(`user_id=${userId}&reaction=${reaction}&reaction_date=${reactionDate}`);
+    xhr.send(`reaction=${reaction}&reaction_date=${reactionDate}`);
+
 }
 cancelBtn.onclick = closeKaomojiSelector;
 overlay.onclick = closeKaomojiSelector;

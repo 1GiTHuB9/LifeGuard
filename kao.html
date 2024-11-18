@@ -175,7 +175,8 @@ function saveReaction(calendarId, userId, reaction, reactionDate) {
             console.log("保存結果:", xhr.responseText);
         }
     };
-    xhr.send(`calendar_id=${calendarId}&user_id=${userId}&reaction=${reaction}&reaction_date=${reactionDate}`);
+    xhr.send(`reaction=${reaction}&reaction_date=${reactionDate}`);
+
 }
 cancelBtn.onclick = closeKaomojiSelector;
 overlay.onclick = closeKaomojiSelector;
