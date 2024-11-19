@@ -5,42 +5,40 @@ require "./php/dbConnect.php"; // データベース接続
 // セッションからユーザーIDを取得
 $userid = $_SESSION['user_id'] ?? null;
 
+$profile_img = null; // 初期値
+$profile = '';
+$isAnonymous = 0;
+
 if ($userid) {
     try {
-        // プロフィール更新処理（Ajaxからのリクエストがあるとき）
-        if ($_SERVER["REQUEST_METHOD"] == "POST" && isset($_POST['ajax'])) {
-            // POSTデータから新しいプロフィール情報を取得
-            $newProfile = $_POST['profile'] ?? '';
-            $newUserName = $_POST['user_name'] ?? ''; // 新しいユーザー名
-            $isAnonymous = isset($_POST['anonymous']) ? 1 : 0;
-            $imageName = $_POST['uploaded_image'] ?? null; // アップロードされた画像名
+        // ユーザープロフィール情報を取得
+        $sql = "SELECT user_name, profile, profile_img, is_anonymous FROM users WHERE user_id = ?";
+        $stmt = $pdo->prepare($sql);
+        $stmt->execute([$userid]);
+        $user = $stmt->fetch(PDO::FETCH_ASSOC);
 
-            // プロフィールと画像の更新
-            $updateSql = "UPDATE users SET user_name = ?, profile = ?, profile_img = ?, is_anonymous = ? WHERE user_id = ?";
-            $updateStmt = $pdo->prepare($updateSql);
-            $updateStmt->execute([$newUserName, $newProfile, $imageName, $isAnonymous, $userid]);
-
-            echo json_encode(['success' => true, 'user_name' => $newUserName, 'image' => $imageName]);
-            exit;
-        }
+        // プロフィール情報を設定
+        $profile_img = $user['profile_img'] ?? null;
+        $profile = $user['profile'] ?? '';
+        $isAnonymous = $user['is_anonymous'] ?? 0;
     } catch (PDOException $e) {
-        echo json_encode(['error' => 'エラーが発生しました: ' . $e->getMessage()]);
-        exit;
+        die("エラー: " . $e->getMessage());
     }
 }
 
-
-// 更新処理（Ajaxからのリクエストがあるとき）
+// Ajaxによるプロフィール更新処理
 if ($_SERVER["REQUEST_METHOD"] == "POST" && isset($_POST['ajax'])) {
-    $newProfile = $_POST['profile'];
+    $newProfile = $_POST['profile'] ?? '';
+    $newUserName = $_POST['user_name'] ?? '';
     $isAnonymous = isset($_POST['anonymous']) ? 1 : 0;
     $imageName = $_POST['uploaded_image'] ?? $profile_img;
 
     try {
-        $updateSql = "UPDATE users SET profile = ?, profile_img = ?, is_anonymous = ? WHERE user_id = ?";
+        $updateSql = "UPDATE users SET user_name = ?, profile = ?, profile_img = ?, is_anonymous = ? WHERE user_id = ?";
         $updateStmt = $pdo->prepare($updateSql);
-        $updateStmt->execute([$newProfile, $imageName, $isAnonymous, $userid]);
-        echo json_encode(['success' => true, 'image' => $imageName]);
+        $updateStmt->execute([$newUserName, $newProfile, $imageName, $isAnonymous, $userid]);
+
+        echo json_encode(['success' => true, 'user_name' => $newUserName, 'image' => $imageName]);
         exit;
     } catch (PDOException $e) {
         echo json_encode(['error' => 'エラーが発生しました: ' . $e->getMessage()]);
@@ -63,33 +61,38 @@ if ($_SERVER["REQUEST_METHOD"] == "POST" && isset($_POST['ajax'])) {
         <div class="container">
             <a href="#" class="back-button" onclick="goBack()">←戻る</a>
 
-            <div class="user-image" id="profile-image-preview" style="background-image: url('<?php echo htmlspecialchars("uploads/$profile_img"); ?>');">
+            <?php
+            // プロフィール画像のパスを設定（キャッシュ防止用のタイムスタンプ付き）
+            $defaultProfileImg = 'img/default_profile.png';
+            $profileImgPath = $profile_img ? "uploads/$profile_img?" . time() : $defaultProfileImg;
+            ?>
+
+            <div class="user-image" id="profile-image-preview" style="background-image: url('<?php echo htmlspecialchars($profileImgPath); ?>');">
                 <label for="image-upload" class="image-label">
                     <span class="plus-icon">+</span>
                     <input type="file" id="image-upload" name="profile_img" style="display:none;" accept="image/*" onchange="uploadImage(event)">
                 </label>
             </div>
 
-                <form id="profile-form" method="POST">
-        <input type="hidden" name="uploaded_image" id="uploaded_image" value="<?php echo htmlspecialchars($profile_img); ?>">
+            <form id="profile-form" method="POST">
+                <input type="hidden" name="uploaded_image" id="uploaded_image" value="<?php echo htmlspecialchars($profile_img); ?>">
 
-        <div class="username">
-            <label>ユーザープロフィール</label>
-            <textarea name="profile" class="user-profile"><?php echo htmlspecialchars($profile ?? ''); ?></textarea>
-        </div>
+                <div class="username">
+                    <label>ユーザープロフィール</label>
+                    <textarea name="profile" class="user-profile"><?php echo htmlspecialchars($profile); ?></textarea>
+                </div>
 
-        <div>
-            <label>
-                匿名で公開する 
-                <input type="checkbox" name="anonymous" <?php echo isset($isAnonymous) && $isAnonymous ? 'checked' : ''; ?>>
-            </label>
-        </div>
+                <div>
+                    <label>
+                        匿名で公開する 
+                        <input type="checkbox" name="anonymous" <?php echo $isAnonymous ? 'checked' : ''; ?>>
+                    </label>
+                </div>
 
-        <div>
-            <button type="button" class="update-button" onclick="updateProfile()">更新する！</button>
-        </div>
-    </form>
-
+                <div>
+                    <button type="button" class="update-button" onclick="updateProfile()">更新する！</button>
+                </div>
+            </form>
         </div>
     </div>
 
@@ -113,7 +116,8 @@ if ($_SERVER["REQUEST_METHOD"] == "POST" && isset($_POST['ajax'])) {
                 if (data.success) {
                     document.getElementById('uploaded_image').value = data.image;
                     const previewContainer = document.getElementById("profile-image-preview");
-                    previewContainer.style.backgroundImage = `url(uploads/${data.image})`;
+                    const timestamp = new Date().getTime(); // キャッシュ防止
+                    previewContainer.style.backgroundImage = `url(uploads/${data.image}?${timestamp})`;
                 } else {
                     alert(data.error || "画像のアップロードに失敗しました。");
                 }
@@ -125,26 +129,27 @@ if ($_SERVER["REQUEST_METHOD"] == "POST" && isset($_POST['ajax'])) {
 
         // プロフィール更新処理
         function updateProfile() {
-        const formData = new FormData(document.getElementById('profile-form'));
-        formData.append('ajax', true); // Ajax送信を示すパラメータ
+            const formData = new FormData(document.getElementById('profile-form'));
+            formData.append('ajax', true); // Ajax送信を示すパラメータ
 
-        fetch('', {
-            method: 'POST',
-            body: formData
-        })
-        .then(response => response.json())
-        .then(data => {
-            if (data.success) {
-                document.getElementById("profile-image-preview").style.backgroundImage = `url(uploads/${data.image})`;
-                alert("プロフィールが更新されました！");
-            } else {
-                alert(data.error || "プロフィールの更新に失敗しました。");
-            }
-        })
-        .catch(error => {
-            console.error("エラー:", error);
+            fetch('', {
+                method: 'POST',
+                body: formData
+            })
+            .then(response => response.json())
+            .then(data => {
+                if (data.success) {
+                    const timestamp = new Date().getTime(); // キャッシュ防止
+                    document.getElementById("profile-image-preview").style.backgroundImage = `url(uploads/${data.image}?${timestamp})`;
+                    alert("プロフィールが更新されました！");
+                } else {
+                    alert(data.error || "プロフィールの更新に失敗しました。");
+                }
+            })
+            .catch(error => {
+                console.error("エラー:", error);
             });
-    }
+        }
     </script>
 </body>
 </html>
