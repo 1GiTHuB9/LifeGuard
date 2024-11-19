@@ -50,7 +50,7 @@ function logincheck($email, $pass, $pdo){
 
 
 if(logincheck($mailaddress,$password,$pdo)){
-    header('Location:../home.html');
+    header('Location:../home.php');
 } else {
     header('Location:../login.php');
 }
