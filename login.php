@@ -7,7 +7,7 @@ if (isset($_SESSION['email']) && isset($_SESSION['pass'])) {
     $email = $_SESSION['email'];
     $password = $_SESSION['pass']; // ハッシュ化前のパスワード
     $level = intval($_SESSION['diagnosis_level']);
-
+    
     if($level == 0){
         header('Location: ./leveldiagnosis.php');
         exit;
@@ -23,7 +23,7 @@ if (isset($_SESSION['email']) && isset($_SESSION['pass'])) {
 
         if ($user && password_verify($password, $user['password'])) {
             // ユーザーIDをセッションに格納
-            $_SESSION['user_id'] = $user_id;
+            $_SESSION['id'] = $user_id;
             
             // パスワードが一致すればホーム画面にリダイレクト
             header('Location: home.html');

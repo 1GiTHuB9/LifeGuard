@@ -2,7 +2,7 @@
 session_start();
 
 // ログインチェック
-if (!isset($_SESSION['user_id'])) {
+if (!isset($_SESSION['id'])) {
     // ログインしていない場合はログインページにリダイレクト
     header('Location: login.php');
     exit();

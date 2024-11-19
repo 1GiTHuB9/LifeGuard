@@ -3,7 +3,7 @@ session_start();
 // DB接続のための設定
 require "./php/db.php"; // db.php のパスを確認してください
 
-$user_id = $_SESSION['user_id'] ?? null; // デフォルト値を削除し、必ずセッションから取得
+$user_id = $_SESSION['id']; // デフォルト値を削除し、必ずセッションから取得
 if (!$user_id) {
     die("ログインが必要です。");
 }
@@ -22,7 +22,7 @@ function getReactions($conn, $user_id) {
 $reactions = getReactions($conn, $user_id);// データベースから顔文字を取得
 
 if ($_SERVER['REQUEST_METHOD'] === 'POST') {
-    $user_id = $_SESSION['user_id'];
+    $user_id = $_SESSION['id'];
     $reaction = $_POST['reaction'] ?? '';
     $reaction_date = $_POST['reaction_date'] ?? '';
 
