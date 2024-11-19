@@ -133,7 +133,12 @@ $sql = "SELECT u.user_id,u.user_name,u.diagnosis_level,p.post_id,p.post_detail,p
     </div>
 
     <script>
+
+        let currentPageC = 0;
+
         function showDetail(postId,name,content) {
+
+            currentPageC++;
             // 詳細エリアをスライドインで表示
             const detailArea = document.getElementById("detailArea");
             detailArea.style.display = "block";  // 詳細エリアを表示
@@ -154,7 +159,7 @@ $sql = "SELECT u.user_id,u.user_name,u.diagnosis_level,p.post_id,p.post_detail,p
                         <!-- ここにコメントが挿入されます -->
                     </div>
 
-                    <button class="view-more-button">もっと見る</button>
+                    <button class="view-more-button" onclick="showDetail(${postId},'${name}','${content}')">もっと見る</button>
                 </div>
             `;
               // 動的に生成されたボタンにクリックイベントを追加
@@ -162,8 +167,9 @@ $sql = "SELECT u.user_id,u.user_name,u.diagnosis_level,p.post_id,p.post_detail,p
             document.getElementById("dynamicCommentButton").addEventListener("click", function() {
                 goToNextComment(postId);  // postIdを渡してページ遷移関数を呼び出す
             });
+
                     // コメント情報を取得
-            fetch(`./php/comment_get.php?post_id=${postId}`)
+            fetch(`./php/comment_get.php?post_id=${postId}&page=${currentPageC}`)
                 .then(response => response.json())
                 .then(comments => {
                     // comment_areaにコメントを挿入
@@ -173,7 +179,7 @@ $sql = "SELECT u.user_id,u.user_name,u.diagnosis_level,p.post_id,p.post_detail,p
                             <div class="profile-commenter"></div>
                             <div class="comment-content">
                                 <p class="username">${comment.user_name}</p>
-                                <p class="text">コメント内容:${comment.comment_detail}</p>
+                                <p class="text">${comment.comment_detail}</p>
                             </div>
                         </div>
                     `).join('');
@@ -184,12 +190,32 @@ $sql = "SELECT u.user_id,u.user_name,u.diagnosis_level,p.post_id,p.post_detail,p
                 goToNextcommet();  // ページ遷移関数を呼び出す
             });
 
+            
             // コンテンツ全体を2分割レイアウトに変更
             document.getElementById("chatArea").style.width = "50%";
         }
-        
 
-        
+        function loadMoreComment(postId){
+            currentPageC++;
+            
+            fetch(`./php/comment_get.php?post_id=${postId}&page=${currentPageC}`)
+                .then(response => response.json())
+                .then(comments => {
+                    // comment_areaにコメントを挿入
+                    const comment_area = document.getElementById("comment_area");
+                    comment_area.innerHTML = comments.map(comment => `
+                        <div class="commenter">
+                            <div class="profile-commenter"></div>
+                            <div class="comment-content">
+                                <p class="username">${comment.user_name}</p>
+                                <p class="text">${comment.comment_detail}</p>
+                            </div>
+                        </div>
+                    `).join('');
+                })
+                .catch(error => console.error('Error:', error));
+        }
+    
         function goToNextPage() {
             window.location.href = "consul.php";
         }
@@ -211,6 +237,8 @@ $sql = "SELECT u.user_id,u.user_name,u.diagnosis_level,p.post_id,p.post_detail,p
 
             // チャットエリアの幅を元に戻す
             chatArea.style.width = "100%";
+
+            currentPageC = 0;
         }
 
         function goBack() {
