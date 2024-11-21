@@ -97,6 +97,7 @@
                     
                         if ($stmt->execute()) {
                             header("Location: " . $_SERVER['PHP_SELF'] . "?room_id=" . $room_id);
+                            
                             exit();
                         } else {
                             echo "<p>エラー: " . $stmt->error . "</p>";
