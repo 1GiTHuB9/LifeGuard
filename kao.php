@@ -1,49 +1,44 @@
 <?php
-session_start(); 
 // DB接続のための設定
 require "./php/db.php"; // db.php のパスを確認してください
 
-$user_id = $_SESSION['id']; // デフォルト値を削除し、必ずセッションから取得
-if (!$user_id) {
-    die("ログインが必要です。");
-}
-
 // データベースから顔文字を取得する関数
-function getReactions($conn, $user_id) {
+function getReactions($conn) {
     $sql = "SELECT reaction, reaction_date FROM calendars WHERE user_id = :user_id";
     $stmt = $conn->prepare($sql);
-    $stmt->bindValue(':user_id', $user_id, PDO::PARAM_INT); // セッションで取得した$user_idを使用
+    $stmt->bindValue(':user_id', 1, PDO::PARAM_INT); // user_idを1に固定
     $stmt->execute();
     return $stmt->fetchAll(PDO::FETCH_ASSOC);
 }
 
-
 // 顔文字を取得
-$reactions = getReactions($conn, $user_id);// データベースから顔文字を取得
+$reactions = getReactions($conn);
+$user_id = 1; // 一時的にuser_idを1に固定
+$reactions = getReactions($conn, $user_id); // データベースから顔文字を取得
 
 if ($_SERVER['REQUEST_METHOD'] === 'POST') {
-    $user_id = $_SESSION['id'];
-    $reaction = $_POST['reaction'] ?? '';
-    $reaction_date = $_POST['reaction_date'] ?? '';
+    $user_id = $_POST['user_id'];
+    //$user_id = 1; // 一時的にuser_idを1に固定
+    $reaction = $_POST['reaction'];
+    $reaction_date = $_POST['reaction_date'];
 
-    if (empty($reaction) || empty($reaction_date)) {
-        echo "顔文字または日付が無効です。";
-        exit;
-    }
+    $sql = "INSERT INTO calendars (user_id, reaction, reaction_date) VALUES (:user_id, :reaction, :reaction_date)";
     
     try {
-        $sql = "INSERT INTO calendars (user_id, reaction, reaction_date) VALUES (:user_id, :reaction, :reaction_date)";
         $stmt = $conn->prepare($sql);
         $stmt->bindValue(':user_id', $user_id, PDO::PARAM_INT);
         $stmt->bindValue(':reaction', $reaction, PDO::PARAM_STR);
         $stmt->bindValue(':reaction_date', $reaction_date, PDO::PARAM_STR);
         $stmt->execute();
 
-        echo "データベースに正常に保存されました。";
+        echo "レコードが正常に保存されました。";
     } catch (PDOException $e) {
         error_log($e->getMessage()); // エラーログに記録
         echo "エラーが発生しました。";
     }
+
+    $conn = null;
+    exit;
 }
 ?>
 
@@ -75,6 +70,11 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
             <img src="./img/nakikan.png" alt="Kaomoji 2" data-kaomoji="nakikan.png" class="kaomoji-option">
             <img src="./img/okokan.png" alt="Kaomoji 3" data-kaomoji="okokan.png" class="kaomoji-option">
         </div>
+        <!--<div id="kaomoji-list">
+            <img src="./img/nicokan.png" alt="Kaomoji 1" data-kaomoji="nicokan.png" class="kaomoji-option">
+            <img src="./img/nakikan.png" alt="Kaomoji 2" data-kaomoji="nakikan.png" class="kaomoji-option">
+            <img src="./img/okokan.png" alt="Kaomoji 3" data-kaomoji="okokan.png" class="kaomoji-option">
+        </div>-->
         <br><br>
         <button id="confirm-btn">決定</button>
         <button id="cancel-btn">キャンセル</button>
@@ -86,10 +86,20 @@ const monthHeader = document.getElementById('month-header');
 const calendar = document.getElementById('calendar');
 const prevMonthBtn = document.getElementById('prev-month');
 const nextMonthBtn = document.getElementById('next-month');
-const userId = <?php echo json_encode($user_id); ?>;
+
 let currentDate = new Date();
 let reactions = <?php echo json_encode($reactions); ?>; // PHPから顔文字のデータをJavaScriptに渡す
 renderCalendar(currentDate);
+
+prevMonthBtn.onclick = () => {
+    currentDate.setMonth(currentDate.getMonth() - 1);
+    slideCalendar(-1);
+};
+
+nextMonthBtn.onclick = () => {
+    currentDate.setMonth(currentDate.getMonth() + 1);
+    slideCalendar(1);
+};
 
 function renderCalendar(date) {
     const year = date.getFullYear();
@@ -100,12 +110,11 @@ function renderCalendar(date) {
     const dayNames = ["日", "月", "火", "水", "木", "金", "土"];
 
     // 反応に対する顔文字画像のマッピング
-    const reactionMap = {
-    "nicokan.png": "niconico",
-    "nakikan.png": "naki",
-    "okokan.png": "okori"
-};
-
+    const reactionToImageMap = {
+        "にっこり": "nicokan.png",
+        "泣き": "nakikan.png",
+        "怒り": "okokan.png"
+    };
 
     monthHeader.textContent = `${year}年 ${monthNames[month]}`;
     calendar.innerHTML = '';
@@ -147,31 +156,15 @@ function renderCalendar(date) {
     }
 }
 
-const calendarContainer = document.getElementById('calendar');
-
 function slideCalendar(direction) {
-    // 1. 適切なエフェクトクラスを追加して、アニメーションを開始
-    const effectClass = direction === 1 ? 'slide-left-enter' : 'slide-right-enter';
-    calendarContainer.classList.add(effectClass);
+    const initialPosition = direction === 1 ? 'slide-right' : 'slide-left';
+    calendar.classList.add(initialPosition);
 
     setTimeout(() => {
-        // 2. 月切り替え後のカレンダーを再描画
         renderCalendar(currentDate);
-
-        // 3. アニメーションクラスを削除して次の切り替えに備える
-        calendarContainer.classList.remove(effectClass);
+        calendar.classList.remove(initialPosition);
     }, 500);
 }
-
-prevMonthBtn.onclick = () => {
-    currentDate.setMonth(currentDate.getMonth() - 1);
-    slideCalendar(-1);
-};
-
-nextMonthBtn.onclick = () => {
-    currentDate.setMonth(currentDate.getMonth() + 1);
-    slideCalendar(1);
-};
 
 const kaomojiModal = document.getElementById('kaomoji-modal');
 const overlay = document.getElementById('overlay');
@@ -218,7 +211,7 @@ confirmBtn.onclick = () => {
             alert("無効な顔文字です。");
             return;
         }
-        const userId = <?php echo json_encode($user_id); ?>;
+        const userId = 1; // 一時的にuser_idを1に固定
         const day = selectedDayElement.querySelector('strong').textContent;
         const reactionDate = `${currentDate.getFullYear()}-${String(currentDate.getMonth() + 1).padStart(2, '0')}-${String(selectedDayElement.querySelector('strong').textContent).padStart(2, '0')}`;
 
@@ -237,8 +230,7 @@ function saveReaction(userId, reaction, reactionDate) {
             console.log("保存結果:", xhr.responseText);
         }
     };
-    xhr.send(`reaction=${reaction}&reaction_date=${reactionDate}`);
-
+    xhr.send(`user_id=${userId}&reaction=${reaction}&reaction_date=${reactionDate}`);
 }
 cancelBtn.onclick = closeKaomojiSelector;
 overlay.onclick = closeKaomojiSelector;
