@@ -1,74 +1,70 @@
 <?php
 session_start();
 require "./php/dbConnect.php";
-$user_id = $_SESSION['id'];
 
-if (!isset($_GET['room_id'])) {
-    echo "<p>ルームIDが指定されていません。</p>";
+$user_id = $_SESSION['id']; // 自分のID
+
+if (isset($_GET['room_id'])) {
+    $room_id = (int)$_GET['room_id'];
+} else {
+    echo "ルームIDが指定されていません。";
     exit();
 }
-$room_id = $_GET['room_id'];
 
+// 相手のuser_idを特定
 try {
-    // 投稿を取得
-    $sqlPosts = "
-        SELECT p.post_detail, p.post_date, p.user_id
-        FROM posts p
-        JOIN userrooms ur ON (p.user_id = ur.user1_id OR p.user_id = ur.user2_id)
-        WHERE ur.room_id = ?
-        ORDER BY p.post_date ASC
-    ";
-    $stmtPosts = $pdo->prepare($sqlPosts);
-    $stmtPosts->execute([$room_id]);
-    $posts = $stmtPosts->fetchAll(PDO::FETCH_ASSOC);
-
-    // コメントを取得
-    $sqlComments = "
-        SELECT c.comment_detail, c.comment_date, c.user_id
-        FROM comments c
-        JOIN posts p ON c.post_id = p.post_id
-        JOIN userrooms ur ON (p.user_id = ur.user1_id OR p.user_id = ur.user2_id)
-        WHERE ur.room_id = ?
-        ORDER BY c.comment_date ASC
-    ";
-    $stmtComments = $pdo->prepare($sqlComments);
-    $stmtComments->execute([$room_id]);
-    $comments = $stmtComments->fetchAll(PDO::FETCH_ASSOC);
-
-    // 投稿とコメントを統合して時系列順に並び替え
-    $timeline = [];
-    foreach ($posts as $post) {
-        $timeline[] = [
-            'type' => 'post',
-            'detail' => $post['post_detail'],
-            'date' => $post['post_date'],
-            'user_id' => $post['user_id']
-        ];
-    }
-    foreach ($comments as $comment) {
-        $timeline[] = [
-            'type' => 'comment',
-            'detail' => $comment['comment_detail'],
-            'date' => $comment['comment_date'],
-            'user_id' => $comment['user_id']
-        ];
-    }
-
-    // 日付順に並び替え
-    usort($timeline, function ($a, $b) {
-        return strtotime($a['date']) - strtotime($b['date']);
-    });
-
-    // 表示
-    foreach ($timeline as $item) {
-        if ($item['type'] === 'post') {
-            $messageClass = 'center'; // 投稿は中央表示
-        } else {
-            $messageClass = ((int)$item['user_id'] === (int)$user_id) ? 'right' : 'left';
-        }
-        echo "<div class='message $messageClass'>" . htmlspecialchars($item['detail']) . "</div>";
+    $stmt = $pdo->prepare("SELECT user1_id, user2_id FROM userrooms WHERE room_id = ?");
+    $stmt->execute([$room_id]);
+    $userroom = $stmt->fetch(PDO::FETCH_ASSOC);
+    
+    if ($userroom) {
+        $other_user_id = ($userroom['user1_id'] === $user_id) ? $userroom['user2_id'] : $userroom['user1_id'];
+    } else {
+        echo "チャットルームが見つかりません。";
+        exit();
     }
 } catch (PDOException $e) {
-    echo "<p>エラー: " . $e->getMessage() . "</p>";
+    echo "エラー: " . $e->getMessage();
+    exit();
 }
+
+// データを取得
+try {
+    $query = "
+        SELECT 'chat' AS type, talk_detail AS detail, talk_date AS date, user_id
+        FROM chats
+        WHERE room_id = :room_id
+        UNION ALL
+        SELECT 'comment' AS type, CONCAT(posts.post_detail, '\n', comments.comment_detail) AS detail, comments.comment_date AS date, comments.user_id
+        FROM comments
+        INNER JOIN posts ON comments.post_id = posts.post_id
+        WHERE (comments.user_id = :user_id AND posts.user_id = :other_user_id)
+           OR (comments.user_id = :other_user_id AND posts.user_id = :user_id)
+        ORDER BY date ASC
+    ";
+
+    $stmt = $pdo->prepare($query);
+    $stmt->bindParam(':room_id', $room_id, PDO::PARAM_INT);
+    $stmt->bindParam(':user_id', $user_id, PDO::PARAM_INT);
+    $stmt->bindParam(':other_user_id', $other_user_id, PDO::PARAM_INT);
+    $stmt->execute();
+    $messages = $stmt->fetchAll(PDO::FETCH_ASSOC);
+} catch (PDOException $e) {
+    echo "エラー: " . $e->getMessage();
+    exit();
+}
+
+// メッセージを変数に格納
+$output = "";
+foreach ($messages as $message) {
+    if ($message['type'] === 'chat') {
+        $messageClass = ((int)$message['user_id'] === (int)$user_id) ? 'right' : 'left';
+    } else if ($message['type'] === 'comment') {
+        $messageClass = 'center';
+    }
+    $output .= "<div class='message $messageClass'>" . htmlspecialchars($message['detail']) . "</div>";
+}
+
+// 結果を出力
+echo $output;
 ?>
