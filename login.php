@@ -1,33 +1,26 @@
 <?php
 session_start();
 
-require "./php/dbConnect.php"; // データベース接続
+require "./php/db.php"; // データベース接続
 
-if (isset($_SESSION['email']) && isset($_SESSION['pass'])) {
-    $email = $_SESSION['email'];
-    $password = $_SESSION['pass']; // ハッシュ化前のパスワード
-    $level = intval($_SESSION['diagnosis_level']);
-    
-    if($level == 0){
-        header('Location: ./leveldiagnosis.php');
-        exit;
-    }
+
+if ($_SERVER['REQUEST_METHOD'] === 'POST') {
+    $email = $_POST['email'];
+    $password = $_POST['pass'];
 
     try {
-        // ユーザーのメールアドレスに基づいてデータベースからハッシュ化されたパスワードを取得
-        $sql = "SELECT password FROM users WHERE mailaddress = ?";
-        $stmt = $pdo->prepare($sql);
-        $stmt->bindValue(1, $email, PDO::PARAM_STR);
+        // メールアドレスでユーザー情報を取得
+        $sql = "SELECT user_id, password FROM users WHERE mailaddress = :email";
+        $stmt = $conn->prepare($sql);
+        $stmt->bindValue(':email', $email, PDO::PARAM_STR);
         $stmt->execute();
         $user = $stmt->fetch(PDO::FETCH_ASSOC);
 
         if ($user && password_verify($password, $user['password'])) {
-            // ユーザーIDをセッションに格納
-            $_SESSION['id'] = $user_id;
-            
-            // パスワードが一致すればホーム画面にリダイレクト
-            header('Location: home.html');
-            exit();
+             // パスワードが一致した場合
+             $_SESSION['id'] = $user['id']; // セッションにuser_idを保存
+             header('Location: home.php'); // ホーム画面にリダイレクト
+             exit;
         } else {
             // パスワードが一致しない場合
             echo "メールアドレスまたはパスワードが間違っています。";
