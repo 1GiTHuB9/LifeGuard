@@ -114,6 +114,11 @@ function renderCalendar(date) {
     const monthNames = ["1月", "2月", "3月", "4月", "5月", "6月", "7月", "8月", "9月", "10月", "11月", "12月"];
     const dayNames = ["日", "月", "火", "水", "木", "金", "土"];
 
+    // 今日の日付を取得
+    const today = new Date();
+    const isTodayMonth = today.getFullYear() === year && today.getMonth() === month;
+    const todayDate = isTodayMonth ? today.getDate() : null;
+
     // 反応に対する顔文字画像のマッピング
     const reactionToImageMap = {
         "にっこり": "nicokan.png",
@@ -121,26 +126,36 @@ function renderCalendar(date) {
         "怒り": "okokan.png"
     };
 
+    // 月ヘッダーを設定
     monthHeader.textContent = `${year}年 ${monthNames[month]}`;
     calendar.innerHTML = '';
 
+    // 曜日ヘッダーを生成
     dayNames.forEach(day => {
         const headerElement = document.createElement('div');
-        headerElement.className = 'header';
+        headerElement.className = 'day-header';
         headerElement.textContent = day;
         calendar.appendChild(headerElement);
     });
 
+     // 空白セルを追加
     for (let i = 0; i < firstDayOfMonth; i++) {
         const emptyCell = document.createElement('div');
         calendar.appendChild(emptyCell);
     }
 
+    // 日付セルを生成
     for (let day = 1; day <= daysInMonth; day++) {
         const dayElement = document.createElement('div');
         dayElement.className = 'day';
         dayElement.innerHTML = `<strong>${day}</strong> <div class="kaomoji" id="kaomoji-${day}"></div>`;
         dayElement.onclick = () => showKaomojiSelector(dayElement);
+
+        // 今日の日付の判定とクラス追加部分の修正
+if (day === todayDate) {
+    dayElement.classList.add('today');
+}
+
 
         // データベースからの反応を表示
         const reactionForDate = reactions.find(r => {

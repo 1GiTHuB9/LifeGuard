@@ -1,32 +1,13 @@
-body, html {
-    margin: 0;
-    padding: 0;
-    width: 100%;
-    height:100%;
-    font-family: Arial, sans-serif;
-    overflow:hidden;
-}
-
-/* 背景画像用の設定 */
-.fullscreen-image {
-    display: flex;
-    justify-content: center; /* 水平方向に中央揃え */
-    align-items: center; /* 垂直方向に中央揃え */
-    position: relative;
-    width: 100%;
-    height: 100vh;
-    overflow: hidden;
-}
-
+/* 背景画像の全体設定 */
 .fullscreen-image img {
     width: 100%;
     height: 100%;
-    object-fit: cover;
-   
+    object-fit: cover; /* 背景全体を覆う */
+    position: fixed; /* 背景を画面全体に固定 */
     top: 0;
     left: 0;
+    z-index: -1; /* 背景画像を背面に移動 */
 }
-
 .fullscreen-image::after {
     content: "";
     position: absolute;
@@ -34,190 +15,98 @@ body, html {
     left: 0;
     width: 100%;
     height: 100%;
-    background: rgba(255, 255, 255, 0.5); /* 背景の白いオーバーレイ */
+    background: rgba(255, 255, 255, 0.5); /* ここで不透明度を調整 */
     pointer-events: none; /* オーバーレイがクリックイベントをブロックしないようにする */
 }
 
-/* カレンダーを囲むコンテナのスタイル */
+/* カレンダーコンテナ */
 .calendar-container {
-    background: rgba(255, 255, 255, 0.8); /* 半透明の白色背景 */
-    padding: 40px;
-    border-radius: 10px; /* 角を丸くする */
-    z-index: 1; /* 背景画像より前に表示 */
-    position: absolute;
-    overflow: hidden; /* スライド時にカレンダーが見切れるようにする */
-}
-
-.calendar {
-    width: 400px;
-    display: grid;
-    grid-template-columns: repeat(7, 1fr);
-    gap: 5px;
-    text-align: center;
-    transition: transform 0.5s ease-in-out; /* スライドアニメーション */
-}
-
-.header {
+    background: rgba(255, 255, 255, 0.9); /* 背景色と透明度 */
     padding: 10px;
+    border-radius: 10px;
+    width: 95%; /* 全幅の95%を基準 */
+    max-width: 500px; /* PC画面での最大幅 */
+    margin: 0 auto; /* 中央寄せ */
+    box-sizing: border-box;
     position: relative;
-}
-
-.day {
-    cursor: pointer;
-    border: 1px solid #ccc;
-    padding: 10px;
-    position: relative;
-    height: 50px;
-}
-
-.kaomoji {
-    margin-top: 10px;
-    font-size: 20px;
-}
-
-/* モーダルウィンドウのスタイル */
-.kaomoji-selector {
-    display: none;
-    position: fixed;
-    top: 50%;
-    left: 50%;
-    transform: translate(-50%, -50%);
-    background-color: white;
-    border: 1px solid #ccc;
-    padding: 20px;                   /* パディングを追加 */
-    z-index: 1000;
-    box-shadow: 0 2px 10px rgba(0, 0, 0, 0.5); /* 影を追加 */
-}
-
-
-
-.overlay {
-    display: none;
-    position: fixed;
-    top: 0;
-    left: 0;
-    width: 100%;
-    height: 100%;
-    background: rgba(0, 0, 0, 0.5);
-    z-index: 999;
-}
-
-.month-header {
-    font-size: 24px;
-    margin-bottom: 20px;
-}
-
-/* 顔文字選択リストのスタイル */
-#kaomoji-list {
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    gap: 20px;
-    flex-wrap: nowrap;            /* 要素を横に強制的に並べる */
-    width: 100%;
-    max-width: 400px;             /* リストの最大幅を指定（任意で調整可能） */
     overflow: hidden;
+    height: auto; /* 高さを内容に合わせて調整 */
 }
 
-
-/* 顔文字選択リストの画像スタイル */
-.kaomoji-option {
-    max-width: 80px;
-    max-height: 80px;
-    width: auto;
-    height: auto;
-    object-fit: contain;
-    cursor: pointer;
-    display: block;
-    transition: background-color 0.2s ease, transform 0.2s ease, box-shadow 0.2s ease;
-    border-radius: 5px; /* 角を丸める */
-    padding: 10px; /* マウスオーバー時に背景が見やすくなるように調整 */
+/* カレンダーグリッド */
+.calendar {
+    display: grid;
+    grid-template-columns: repeat(7, 1fr); /* 7列を均等に分割 */
+    gap: 3px; /* 各セル間のスペース */
+    text-align: center;
+    width: 100%; /* カレンダー全体の幅を100% */
 }
 
-/* マウスオーバー時の背景色変更 */
-.kaomoji-option:hover {
-    background-color: rgba(255, 255, 255, 0.7); /* 背景色を薄く白に変更 */
-    box-shadow: 0 0 10px rgba(0, 0, 0, 0.3); /* シャドウを追加 */
-    transform: scale(1.05); /* 少し大きくする */
-    background-color: rgb(57, 118, 118);
+/* 日付セル */
+.day {
+    border: 1px solid #ccc;
+    padding: 10px; /* セル内のスペース */
+    font-size: 1rem; /* ベースのフォントサイズ */
+    min-height: calc(100vw / 10); /* 画面幅を基準とした高さ */
+    max-height: 80px; /* 最大高さの制限 */
+    box-sizing: border-box;
+    position: relative;
+    background-color: #fff; /* セルの背景色 */
+    border-radius: 5px; /* セルの角を丸める */
 }
 
-/* 選択された顔文字に対して背景色を強調 */
-.kaomoji-option.selected {
-    background-color: rgba(0, 128, 255, 0.3); /* 背景色を青に変更（選択された場合） */
-    border: 2px solid rgba(0, 128, 255, 0.7); /* 境界線を青色に変更 */
+/* 曜日のヘッダー */
+.day-header {
+    font-weight: bold;
+    color: #333; /* ヘッダーの文字色 */
 }
-
-
-
-
-/* カレンダー内の顔文字画像のスタイル */
-.kaomoji img {
-    width: 100%; /* 幅を100%にして親要素に収まるように */
-    height: auto; /* 高さは自動調整 */
-    object-fit: contain; /* アスペクト比を保つ */
-    display: block; /* ブロック要素にして独立表示 */
-    margin: 0 auto; /* 中央揃え */
-}
-
-/* 月ナビゲーションボタンのスタイル */
-.month-nav-btn {
-    background: none;
-    border: none;
-    font-size: 30px;
-    cursor: pointer;
-    position: absolute;
-    top: 50%;
-    transform: translateY(-50%);
-    z-index: 10;
-    color: #333;
-    opacity: 0.7;
-}
-
-#prev-month {
-    position: absolute;
-    top: 50%; /* カレンダーの中央に配置 */
-    left: -10px; /* 左端に配置 */
-    transform: translateY(-50%); /* 縦方向の中央に合わせる */
-    z-index: 100;
-    padding: 10px; /* 十分なクリック範囲を確保 */
-}
-
-#next-month {
-    position: absolute;
-    top: 50%; /* カレンダーの中央に配置 */
-    right: -10px; /* 右端に配置 */
-    transform: translateY(-50%); /* 縦方向の中央に合わせる */
-    z-index: 100;
-    padding: 10px; /* 十分なクリック範囲を確保 */
-}
-
-.month-nav-btn:hover {
-    opacity: 1;
-}
-
-/* カレンダーの移動中のアニメーション */
-.slide-left {
-    transform: translateX(-100%);
-}
-
-.slide-right {
-    transform: translateX(100%);
+/* 今日の日付セルのスタイル */
+.today {
+    background-color:aqua; /* 背景色をゴールドに設定 */
+    border: 2px solid #ffa500; /* ボーダー色をオレンジに設定 */
 }
 
 
 
-/* アスペクト比に応じたレイアウト調整 */
-@media (min-aspect-ratio: 16/9) {
-    .fullscreen-image img {
-        width: 100%;
-        height: auto;
+/* モバイル用レスポンシブデザイン */
+@media (max-width: 600px) {
+    .calendar-container {
+        padding: 5px; /* コンテナの余白を縮小 */
+        width: 100%; /* 全幅を使用 */
+        max-width: 100%; /* 最大幅の制限を解除 */
+    }
+
+    .day {
+        font-size: 0.9rem; /* フォントサイズを縮小 */
+        padding: 5px; /* セル内の余白を縮小 */
+        min-height: calc(100vw / 8); /* より小さい高さを設定 */
+    }
+
+    .calendar {
+        gap: 2px; /* セル間のギャップを縮小 */
     }
 }
 
-@media (max-aspect-ratio: 9/16) {
-    .fullscreen-image img {
-        width: auto;
-        height: 100%;
+/* タブレット用レスポンシブデザイン */
+@media (min-width: 601px) and (max-width: 1024px) {
+    .calendar-container {
+        max-width: 600px; /* タブレット幅で最大幅を調整 */
+    }
+
+    .day {
+        font-size: 1rem; /* 標準フォントサイズ */
+        padding: 8px; /* 標準の余白 */
+    }
+}
+
+/* PC用のレスポンシブデザイン */
+@media (min-width: 1025px) {
+    .calendar-container {
+        max-width: 800px; /* 大きい画面の際の最大幅 */
+    }
+
+    .day {
+        font-size: 1.2rem; /* フォントサイズを少し拡大 */
+        padding: 12px; /* より広い余白を設定 */
     }
 }
