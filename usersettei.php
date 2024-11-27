@@ -2,42 +2,51 @@
 session_start();
 require "./php/dbConnect.php"; // データベース接続
 
-// 初期設定
+// セッションからユーザーIDを取得
 $userid = $_SESSION['user_id'] ?? null;
-$profile_img = $_SESSION['last_profile_img'] ?? null; // 前回のプロフィール画像をセッションから取得
+
+$profile_img = null; // 初期値
 $profile = '';
 $isAnonymous = 0;
 
 if ($userid) {
     try {
-        // データベース接続確認
-        if (!$pdo) {
-            throw new PDOException("データベース接続に失敗しました。");
-        }
-
         // ユーザープロフィール情報を取得
         $sql = "SELECT user_name, profile, profile_img, is_anonymous FROM users WHERE user_id = ?";
         $stmt = $pdo->prepare($sql);
         $stmt->execute([$userid]);
         $user = $stmt->fetch(PDO::FETCH_ASSOC);
 
-        if ($user) {
-            $profile_img = $user['profile_img'] ?? $profile_img; // データベースから取得（なければセッションの画像を使用）
-            $profile = $user['profile'] ?? '';
-            $isAnonymous = $user['is_anonymous'] ?? 0;
-        }
-
-        // プロフィール画像をセッションに保存
-        $_SESSION['last_profile_img'] = $profile_img;
+        // プロフィール情報を設定
+        $profile_img = $user['profile_img'] ?? null;
+        $profile = $user['profile'] ?? '';
+        $isAnonymous = $user['is_anonymous'] ?? 0;
     } catch (PDOException $e) {
-        // データベースエラー時、セッション画像を使用
-        $error_message = "データベースエラー: " . htmlspecialchars($e->getMessage());
+        die("エラー: " . $e->getMessage());
     }
 }
 
-// プロフィール画像パスを設定（キャッシュ防止のためにタイムスタンプを追加）
-$profileImgPath = $profile_img ? "uploads/$profile_img?" . time() : '';
+// Ajaxによるプロフィール更新処理
+if ($_SERVER["REQUEST_METHOD"] == "POST" && isset($_POST['ajax'])) {
+    $newProfile = $_POST['profile'] ?? '';
+    $newUserName = $_POST['user_name'] ?? '';
+    $isAnonymous = isset($_POST['anonymous']) ? 1 : 0;
+    $imageName = $_POST['uploaded_image'] ?? $profile_img;
+
+    try {
+        $updateSql = "UPDATE users SET user_name = ?, profile = ?, profile_img = ?, is_anonymous = ? WHERE user_id = ?";
+        $updateStmt = $pdo->prepare($updateSql);
+        $updateStmt->execute([$newUserName, $newProfile, $imageName, $isAnonymous, $userid]);
+
+        echo json_encode(['success' => true, 'user_name' => $newUserName, 'image' => $imageName]);
+        exit;
+    } catch (PDOException $e) {
+        echo json_encode(['error' => 'エラーが発生しました: ' . $e->getMessage()]);
+        exit;
+    }
+}
 ?>
+
 <!DOCTYPE html>
 <html lang="ja">
 <head>
@@ -51,6 +60,12 @@ $profileImgPath = $profile_img ? "uploads/$profile_img?" . time() : '';
         <img src="img/haikei4.png" alt="Full Screen Image">
         <div class="container">
             <a href="#" class="back-button" onclick="goBack()">←戻る</a>
+
+            <?php
+            // プロフィール画像のパスを設定（キャッシュ防止用のタイムスタンプ付き）
+            $defaultProfileImg = 'img/default_profile.png';
+            $profileImgPath = $profile_img ? "uploads/$profile_img?" . time() : $defaultProfileImg;
+            ?>
 
             <div class="user-image" id="profile-image-preview" style="background-image: url('<?php echo htmlspecialchars($profileImgPath); ?>');">
                 <label for="image-upload" class="image-label">
@@ -80,12 +95,6 @@ $profileImgPath = $profile_img ? "uploads/$profile_img?" . time() : '';
             </form>
         </div>
     </div>
-
-    <?php if (isset($error_message)): ?>
-        <script>
-            alert("<?php echo $error_message; ?>");
-        </script>
-    <?php endif; ?>
 
     <script>
         function goBack() {
