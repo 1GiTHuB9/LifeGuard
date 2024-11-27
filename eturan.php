@@ -94,7 +94,7 @@ $sql = "SELECT u.user_id,u.user_name,u.diagnosis_level,p.post_id,p.post_detail,p
                     $count++;
                     } 
                     ?>
-                    <button class="loadPost-button" id="loadPostButton">さらに表示</button>
+                    <button class="vie-more-button" id="loadPostButton">さらに表示</button>
                 </main>
 
                 <!-- 詳細エリア（最初は非表示） -->
@@ -138,7 +138,7 @@ $sql = "SELECT u.user_id,u.user_name,u.diagnosis_level,p.post_id,p.post_detail,p
 
         function showDetail(postId,name,content) {
 
-            currentPageC++;
+            currentPageC = 0;
             // 詳細エリアをスライドインで表示
             const detailArea = document.getElementById("detailArea");
             detailArea.style.display = "block";  // 詳細エリアを表示
@@ -159,7 +159,7 @@ $sql = "SELECT u.user_id,u.user_name,u.diagnosis_level,p.post_id,p.post_detail,p
                         <!-- ここにコメントが挿入されます -->
                     </div>
 
-                    <button class="view-more-button" onclick="showDetail(${postId},'${name}','${content}')">もっと見る</button>
+                    <button class="view-more-button" id="MoreComment" onclick="loadMoreComment('${postId}','${name}','${content}','1')">もっと見る</button>
                 </div>
             `;
               // 動的に生成されたボタンにクリックイベントを追加
@@ -169,7 +169,7 @@ $sql = "SELECT u.user_id,u.user_name,u.diagnosis_level,p.post_id,p.post_detail,p
             });
 
                     // コメント情報を取得
-            fetch(`./php/comment_get.php?post_id=${postId}&page=${currentPageC}`)
+            fetch(`./php/comment_get.php?post_id=${postId}`)
                 .then(response => response.json())
                 .then(comments => {
                     // comment_areaにコメントを挿入
@@ -193,29 +193,58 @@ $sql = "SELECT u.user_id,u.user_name,u.diagnosis_level,p.post_id,p.post_detail,p
             
             // コンテンツ全体を2分割レイアウトに変更
             document.getElementById("chatArea").style.width = "50%";
+
         }
 
-        function loadMoreComment(postId){
-            currentPageC++;
-            
-            fetch(`./php/comment_get.php?post_id=${postId}&page=${currentPageC}`)
-                .then(response => response.json())
-                .then(comments => {
-                    // comment_areaにコメントを挿入
-                    const comment_area = document.getElementById("comment_area");
-                    comment_area.innerHTML = comments.map(comment => `
-                        <div class="commenter">
-                            <div class="profile-commenter"></div>
-                            <div class="comment-content">
-                                <p class="username">${comment.user_name}</p>
-                                <p class="text">${comment.comment_detail}</p>
-                            </div>
-                        </div>
-                    `).join('');
+        function loadMoreComment(postId) {
+
+            currentPageC++; // 次のページ番号を増やす
+
+            // fetchでコメントを取得
+            fetch(`./php/fetchComments.php?post_id=${postId}&page=${currentPageC}`)
+                .then(response => {
+                    if (!response.ok) {
+                        throw new Error('サーバーエラーが発生しました');
+                    }
+                    return response.json(); // レスポンスをJSON形式に変換
                 })
-                .catch(error => console.error('Error:', error));
+                .then(comments => {
+                    // コメントエリアを取得
+                    const commentArea = document.getElementById("comment_area");
+
+                    // コメントが空の場合
+                    if (!comments || comments.length === 0) {
+                        alert("これ以上のコメントはありません");
+                        return;
+                    }
+
+                    // 取得したコメントをループで挿入
+                    comments.forEach(row => {
+                        // コメント要素を作成
+                        const messageDiv = document.createElement("div");
+                        messageDiv.classList.add("comment"); // 適切なクラスを追加
+
+                        // コメントのHTMLを生成
+                        messageDiv.innerHTML = `
+                            <div class="commenter">
+                                <div class="profile-commenter"></div>
+                                <div class="comment-content">
+                                    <p class="username">${row.user_name}</p>
+                                    <p class="text">${row.comment_detail}</p>
+                                </div>
+                            </div>
+                        `;
+
+                        // コメントエリアの末尾にコメントを追加
+                        commentArea.appendChild(messageDiv);
+                    });
+                })
+                .catch(error => {
+                    console.error('エラーが発生しました:', error);
+                    alert('コメントの取得に失敗しました');
+                });
         }
-    
+
         function goToNextPage() {
             window.location.href = "consul.php";
         }
@@ -278,7 +307,7 @@ $sql = "SELECT u.user_id,u.user_name,u.diagnosis_level,p.post_id,p.post_detail,p
                             <div class="profile-pic"></div>
                             <div class="message-content">
                                 <p class="username">${username}</p>
-                                <p class="text" onclick="showDetail('${row.post_id}', '${username}', '${row.post_detail}'); event.stopPropagation();">
+                                <p class="text" onclick="('${row.post_id}', '${username}', '${row.post_detail}'); event.stopPropagation();">
                                     ${row.post_detail}
                                 </p>
                             </div>

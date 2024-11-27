@@ -3,10 +3,9 @@ session_start();
 require "dbConnect.php"; 
 
 // post_idの取得とページ番号の設定
-if (isset($_GET['post_id']) && isset($_GET['page'])) {
+if (isset($_GET['post_id'])) {
     $post_id = (int) $_GET['post_id'];
-    $page = (int) $_GET['page'];
-    $limit = $page * 10;
+    $limit = 10;
 
     $sql = "SELECT c.comment_detail, c.comment_date, c.comment_flag, u.user_name, u.profile_img
             FROM comments AS c
