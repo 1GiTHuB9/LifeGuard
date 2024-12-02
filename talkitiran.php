@@ -1,18 +1,32 @@
 <?php
-    $host = 'localhost'; // ホスト名
-    $username = 'lifeguard_user'; // ユーザー名
-    $password = 'Liguardfe712'; // パスワード
-    $dbname = 'lifeguard'; // データベース名
-
-    // データベースに接続
-    $connection = new mysqli($host, $username, $password, $dbname);
-
-    // 接続エラーチェック
-    if ($connection->connect_error) {
-        die("接続失敗: " . $connection->connect_error);
+    session_start();
+    require "./php/dbConnect.php";
+    require "./php/talk_model.php";
+    
+    $model = new Talk_model($pdo);
+    
+    // チャットルームと最新メッセージを取得
+    try {
+        $chatRooms = $model->getChatRooms();
+        $latestMessages = $model->getLatestMessages();
+    } catch (Exception $e) {
+        $error = "データ取得中にエラーが発生しました: " . htmlspecialchars($e->getMessage());
     }
-
-
+    
+    // チャットルームと最新メッセージのマッピング
+    $chatData = [];
+    if (!empty($chatRooms) && !empty($latestMessages)) {
+        foreach ($chatRooms as $index => $room) {
+            $chatData[] = [
+                'room_name' => $room['room_name'],
+                'room_id' => $room['room_id'],
+                'latest_message' => $latestMessages[$index]['talk_detail'] ?? '　　　　　　　　　　',
+            ];
+        }
+    } elseif (empty($chatRooms)) {
+        $chatData = [];
+        $error = "チャットルームがありません";
+    }
     ?>
 <!DOCTYPE html>
 <html lang="ja">
@@ -33,67 +47,26 @@
         <div class="container">
             <a href="#" class="back-button" onclick="goBack()">←戻る</a>    
             
-                <?php
-
-                    $sqlroom = "SELECT room_name,room_id FROM chatrooms";
-                    $resultroom = $connection->query($sqlroom);
-
-                    $sqltext = "SELECT c.room_id, c.talk_detail
-                                    FROM chats c
-                                    JOIN (
-                                        SELECT room_id, MAX(message_id) AS max_message_id
-                                        FROM chats
-                                        GROUP BY room_id
-                                    ) AS max_messages ON c.room_id = max_messages.room_id AND c.message_id = max_messages.max_message_id
-                                    ORDER BY c.room_id ASC";
-                    $resulttext = $connection->query($sqltext);
-
-
-                    if ($resultroom->num_rows > 0) {
-                        while ($row = $resultroom->fetch_assoc()) {
-                            $chatrooms[] = $row; // 配列にチャットルーム名を追加
-                        }
-                        while($row = $resulttext->fetch_assoc()){
-                            $texts[] = $row;
-                        }
-                        
-                        if (!empty($chatrooms)) {
-                                                    
-                            for ($i=0;$i<count($chatrooms);$i++) {
-                                echo    "<div class='message'>
-                                            <div class='profile-pic'></div>
-                                                <div class='message-content' onclick=\"location.href='talk.php?room_id=".htmlspecialchars($chatrooms[$i]['room_id'])."';\">
-                                                <p class='username'>".htmlspecialchars($chatrooms[$i]['room_name'])."</p>
-                                                <p class='text'>";
-                                                if(!empty($texts[$i]['talk_detail'])){
-                                                    echo htmlspecialchars($texts[$i]['talk_detail'])."</p>";
-                                                }else{
-                                                    echo "　　　　　　　　　　</p>";
-                                                }
-                                            echo "</div>
-                                        </div>
-                                        <hr class='divider'> <!-- 横棒を追加 -->";
-                            }
-
-
-                        } else {
-                            echo "チャットルームがありません";
-                        }                   
-                    }
-                ?>
-            
-            
+            <?php if (!empty($error)): ?>
+            <p><?= htmlspecialchars($error) ?></p>
+            <?php else: ?>
+                <?php foreach ($chatData as $chat): ?>
+                    <div class="message">
+                        <div class="profile-pic"></div>
+                        <div class="message-content" onclick="location.href='talk.php?room_id=<?= htmlspecialchars($chat['room_id']) ?>';">
+                            <p class="username"><?= htmlspecialchars($chat['room_name']) ?></p>
+                            <p class="text"><?= htmlspecialchars($chat['latest_message']) ?></p>
+                        </div>
+                    </div>
+                    <hr class="divider"> <!-- 横棒を追加 -->
+                <?php endforeach; ?>
+            <?php endif; ?>
         </div>
     </div>
     <script>
         function goBack() {
-            history.back();
+            location.href = "home.html";
         }    
     </script>
-
-    <?php
-        // 接続を閉じる
-        $connection->close();
-    ?>
 </body>
 </html>

@@ -7,8 +7,10 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     $comment_detail = $_POST['comment_detail'];
     $comment_flag = $_POST['comment_flag'];
     $post_id = $_POST['post_id'];
+    $comment_user_name = $_POST['comment_user_name'];
     // コメント投稿先のユーザーIDを取得
     $post_user_id = $_POST['post_user_id'];
+    $user_name=$_POST['user_name'];
 
     try {
         // トランザクション開始
@@ -37,12 +39,18 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
 
         // チャットルームが存在しない場合、新しいルームを作成
         if ($stmt->rowCount() === 0&&(int)$user_id !== (int)$post_user_id) {
+            // チャットルーム名を生成
+            if ($user_name === "匿名" && $comment_user_name === "匿名") {
+                $room_name = '匿名同士のチャット';
+            } else {
+                $room_name = $user_name . "と" . $comment_user_name."のチャット";
+            }
+
             // 新しいルームを ChatRooms テーブルに作成
             $stmt = $pdo->prepare("
                 INSERT INTO chatrooms (room_name, room_date) 
                 VALUES (:room_name, CURDATE())
             ");
-            $room_name = "Chat between User " . $user_id . " and User " . $post_user_id;
             $stmt->bindParam(':room_name', $room_name, PDO::PARAM_STR);
             $stmt->execute();
 

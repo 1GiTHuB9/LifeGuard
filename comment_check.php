@@ -22,8 +22,8 @@ try {
 
     // データが取得できたか確認
     if ($login_user) {
-        $login_user_name = $login_user['user_name'];
-        $login_profile_img = $login_user['profile_img'];
+        $comment_user_name = $login_user['user_name'];
+        $comment_profile_img = $login_user['profile_img'];
     } else {
         echo "<p>ログインユーザー情報が見つかりません。</p>";
         exit();
@@ -39,6 +39,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     $anonymous = isset($_POST['anonymous']) ? '匿名' : '公開';
     //匿名フラグを数値で設定 データベースには0か1で保存
     $comment_flag = isset($_POST['anonymous']) ? 1 : 0;
+    $comment_user_name=isset($_POST['anonymous']) ? '匿名' : $comment_user_name;
     // 投稿内容を取得
     $post_detail = $_POST['post_detail'];
     // 投稿先ユーザー名と画像を取得
@@ -65,7 +66,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         <a href="#" class="back-button" onclick="goBack()">←戻る</a>
         <div class="user-image"><span>画像</span></div>
         <!-- ログインユーザー名 -->
-        <div class="user-name"><?php echo htmlspecialchars($login_user_name); ?></div>
+        <div class="user-name"><?php echo htmlspecialchars($comment_user_name); ?></div>
         <p>投稿スタイル：<span id="post-style"><?php echo htmlspecialchars($anonymous); ?></span></p>
         <p>投稿内容:<span id="content-display"><?php echo htmlspecialchars($content); ?></span></p>
         <p>投稿先</p>
@@ -79,11 +80,12 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
             <input type="hidden" name="comment_detail" value="<?php echo htmlspecialchars($content); ?>">
             <input type="hidden" name="comment_flag" value="<?php echo htmlspecialchars($comment_flag); ?>">
             <input type="hidden" name="post_id" value="<?php echo htmlspecialchars($post_id); ?>">
+            <input type="hidden" name="comment_user_name" value="<?php echo htmlspecialchars($comment_user_name); ?>">
             <!-- 投稿先のユーザーID -->
             <input type="hidden" name="post_user_id" value="<?php echo htmlspecialchars($post_user_id); ?>">
+            <input type="hidden" name="user_name" value="<?php echo htmlspecialchars($user_name); ?>">
             <button type="submit" class="submit-button">投稿する！</button>
         </form>
-        <!-- <button class="submit-button">投稿する！</button> -->
     </div>
     </div> 
     <script>
