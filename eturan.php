@@ -94,7 +94,7 @@ $sql = "SELECT u.user_id,u.user_name,u.diagnosis_level,p.post_id,p.post_detail,p
                     $count++;
                     } 
                     ?>
-                    <button class="vie-more-button" id="loadPostButton">さらに表示</button>
+                    <button class="view-more-button" id="loadPostButton">さらに表示</button>
                 </main>
 
                 <!-- 詳細エリア（最初は非表示） -->
@@ -307,7 +307,7 @@ $sql = "SELECT u.user_id,u.user_name,u.diagnosis_level,p.post_id,p.post_detail,p
                             <div class="profile-pic"></div>
                             <div class="message-content">
                                 <p class="username">${username}</p>
-                                <p class="text" onclick="('${row.post_id}', '${username}', '${row.post_detail}'); event.stopPropagation();">
+                                <p class="text" onclick="showDetail('${row.post_id}', '${username}', '${row.post_detail}'); event.stopPropagation();">
                                     ${row.post_detail}
                                 </p>
                             </div>
