@@ -1,7 +1,7 @@
 <?php
 session_start();
 // DB接続のための設定
-require "./php/db.php"; // db.php のパスを確認してください
+require "./php/dbConnect.php"; // db.php のパスを確認してください
 
 if (!isset($_SESSION['id'])) {
     // ログインしていない場合はログインページにリダイレクト
