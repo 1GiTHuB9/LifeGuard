@@ -26,12 +26,11 @@
                 <br>
 
                 <label for="email"><h3>メールアドレス</h3></label>
-                <input type="email" id="email" name="email" required class="box" pattern="^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$"><br>
+                <input type="email" id="email" name="email" required class="box"><br>
                 <br>
    
                 <label for="password"><h3>パスワード</h3></label>
-                <input type="password" id="password" name="password" required class="box" pattern="^(?=.*[A-Za-z])(?=.*\d)[A-Za-z\d]{8,}$"
-                title="8文字以上で、英字と数字をそれぞれ1つ以上含む必要があります"><br>
+                <input type="password" id="password" name="password" required class="box"><br>
                 <br><br>
                 
 

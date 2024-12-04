@@ -161,9 +161,7 @@ body, html {
     cursor: pointer;
     align-self: center;
     margin-top: 20px;
-    margin-bottom: 20px;
 }
-
 
 /*コメントを追加ボタン*/
 .comment-button {

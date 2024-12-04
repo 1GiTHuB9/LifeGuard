@@ -148,10 +148,7 @@ body, html {
 .submit-button:hover {
     background-color: #FF8C00;
 }
-#post_detail{
-    /* 文字のはみ出しを抑える*/
-    overflow-wrap: anywhere;
-}
+
 /* アスペクト比に応じたレイアウト調整 */
 @media (min-aspect-ratio: 16/9) {
     .fullscreen-image img {
