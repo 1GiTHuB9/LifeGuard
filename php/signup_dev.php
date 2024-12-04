@@ -1,4 +1,5 @@
 <?php
+session_start();
 require "./dbConnect.php";
 
 function getParam($key, $pattern, $error){
@@ -31,13 +32,19 @@ try {
     $stmt->bindValue(3, $_POST['name'], PDO::PARAM_STR);
 
     // クエリ実行
-    $stmt->execute();
+    if($stmt->execute()){
+        //新規登録ユーザのIDを取得し、セッションに保存
+        $_SESSION['id'] = $pdo->lastInsertId();//最後に挿入されたユーザーIDを取得
 
-    echo "<script type='text/javascript'>alert('アカウント登録が完了しました'); window.location.href='../usersettei.php';</script>";
-    exit();
+        echo "<script type='text/javascript'>alert('アカウント登録が完了しました'); window.location.href = '../leveldiagnosis.php';</script>";
+        exit();
+    }else{
+        //実行に失敗した場合
+        echo "<script type='text/javascript'>alert('登録に失敗しました。再度お試しください。'); window.location.href = '../signup.php';</script>";
+        exit();
+    }
 } catch (PDOException $e) {
     // エラーメッセージをキャッチして表示
     echo "データの挿入中にエラーが発生しました: " . $e->getMessage();
-    header('Location:../signup.php');
 }
 ?>

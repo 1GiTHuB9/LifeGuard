@@ -62,7 +62,7 @@ if (!isset($_SESSION['id'])) {
 
          // 各ボタンのページ遷移処理
     document.getElementById("talk").addEventListener("click", function() {
-        window.location.href = "talkitiran.html";
+        window.location.href = "talkitiran.php";
     });
 
     document.getElementById("chosi").addEventListener("click", function() {
@@ -70,7 +70,7 @@ if (!isset($_SESSION['id'])) {
     });
 
     document.getElementById("eturan").addEventListener("click", function() {
-        window.location.href = "eturan.html";
+        window.location.href = "eturan.php";
     });
 
     // ログアウトボタンのクリックイベント
