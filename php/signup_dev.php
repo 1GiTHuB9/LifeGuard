@@ -1,6 +1,22 @@
 <?php
 require "./dbConnect.php";
 
+function getParam($key, $pattern, $error){
+	//POSTのパラメータを取り出す
+	$val = filter_input(INPUT_POST, $key);
+
+	//文字エンコーディング(UTF-8)のチェック
+	if(! mb_check_encoding($val, 'UTF-8')){
+		die('文字エンコーディングが不正です');
+	}
+
+	//引数で受け取ったパターンでチェック
+	if(preg_match($pattern, $val) !== 1) {
+		die($error);
+	}
+	return $val;
+}
+
 try {
 
     $hashedPassword = password_hash($_POST['password'], PASSWORD_DEFAULT);
