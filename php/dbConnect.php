@@ -1,7 +1,7 @@
 <?php
 // データベース接続
 $host = 'localhost';
-$dbname = 'lifeguard2';
+$dbname = 'lifeguard';
 $username = 'lifeguard_user';
 $password = 'Liguardfe712';
 

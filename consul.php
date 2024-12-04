@@ -1,3 +1,12 @@
+<?php
+session_start();
+
+if(isset($_SESSION['id'])){
+}else{
+    header('Location: ./login.php');
+}
+
+?>
 <!DOCTYPE html>
 <html lang="ja">
 <head>
@@ -17,7 +26,7 @@
             <div class="suggestion">
                 周りの人はこんなことを書き込んでるよ！
                 <div class="other-posts">
-                    他の人の投稿を表示
+                    他の人の投稿を表示  
                     リンクか最新or共感の多い投稿をいくつか表示
                 </div>
             </div>
@@ -39,7 +48,7 @@
             var postStyle = anonymous ? '匿名' : '公開';
             localStorage.setItem('postStyle', postStyle);
             localStorage.setItem('content', content);
-            window.location.href = 'soudankakunin.html';
+            window.location.href = 'consul_check.php';
         });
 
         function goBack() {

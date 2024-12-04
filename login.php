@@ -29,7 +29,9 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         echo "エラーが発生しました: " . $e->getMessage();
     }
 }
+
 ?>
+
 <!DOCTYPE html>
 <html lang="ja">
 <head>
@@ -58,8 +60,24 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
    
                 <label for="password"><h3>パスワード</h3></label>
                 <input type="password" id="password" name="pass" requpasswoired class="box"><br>
-                <br><br>
-
+                
+                <?php
+                // エラーメッセージが設定されていない場合のみ <br> を表示
+                if(!isset($_SESSION['error']) && !isset($_SESSION['e'])){
+                    echo "<br><br>";
+                }
+                ?>
+                <span id="errorCheck" class="error-message">
+                <?php
+                if(isset($_SESSION['error'])){
+                    echo "<p>" . $_SESSION['error'] . "</p>";
+                    unset($_SESSION['error']);
+                  } else if(isset($_SESSION['e'])){
+                    echo "<p>" . $_SESSION['e'] . "</p>";
+                    unset($_SESSION['e']);
+                  } 
+                ?>
+                </span>  
                 <button type="submit">ログイン</button>
             </form>
             
