@@ -1,13 +1,13 @@
 <?php
 session_start();
 
-require "./php/db.php"; // データベース接続
+require "./php/dbConnect.php"; // データベース接続
 
 
 if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     $email = $_POST['email'];
     $password = $_POST['pass'];
-
+    $level = intval($_SESSION['diagnosis_level']);
     try {
         // メールアドレスでユーザー情報を取得
         $sql = "SELECT user_id, password FROM users WHERE mailaddress = :email";

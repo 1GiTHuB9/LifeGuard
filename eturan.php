@@ -13,7 +13,7 @@ $sql = "SELECT u.user_id,u.user_name,u.diagnosis_level,p.post_id,p.post_detail,p
         
         $stmt = $pdo->prepare($sql); 
         
-        $stmt->bindValue(1, $_SESSION['dlevel'], PDO::PARAM_INT);
+        $stmt->bindValue(1, $_SESSION['diagnosis_level'], PDO::PARAM_INT);
         // クエリ実行
         $stmt->execute();
         $post = $stmt->fetchAll(PDO::FETCH_ASSOC);
