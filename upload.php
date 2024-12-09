@@ -2,12 +2,6 @@
 session_start();
 require "./php/dbConnect.php"; // データベース接続
 
-// ユーザーがログインしているか確認
-if (!isset($_SESSION['user_id'])) {
-    echo json_encode(["success" => false, "error" => "ログインしていません。"]);
-    exit;
-}
-
 $userId = $_SESSION['user_id'];
 
 // POSTリクエストで画像がアップロードされた場合
