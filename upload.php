@@ -1,4 +1,5 @@
 <?php
+session_start();
 require "./php/dbConnect.php"; // データベース接続
 
 // POSTリクエストで画像がアップロードされた場合
@@ -18,15 +19,23 @@ if ($_SERVER["REQUEST_METHOD"] == "POST" && isset($_FILES['profile_img'])) {
 
         // アップロード先にファイルを保存
         if (move_uploaded_file($_FILES['profile_img']['tmp_name'], $uploadDir . $imageName)) {
-            // アップロードが成功した場合、データベースにファイル名を保存
-            $sql = "INSERT INTO uploaded_images (file_name) VALUES (:file_name)";
-            $stmt = $pdo->prepare($sql);
-            $stmt->bindParam(':file_name', $imageName, PDO::PARAM_STR);
+            // ユーザーIDをセッションから取得
+            $userId = $_SESSION['user_id'] ?? null;
 
-            if ($stmt->execute()) {
-                echo json_encode(["success" => true, "image" => $imageName]);
+            if ($userId) {
+                // データベースにファイル名を保存
+                $sql = "UPDATE users SET profile_img = :profile_img WHERE user_id = :user_id";
+                $stmt = $pdo->prepare($sql);
+                $stmt->bindParam(':profile_img', $imageName, PDO::PARAM_STR);
+                $stmt->bindParam(':user_id', $userId, PDO::PARAM_INT);
+
+                if ($stmt->execute()) {
+                    echo json_encode(["success" => true, "image" => $imageName]);
+                } else {
+                    echo json_encode(["success" => false, "error" => "データベースの更新に失敗しました。"]);
+                }
             } else {
-                echo json_encode(["success" => false, "error" => "データベースへの保存に失敗しました。"]);
+                echo json_encode(["success" => false, "error" => "ユーザーがログインしていません。"]);
             }
         } else {
             echo json_encode(["success" => false, "error" => "アップロードに失敗しました。"]);
@@ -37,4 +46,3 @@ if ($_SERVER["REQUEST_METHOD"] == "POST" && isset($_FILES['profile_img'])) {
 } else {
     echo json_encode(["success" => false, "error" => "画像が見つかりません。"]);
 }
-?>
