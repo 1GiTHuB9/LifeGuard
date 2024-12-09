@@ -47,6 +47,17 @@ $sql = "SELECT u.user_id,u.user_name,u.diagnosis_level,p.post_id,p.post_detail,p
             width: 100%;  /* 最初は画面全体 */
             transition: width 0.5s ease-in-out;
         }
+
+          /* スマホサイズ用 */
+          @media (max-width: 768px) {
+            .detail-area {
+                top: auto;
+                bottom: 0;
+                width: 60%;
+                height: 60%; /* 必要に応じて高さを調整 */
+                transform: translateY(100%); /* 初期位置（スマホ） */
+            }
+        }
     </style>
 </head>
 <body>
@@ -186,9 +197,9 @@ $sql = "SELECT u.user_id,u.user_name,u.diagnosis_level,p.post_id,p.post_detail,p
                 })
                 .catch(error => console.error('Error:', error));
             // 動的に生成されたボタンにクリックイベントを追加
-            document.getElementById("dynamicCommentButton").addEventListener("click", function() {
-                goToNextcommet();  // ページ遷移関数を呼び出す
-            });
+            //document.getElementById("dynamicCommentButton").addEventListener("click", function() {
+              //  goToNextcommet();  // ページ遷移関数を呼び出す
+            //});
 
             
             // コンテンツ全体を2分割レイアウトに変更
@@ -274,6 +285,49 @@ $sql = "SELECT u.user_id,u.user_name,u.diagnosis_level,p.post_id,p.post_detail,p
             history.back();
         }
 
+        //スマホの時の２分割js
+        // コメントボタンクリック時の処理
+        document.addEventListener("DOMContentLoaded", () => {
+            const commentButtons = document.querySelectorAll(".text");
+            const commentView = document.getElementById("detailArea");
+
+            commentButtons.forEach((button) => {
+                button.addEventListener("click", () => {
+                    const screenWidth = window.innerWidth;
+
+                    if (screenWidth <= 768) {
+                        commentView.style.display = "block";
+                        commentView.style.transform = "translateY(100%)";
+                        commentView.style.transition = "transform 0.5s ease-in-out";
+                        commentView.style.transform = "translateY(0)";
+                    } else {
+                        commentView.style.display = "block";
+                        commentView.style.transform = "translateX(100%)";
+                        commentView.style.transition = "transform 0.5s ease-in-out";
+                        commentView.style.transform = "translateX(0)";
+                    }
+
+                    document.getElementById("chatArea").style.width = screenWidth <= 768 ? "100%" : "50%";
+                });
+            });
+
+
+            document.body.addEventListener("click", (e) => {
+                if (e.target.id === "chatArea" || e.target.id === "closeButton") {
+                    if (window.innerWidth <= 768) {
+                        commentView.style.transform = "translateY(100%)";
+                    } else {
+                        commentView.style.transform = "translateX(100%)";
+                    }
+
+                    setTimeout(() => {
+                        commentView.style.display = "none";
+                    }, 500);
+                    document.getElementById("chatArea").style.width = "100%";
+                }
+            });
+        });
+
         // JavaScriptで固定のコメント追加ボタンがクリックされたときにページ遷移
         document.getElementById("commentButton").addEventListener("click", function() {
             goToNextcommet();  // ページ遷移関数を呼び出す
@@ -281,45 +335,37 @@ $sql = "SELECT u.user_id,u.user_name,u.diagnosis_level,p.post_id,p.post_detail,p
 
         let currentPage = 0; // 現在のページ番号
 
-        // さらに表示ボタンがクリックされたときの処理
         document.getElementById("loadPostButton").addEventListener("click", loadMorePosts);
 
-        function loadMorePosts() {
-            currentPage++; // 次のページ番号に進む
+function loadMorePosts() {
+    currentPage++;
+    fetch(`./php/fetchPosts.php?page=${currentPage}`)
+        .then(response => response.json())
+        .then(posts => {
+            const chatArea = document.getElementById("chatArea");
+            const loadButton = document.getElementById("loadPostButton");
 
-            // fetchを使用して、次の10件の投稿を非同期で取得
-            fetch(`./php/fetchPosts.php?page=${currentPage}`)
-                .then(response => response.json())
-                .then(posts => {
-                    const chatArea = document.getElementById("chatArea"); // チャットエリアを取得
-                    const loadButton = document.getElementById("loadPostButton"); // さらに表示ボタンを取得
+            posts.forEach(row => {
+                const messageDiv = document.createElement("div");
+                messageDiv.classList.add("message");
 
-                    // 取得した投稿をチャットエリアの上部に追加
-                    posts.forEach(row => {
-                        const messageDiv = document.createElement("div");
-                        messageDiv.classList.add("message");
+                const username = row.post_flag == 1 ? "匿名" : row.user_name;
 
-                        // 匿名判定
-                        const username = row.post_flag == 1 ? "匿名" : row.user_name;
+                messageDiv.innerHTML = `
+                    <div class="profile-pic"></div>
+                    <div class="message-content">
+                        <p class="username">${username}</p>
+                        <p class="text" onclick="showDetail('${row.post_id}', '${username}', '${row.post_detail}'); event.stopPropagation();">
+                            ${row.post_detail}
+                        </p>
+                    </div>
+                `;
 
-                        // 新しい投稿のHTMLを生成
-                        messageDiv.innerHTML = `
-                            <div class="profile-pic"></div>
-                            <div class="message-content">
-                                <p class="username">${username}</p>
-                                <p class="text" onclick="showDetail('${row.post_id}', '${username}', '${row.post_detail}'); event.stopPropagation();">
-                                    ${row.post_detail}
-                                </p>
-                            </div>
-                        `;
-
-                        // loadButtonの上に新しいメッセージを挿入
-                        chatArea.insertBefore(messageDiv, loadButton);
-                    });
-                })
-                .catch(error => console.error('エラーが発生しました:', error));
-        }
-
-    </script>
+                chatArea.insertBefore(messageDiv, loadButton);
+            });
+        })
+        .catch(error => console.error('エラーが発生しました:', error));
+}
+</script>
 </body>
 </html>
