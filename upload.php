@@ -1,5 +1,14 @@
 <?php
+session_start();
 require "./php/dbConnect.php"; // データベース接続
+
+// ユーザーがログインしているか確認
+if (!isset($_SESSION['user_id'])) {
+    echo json_encode(["success" => false, "error" => "ログインしていません。"]);
+    exit;
+}
+
+$userId = $_SESSION['user_id'];
 
 // POSTリクエストで画像がアップロードされた場合
 if ($_SERVER["REQUEST_METHOD"] == "POST" && isset($_FILES['profile_img'])) {
@@ -12,24 +21,30 @@ if ($_SERVER["REQUEST_METHOD"] == "POST" && isset($_FILES['profile_img'])) {
         $imageName = uniqid('profile_', true) . '.' . $extension;
         $uploadDir = 'uploads/';
 
+        // アップロードディレクトリが存在しない場合は作成
         if (!is_dir($uploadDir)) {
             mkdir($uploadDir, 0777, true);
         }
 
         // アップロード先にファイルを保存
         if (move_uploaded_file($_FILES['profile_img']['tmp_name'], $uploadDir . $imageName)) {
-            // アップロードが成功した場合、データベースにファイル名を保存
-            $sql = "INSERT INTO uploaded_images (file_name) VALUES (:file_name)";
-            $stmt = $pdo->prepare($sql);
-            $stmt->bindParam(':file_name', $imageName, PDO::PARAM_STR);
+            try {
+                // データベースに画像情報を保存
+                $sql = "UPDATE users SET profile_img = :profile_img WHERE user_id = :user_id";
+                $stmt = $pdo->prepare($sql);
+                $stmt->bindParam(':profile_img', $imageName, PDO::PARAM_STR);
+                $stmt->bindParam(':user_id', $userId, PDO::PARAM_INT);
 
-            if ($stmt->execute()) {
-                echo json_encode(["success" => true, "image" => $imageName]);
-            } else {
-                echo json_encode(["success" => false, "error" => "データベースへの保存に失敗しました。"]);
+                if ($stmt->execute()) {
+                    echo json_encode(["success" => true, "image" => $imageName]);
+                } else {
+                    echo json_encode(["success" => false, "error" => "データベースの更新に失敗しました。"]);
+                }
+            } catch (PDOException $e) {
+                echo json_encode(["success" => false, "error" => "データベースエラー: " . $e->getMessage()]);
             }
         } else {
-            echo json_encode(["success" => false, "error" => "アップロードに失敗しました。"]);
+            echo json_encode(["success" => false, "error" => "ファイルのアップロードに失敗しました。"]);
         }
     } else {
         echo json_encode(["success" => false, "error" => "無効なファイル形式です。"]);
@@ -37,4 +52,3 @@ if ($_SERVER["REQUEST_METHOD"] == "POST" && isset($_FILES['profile_img'])) {
 } else {
     echo json_encode(["success" => false, "error" => "画像が見つかりません。"]);
 }
-?>
