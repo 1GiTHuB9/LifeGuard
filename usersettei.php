@@ -5,9 +5,7 @@ require "./php/dbConnect.php"; // データベース接続
 // セッションからユーザーIDを取得
 $userid = $_SESSION['user_id'] ?? null;
 
-// 初期値の設定
-$defaultProfileImg = 'img/default_profile.png'; // デフォルトのプロフィール画像
-$profile_img = null;
+$profile_img = null; // 初期値
 $profile = '';
 $isAnonymous = 0;
 
@@ -19,21 +17,34 @@ if ($userid) {
         $stmt->execute([$userid]);
         $user = $stmt->fetch(PDO::FETCH_ASSOC);
 
-        if ($user) {
-            // 前回のデータが存在する場合は設定
-            $profile_img = $user['profile_img'] ?? null;
-            $profile = $user['profile'] ?? '';
-            $isAnonymous = $user['is_anonymous'] ?? 0;
-        }
+        // プロフィール情報を設定
+        $profile_img = $user['profile_img'] ?? null;
+        $profile = $user['profile'] ?? '';
+        $isAnonymous = $user['is_anonymous'] ?? 0;
     } catch (PDOException $e) {
         die("エラー: " . $e->getMessage());
     }
 }
 
-// プロフィール画像のパスを設定（キャッシュ防止用のタイムスタンプ付き）
-$profileImgPath = $profile_img && file_exists("uploads/$profile_img") 
-    ? "uploads/$profile_img?" . time() 
-    : $defaultProfileImg;
+// Ajaxによるプロフィール更新処理
+if ($_SERVER["REQUEST_METHOD"] == "POST" && isset($_POST['ajax'])) {
+    $newProfile = $_POST['profile'] ?? '';
+    $newUserName = $_POST['user_name'] ?? '';
+    $isAnonymous = isset($_POST['anonymous']) ? 1 : 0;
+    $imageName = $_POST['uploaded_image'] ?? $profile_img;
+
+    try {
+        $updateSql = "UPDATE users SET user_name = ?, profile = ?, profile_img = ?, is_anonymous = ? WHERE user_id = ?";
+        $updateStmt = $pdo->prepare($updateSql);
+        $updateStmt->execute([$newUserName, $newProfile, $imageName, $isAnonymous, $userid]);
+
+        echo json_encode(['success' => true, 'user_name' => $newUserName, 'image' => $imageName]);
+        exit;
+    } catch (PDOException $e) {
+        echo json_encode(['error' => 'エラーが発生しました: ' . $e->getMessage()]);
+        exit;
+    }
+}
 ?>
 
 <!DOCTYPE html>
@@ -49,6 +60,12 @@ $profileImgPath = $profile_img && file_exists("uploads/$profile_img")
         <img src="img/haikei4.png" alt="Full Screen Image">
         <div class="container">
             <a href="#" class="back-button" onclick="goBack()">←戻る</a>
+
+            <?php
+            // プロフィール画像のパスを設定（キャッシュ防止用のタイムスタンプ付き）
+            $defaultProfileImg = 'img/default_profile.png';
+            $profileImgPath = $profile_img ? "uploads/$profile_img?" . time() : $defaultProfileImg;
+            ?>
 
             <div class="user-image" id="profile-image-preview" style="background-image: url('<?php echo htmlspecialchars($profileImgPath); ?>');">
                 <label for="image-upload" class="image-label">
