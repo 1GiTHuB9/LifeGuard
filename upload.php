@@ -47,13 +47,12 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
 
     // データベースのユーザー情報を更新
     try {
-        $sql = "UPDATE Users SET profile_img = :profile_img, profile = :profile, is_anonymous = :is_anonymous WHERE user_id = :user_id";
+        $sql = "UPDATE Users SET profile_img = :profile_img, profile = :profile,  WHERE user_id = :user_id";
         $stmt = $pdo->prepare($sql);
         
         // プレースホルダーに値をバインド
         $stmt->bindParam(':profile_img', $uploaded_image, PDO::PARAM_STR);
         $stmt->bindParam(':profile', $profile, PDO::PARAM_STR);
-        $stmt->bindParam(':is_anonymous', $isAnonymous, PDO::PARAM_INT);
         $stmt->bindParam(':user_id', $user_id, PDO::PARAM_INT);
 
         // SQLを実行

@@ -60,6 +60,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     <img src="haikei4.png" alt="Full Screen Image">
 
     <div class="calendar-container">
+    <a href="#" class="back-button" onclick="goBack()">←戻る</a>
         <button id="prev-month" class="month-nav-btn">◀</button>
         <div class="month-header" id="month-header"></div>
         <div class="calendar" id="calendar"></div>
@@ -240,6 +241,9 @@ function saveReaction(userId, reaction, reactionDate) {
 
 cancelBtn.onclick = closeKaomojiSelector;
 overlay.onclick = closeKaomojiSelector;
+function goBack() {
+            history.back();
+        }
 </script>
 
 </body>
