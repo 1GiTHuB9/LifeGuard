@@ -106,12 +106,19 @@ h2 {
     margin-bottom: 20px;
 }
 
- 
+/* フォーム全体のCSS */
+#consultation-form {
+    width: 500px; /* デフォルト幅を500px */
+    max-width: 100%; /* 画面幅を超えない最大幅 */
+    margin: 0 auto; /* フォーム全体を中央揃え */
+    box-sizing: border-box;
+}
+
+/* テキストエリア */
 textarea {
-    width: auto;
-    min-width: 600px;
-    max-width: 600px;  /* 最大横幅を設定（例：600px） */
-    height: 20vh; 
+    width: 100%; /* テキストエリアの幅をフォームに合わせる */
+    max-width: 600px; /* 最大幅を設定 */
+    height: 20vh;
     margin-bottom: 20px;
     padding: 10px;
     font-size: 16px;
@@ -121,14 +128,15 @@ textarea {
     box-sizing: border-box;
 }
 
+/* スマホ用のレスポンシブ */
 @media (max-width: 767px) {
     textarea {
-        min-width:auto;
-        max-width:400px;
-        width: 350px;    /* スマホで幅100% */
-        height: 20vh;   /* 通常の高さ */
+        max-width: 100%;
+        width: 100%; 
+        height: 20vh;
     }
 }
+
  
 
 
