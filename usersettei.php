@@ -98,7 +98,7 @@ $profileImgPath = $profile_img ? "uploads/$profile_img?" . time() : $defaultProf
                     document.getElementById('uploaded_image').value = data.image;
                     const previewContainer = document.getElementById("profile-image-preview");
                     const timestamp = new Date().getTime(); // キャッシュ防止
-                    previewContainer.style.backgroundImage = `url(uploads/${data.image}?${timestamp})`;
+                    previewContainer.style.backgroundImage = url(uploads/${data.image}?${timestamp});
                 } else {
                     alert(data.error || "画像のアップロードに失敗しました。");
                 }
@@ -121,7 +121,7 @@ $profileImgPath = $profile_img ? "uploads/$profile_img?" . time() : $defaultProf
             .then(data => {
                 if (data.success) {
                     const timestamp = new Date().getTime(); // キャッシュ防止
-                    document.getElementById("profile-image-preview").style.backgroundImage = `url(uploads/${data.image}?${timestamp})`;
+                    document.getElementById("profile-image-preview").style.backgroundImage = url(uploads/${data.image}?${timestamp});
                     alert("プロフィールが更新されました！");
                 } else {
                     alert(data.error || "プロフィールの更新に失敗しました。");
