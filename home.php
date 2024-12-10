@@ -1,3 +1,13 @@
+<?php
+session_start();
+
+// ログインチェック
+if (!isset($_SESSION['id'])) {
+    // ログインしていない場合はログインページにリダイレクト
+    header('Location: login.php');
+    exit();
+}
+?>
 <!DOCTYPE html>
 <html lang="ja">
 <head>

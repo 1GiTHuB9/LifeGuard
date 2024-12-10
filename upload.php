@@ -2,13 +2,20 @@
 session_start();
 require "./php/dbConnect.php"; // データベース接続
 
-// ユーザーIDをセッションから取得
-$userid = $_SESSION['user_id'] ?? null;
+if ($_SERVER['REQUEST_METHOD'] === 'POST') {
+    // フォームからのデータ取得
+    $user_id = $_POST['user_id'];
+    $profile = !empty($_POST['profile']) ? $_POST['profile'] : ''; // 空の場合は空文字列にする
+    $isAnonymous = isset($_POST['anonymous']) ? 1 : 0; // チェックボックスの値を整数に変換
+    $uploaded_image = !empty($_POST['uploaded_image']) ? $_POST['uploaded_image'] : ''; // 空の場合は空文字列にする
 
-// POSTリクエストで画像がアップロードされた場合
-if ($_SERVER["REQUEST_METHOD"] == "POST" && isset($_FILES['profile_img']) && $userid) {
-    $fileType = $_FILES['profile_img']['type'];
-    $allowedTypes = ['image/jpeg', 'image/png', 'image/gif'];
+    // 画像がアップロードされたかどうか確認
+    if (!empty($_FILES['profile_img']['name'])) {
+        // ファイルアップロード処理
+        $targetDir = "uploads/";
+        $targetFile = $targetDir . basename($_FILES["profile_img"]["name"]);
+        $uploadOk = 1;
+        $imageFileType = strtolower(pathinfo($targetFile, PATHINFO_EXTENSION));
 
     if (in_array($fileType, $allowedTypes)) {
         // ユニークなファイル名を生成
@@ -29,26 +36,36 @@ if ($_SERVER["REQUEST_METHOD"] == "POST" && isset($_FILES['profile_img']) && $us
                 $stmt->execute([$userid]);
                 $existingImage = $stmt->fetchColumn();
 
-                if ($existingImage && file_exists($uploadDir . $existingImage)) {
-                    unlink($uploadDir . $existingImage); // 古いファイルを削除
-                }
+        // 特定のファイル形式を許可
+        if (!in_array($imageFileType, ['jpg', 'jpeg', 'png', 'gif'])) {
+            echo json_encode(['success' => false, 'error' => 'JPG、JPEG、PNG、GIFファイルのみが許可されています。']);
+            $uploadOk = 0;
+        }
 
-                // 新しい画像データを挿入または更新
-                $sql = "INSERT INTO uploaded_images (user_id, file_name) 
-                        VALUES (:user_id, :file_name) 
-                        ON DUPLICATE KEY UPDATE file_name = :file_name";
-                $stmt = $pdo->prepare($sql);
-                $stmt->bindParam(':user_id', $userid, PDO::PARAM_INT);
-                $stmt->bindParam(':file_name', $imageName, PDO::PARAM_STR);
-
-                if ($stmt->execute()) {
-                    echo json_encode(["success" => true, "image" => $imageName]);
-                } else {
-                    echo json_encode(["success" => false, "error" => "データベースへの保存に失敗しました。"]);
-                }
-            } catch (PDOException $e) {
-                echo json_encode(["success" => false, "error" => "エラー: " . $e->getMessage()]);
+        // エラーがない場合、ファイルをアップロード
+        if ($uploadOk === 1) {
+            if (move_uploaded_file($_FILES["profile_img"]["tmp_name"], $targetFile)) {
+                $uploaded_image = basename($_FILES["profile_img"]["name"]); // アップロードされた画像名を保存
+            } else {
+                echo json_encode(['success' => false, 'error' => '画像のアップロードに失敗しました。']);
             }
+        }
+    }
+
+    // データベースのユーザー情報を更新
+    try {
+        $sql = "UPDATE Users SET profile_img = :profile_img, profile = :profile, is_anonymous = :is_anonymous WHERE user_id = :user_id";
+        $stmt = $pdo->prepare($sql);
+        
+        // プレースホルダーに値をバインド
+        $stmt->bindParam(':profile_img', $uploaded_image, PDO::PARAM_STR);
+        $stmt->bindParam(':profile', $profile, PDO::PARAM_STR);
+        $stmt->bindParam(':is_anonymous', $isAnonymous, PDO::PARAM_INT);
+        $stmt->bindParam(':user_id', $user_id, PDO::PARAM_INT);
+
+        // SQLを実行
+        if ($stmt->execute()) {
+            echo json_encode(['success' => true, 'image' => $uploaded_image]);
         } else {
             echo json_encode(["success" => false, "error" => "アップロードに失敗しました。"]);
         }
@@ -58,4 +75,5 @@ if ($_SERVER["REQUEST_METHOD"] == "POST" && isset($_FILES['profile_img']) && $us
 } else {
     echo json_encode(["success" => false, "error" => "画像が見つからないか、ユーザーIDがありません。"]);
 }
+
 ?>

@@ -1,3 +1,12 @@
+<?php
+session_start();
+
+if(isset($_SESSION['id'])){
+}else{
+    header('Location: ./login.php');
+}
+
+?>
 <!DOCTYPE html>
 <html lang="ja">
 <head>
@@ -14,13 +23,6 @@
         <h2>相談したいことを書き込もう！</h2>
         <form id="consultation-form">
             <textarea name="content" id="content" placeholder="相談内容" required></textarea>
-            <div class="suggestion">
-                周りの人はこんなことを書き込んでるよ！
-                <div class="other-posts">
-                    他の人の投稿を表示
-                    リンクか最新or共感の多い投稿をいくつか表示
-                </div>
-            </div>
             <div class="anonymous">
                 <label for="anonymous">
                     <input type="checkbox" id="anonymous" name="anonymous">
@@ -39,7 +41,7 @@
             var postStyle = anonymous ? '匿名' : '公開';
             localStorage.setItem('postStyle', postStyle);
             localStorage.setItem('content', content);
-            window.location.href = 'soudankakunin.html';
+            window.location.href = 'consul_check.php';
         });
 
         function goBack() {
