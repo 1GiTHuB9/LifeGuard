@@ -14,10 +14,7 @@ $isAnonymous = 0;
 if ($userid) {
     try {
         // ユーザープロフィール情報を取得
-        $sql = "SELECT u.user_name, u.profile, ui.file_name AS profile_img, u.is_anonymous
-                FROM users u
-                LEFT JOIN uploaded_images ui ON u.user_id = ui.user_id
-                WHERE u.user_id = ?";
+        $sql = "SELECT user_name, profile, profile_img, is_anonymous FROM users WHERE user_id = ?";
         $stmt = $pdo->prepare($sql);
         $stmt->execute([$userid]);
         $user = $stmt->fetch(PDO::FETCH_ASSOC);
@@ -32,7 +29,6 @@ if ($userid) {
         die("エラー: " . $e->getMessage());
     }
 }
-
 
 // プロフィール画像のパスを設定（キャッシュ防止用のタイムスタンプ付き）
 $profileImgPath = $profile_img ? "uploads/$profile_img?" . time() : $defaultProfileImg;
