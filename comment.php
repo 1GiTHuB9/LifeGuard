@@ -47,13 +47,6 @@ try {
 
         <form id="consultation-form" action="comment_check.php" method="POST">
             <textarea name="content" id="content" placeholder="コメント" required></textarea>
-            
-            <div class="anonymous">
-                <label for="anonymous">
-                    <input type="checkbox" id="anonymous" name="anonymous">
-                    匿名で投稿する
-                </label>
-            </div>
 
             <!-- 隠しフィールドでpost_detail, user_name, profile_img, post_idを送信 -->
             <input type="hidden" name="post_detail" value="<?php echo htmlspecialchars($result['post_detail']); ?>">
