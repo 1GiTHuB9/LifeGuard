@@ -6,13 +6,24 @@
         $profile = !empty($_POST['profile']) ? $_POST['profile'] : '';
         
         // デフォルト画像を設定
-        $uploaded_image = 'img/shoki.png'; 
+        $uploaded_image = 'img/user.png'; 
 
+        // 画像アップロード時に上書き
         if (!empty($_FILES['profile_img']['name'])) {
             $targetDir = "uploads/";
-            $targetFile = $targetDir . uniqid() . "_" . basename($_FILES["profile_img"]["name"]); // ユニークなファイル名
-            $uploadOk = 1;
-            $imageFileType = strtolower(pathinfo($targetFile, PATHINFO_EXTENSION));
+            $targetFile = $targetDir . uniqid() . "_" . basename($_FILES["profile_img"]["name"]);
+        if (move_uploaded_file($_FILES["profile_img"]["tmp_name"], $targetFile)) {
+            $uploaded_image = $targetFile; // アップロード成功時に上書き
+        }
+        }
+
+        
+        
+        //if (!empty($_FILES['profile_img']['name'])) {
+            //$targetDir = "uploads/";
+           // $targetFile = $targetDir . uniqid() . "_" . basename($_FILES["profile_img"]["name"]); // ユニークなファイル名
+           // $uploadOk = 1;
+           // $imageFileType = strtolower(pathinfo($targetFile, PATHINFO_EXTENSION));
 
             // 画像ファイルかどうか確認
             $check = getimagesize($_FILES["profile_img"]["tmp_name"]);
@@ -30,12 +41,6 @@
                 $uploadOk = 0;
             }
 
-            // アップロード処理
-            if ($uploadOk === 1) {
-                if (move_uploaded_file($_FILES["profile_img"]["tmp_name"], $targetFile)) {
-                    $uploaded_image = basename($targetFile); // アップロードした画像のファイル名
-                }
-            }
         }
 
         try {
@@ -49,7 +54,6 @@
         } catch (PDOException $e) {
             echo 'エラー: ' . $e->getMessage();
         }
-    }
 ?>
 <!DOCTYPE html>
 <html lang="ja">
@@ -65,7 +69,7 @@
         <div class="container">
             <a href="#" class="back-button" onclick="goBack()">←戻る</a>
 
-            <div class="user-image" id="profile-image-preview" style="background-image: url('<?php echo htmlspecialchars($uploaded_image ?? 'img/shoki.png'); ?>');">
+            <div class="user-image" id="profile-image-preview" style="background-image: url('<?php echo htmlspecialchars($uploaded_image); ?>');">
                 <!-- プロフィール画像のプレビュー -->
                 <label for="image-upload" class="image-label">
                     <span class="plus-icon">+</span>
@@ -75,7 +79,7 @@
 
             <form action="" method="POST" id="profile-form" enctype="multipart/form-data">
                 <input type="hidden" name="user_id" value="<?php echo htmlspecialchars($user_id ?? ''); ?>">
-                <input type="hidden" name="uploaded_image" id="uploaded_image" value="<?php echo htmlspecialchars($uploaded_image ?? 'img/shoki.png'); ?>">
+                <input type="hidden" name="uploaded_image" id="uploaded_image" value="<?php echo htmlspecialchars($uploaded_image ?? 'img/user.png'); ?>">
 
                 <div class="username">
                     <label>ユーザープロフィール</label>
@@ -105,12 +109,15 @@
         }
 
         window.onload = function() {
-            const uploadedImage = document.getElementById('uploaded_image').value;
-            if (uploadedImage) {
-                const previewContainer = document.getElementById("profile-image-preview");
-                previewContainer.style.backgroundImage = `url(uploads/${uploadedImage})`;
-            }
-        };
+    const previewContainer = document.getElementById("profile-image-preview");
+    const uploadedImage = "<?php echo htmlspecialchars($uploaded_image); ?>";
+
+    // 初期値としてアップロードされた画像がない場合、hiyoko.png を使用
+    const imageUrl = uploadedImage && uploadedImage !== 'img/user.png' ? uploadedImage : 'img/user.png';
+    previewContainer.style.backgroundImage = `url('${imageUrl}')`;
+};
+
+
     </script>
 </body>
 </html>
