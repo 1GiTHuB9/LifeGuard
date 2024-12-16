@@ -112,5 +112,47 @@
                 throw new Exception("メッセージ送信エラー: " . $e->getMessage());
             }
         }
+        // 未承認のチャットルームを取得
+        public function getPendingChatRooms($userId) {
+            $stmt = $this->pdo->prepare("
+                SELECT cr.room_id, cr.room_name, p.post_detail, c.comment_detail, u.user_name
+                FROM chatrooms cr
+                JOIN comments c ON cr.comment_id = c.comment_id
+                JOIN posts p ON c.post_id = p.post_id
+                JOIN users u ON c.user_id = u.user_id
+                WHERE cr.approval_status = 0 AND p.user_id = :user_id
+            ");
+            $stmt->bindParam(':user_id', $userId, PDO::PARAM_INT);
+            $stmt->execute();
+            return $stmt->fetchAll(PDO::FETCH_ASSOC);
+        }
+
+        // 承認済みのチャットルームを取得
+        public function getApprovedChatRooms($userId) {
+            $stmt = $this->pdo->prepare("
+                SELECT cr.room_id, cr.room_name
+                FROM chatrooms cr
+                JOIN userrooms ur ON cr.room_id = ur.room_id
+                WHERE cr.approval_status = 1 AND (ur.user1_id = :user_id OR ur.user2_id = :user_id)
+            ");
+            $stmt->bindParam(':user_id', $userId, PDO::PARAM_INT);
+            $stmt->execute();
+            return $stmt->fetchAll(PDO::FETCH_ASSOC);
+        }
+        // 拒否されたチャットルームを取得
+        public function getRejectedChatRooms($userId) {
+            $stmt = $this->pdo->prepare("
+                SELECT cr.room_id, cr.room_name, p.post_detail, c.comment_detail, u.user_name
+                FROM chatrooms cr
+                JOIN comments c ON cr.comment_id = c.comment_id
+                JOIN posts p ON c.post_id = p.post_id
+                JOIN users u ON c.user_id = u.user_id
+                WHERE cr.approval_status = 2 AND p.user_id = :user_id
+            ");
+            $stmt->bindParam(':user_id', $userId, PDO::PARAM_INT);
+            $stmt->execute();
+            return $stmt->fetchAll(PDO::FETCH_ASSOC);
+        }
+        
     }
 ?>
