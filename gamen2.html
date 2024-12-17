@@ -1,0 +1,84 @@
+<?php
+$db['dbname'] = "lifeguard";  // データベース名
+$db['user'] = "lifeguard_user";  // ユーザー名
+$db['pass'] = "Liguardfe712";  // ユーザー名のパスワード
+$db['host'] = "http://localhost/phpmyadmin/index.php?route=/database/structure&db=lifeguard";  // DBサーバのURL
+$errorMessage = "";
+//フラグの初期化
+$o = false;
+
+$dsn = sprintf('mysql:host=%s; dbname=%s; charset=utf8', $db['host'], $db['dbname']); 
+?>
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Fullscreen Image</title>
+    <link rel="stylesheet" href="./css/gamen2.css">
+    <style>
+         body {
+            margin: 0;
+            padding: 0;
+            background-image: url('haikei4.png'); /* 画像のパス */
+            background-size: cover; /* 画像が画面全体を覆うように設定 */
+            background-position: center; /* 画像の中心を表示 */
+            background-repeat: no-repeat; /* 画像を繰り返さない */
+        }
+
+        /* コンテンツエリアのスタイル */
+        .content {
+            color: white;
+            text-align: center;
+            padding: 50px;
+            font-size: 24px;
+        }
+        .error {
+            color: red;
+            font-weight: bold;
+            margin-top: 10px;
+        }
+    </style>
+    <script>
+        function validateForm() {
+            // テキストエリアの内容を取得
+            const comment = document.getElementById('comment').value.trim();
+            const errorMessage = document.getElementById('error-message');
+
+            // エラーメッセージをクリア
+            errorMessage.textContent = "";
+
+            // 空欄チェック
+            if (comment === "") {
+                errorMessage.textContent = "コメントを入力してください。";
+                return false; // フォーム送信をキャンセル
+            }
+
+            return true; // フォーム送信を許可
+        }
+    </script>
+</head>
+<body>
+    <div class="fullscreen-image">
+        <img src="haikei4.jpg" alt="Full Screen Image">
+      
+    
+    <button onclick="goBack()">←戻る</button>
+
+    <!-- onsubmitイベントでフォーム送信前にテキストエリアの空欄チェック -->
+    <form action="https://www.example.com" method="get" onsubmit="return validateForm()">
+        <textarea id="comment" name="comment" rows="4" cols="50"></textarea><br><br>
+        <label>
+            匿名で投稿する
+            <input type="checkbox" name="option1" value="1">
+        </label><br>
+
+        <!-- エラーメッセージを表示する要素 -->
+        <div id="error-message" class="error"></div><br>
+
+        <button class="comment" type="submit">確認する</button>
+    </div>
+    </form>
+
+</body>
+</html>
