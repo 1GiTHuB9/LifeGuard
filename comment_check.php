@@ -36,17 +36,22 @@ try {
 if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     // コメント内容を取得
     $content = $_POST['content'];
-    $anonymous = isset($_POST['anonymous']) ? '匿名' : '公開';
+    // $anonymous = isset($_POST['anonymous']) ? '匿名' : '公開';
     //匿名フラグを数値で設定 データベースには0か1で保存
-    $comment_flag = isset($_POST['anonymous']) ? 1 : 0;
-    $comment_user_name=isset($_POST['anonymous']) ? '匿名' : $comment_user_name;
+    // $comment_flag = isset($_POST['anonymous']) ? 1 : 0;
+    // $comment_user_name=isset($_POST['anonymous']) ? '匿名' : $comment_user_name;
     // 投稿内容を取得
     $post_detail = $_POST['post_detail'];
     // 投稿先ユーザー名と画像を取得
-    $user_name = $_POST['user_name'];
     $profile_img = $_POST['profile_img'];
     $post_id = $_POST['post_id'];
     $post_user_id=$_POST['post_user_id'];
+    //匿名フラグが1の場合、ユーザー名を匿名にする
+    if ((int)$_POST['post_flag'] === 1) {
+        $user_name = '匿名';
+    }else {
+        $user_name = $_POST['user_name'];
+    }
 } else {
     echo "<p>データが送信されていません。</p>";
 }
@@ -67,7 +72,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         <div class="user-image"><span>画像</span></div>
         <!-- ログインユーザー名 -->
         <div class="user-name"><?php echo htmlspecialchars($comment_user_name); ?></div>
-        <p>投稿スタイル：<span id="post-style"><?php echo htmlspecialchars($anonymous); ?></span></p>
+        <p>投稿スタイル：<span id="post-style">公開</span></p>
         <p>投稿内容:<span id="content-display"><?php echo htmlspecialchars($content); ?></span></p>
         <p>投稿先</p>
         <div class="user-image2"><span>画像</span></div>
@@ -78,12 +83,13 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         <!-- コメント挿入用のフォーム -->
         <form action="./php/comment_insert.php" method="POST">
             <input type="hidden" name="comment_detail" value="<?php echo htmlspecialchars($content); ?>">
-            <input type="hidden" name="comment_flag" value="<?php echo htmlspecialchars($comment_flag); ?>">
+            <!-- <input type="hidden" name="comment_flag" value="<?php //echo htmlspecialchars($comment_flag); ?>"> -->
             <input type="hidden" name="post_id" value="<?php echo htmlspecialchars($post_id); ?>">
             <input type="hidden" name="comment_user_name" value="<?php echo htmlspecialchars($comment_user_name); ?>">
-            <!-- 投稿先のユーザーID -->
+            <!-- 投稿先のユーザーID、ユーザー名 -->
             <input type="hidden" name="post_user_id" value="<?php echo htmlspecialchars($post_user_id); ?>">
-            <input type="hidden" name="user_name" value="<?php echo htmlspecialchars($user_name); ?>">
+            <!-- 記名のユーザー名 -->
+            <input type="hidden" name="user_name" value="<?php echo htmlspecialchars($_POST['user_name']); ?>">
             <button type="submit" class="submit-button">投稿する！</button>
         </form>
     </div>

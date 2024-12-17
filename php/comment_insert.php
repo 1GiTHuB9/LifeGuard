@@ -5,9 +5,10 @@ require "dbConnect.php";
 $user_id = $_SESSION['id'];
 if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     $comment_detail = $_POST['comment_detail'];
-    $comment_flag = $_POST['comment_flag'];
-    $post_id = $_POST['post_id'];
+    // $comment_flag = $_POST['comment_flag'];
     $comment_user_name = $_POST['comment_user_name'];
+    //　投稿先の投稿IDを取得
+    $post_id = $_POST['post_id'];
     // コメント投稿先のユーザーIDを取得
     $post_user_id = $_POST['post_user_id'];
     $user_name=$_POST['user_name'];
@@ -18,15 +19,16 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
 
         // コメントを comments テーブルに挿入
         $stmt = $pdo->prepare("
-            INSERT INTO comments (comment_detail, comment_date, comment_flag, post_id, user_id)
-            VALUES (:comment_detail, NOW(), :comment_flag, :post_id, :user_id)
+            INSERT INTO comments (comment_detail, comment_date, post_id, user_id)
+            VALUES (:comment_detail, NOW(), :post_id, :user_id)
         ");
         $stmt->bindParam(':comment_detail', $comment_detail, PDO::PARAM_STR);
-        $stmt->bindParam(':comment_flag', $comment_flag, PDO::PARAM_INT);
+        // $stmt->bindParam(':comment_flag', $comment_flag, PDO::PARAM_INT);
         $stmt->bindParam(':post_id', $post_id, PDO::PARAM_INT);
         $stmt->bindParam(':user_id', $user_id, PDO::PARAM_INT);
         $stmt->execute();
-
+        // 挿入されたコメントの comment_id を取得
+        $comment_id = $pdo->lastInsertId();
         // UserRooms テーブルに user_id と post_user_id の組み合わせが存在するか確認
         $stmt = $pdo->prepare("
             SELECT room_id FROM userrooms 
@@ -40,18 +42,15 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         // チャットルームが存在しない場合、新しいルームを作成
         if ($stmt->rowCount() === 0&&(int)$user_id !== (int)$post_user_id) {
             // チャットルーム名を生成
-            if ($user_name === "匿名" && $comment_user_name === "匿名") {
-                $room_name = '匿名同士のチャット';
-            } else {
-                $room_name = $user_name . "と" . $comment_user_name."のチャット";
-            }
+            $room_name = $user_name . "と" . $comment_user_name."のチャット";
 
             // 新しいルームを ChatRooms テーブルに作成
             $stmt = $pdo->prepare("
-                INSERT INTO chatrooms (room_name, room_date) 
-                VALUES (:room_name, CURDATE())
+                INSERT INTO chatrooms (room_name, room_date,comment_id) 
+                VALUES (:room_name, CURDATE(),:comment_id)
             ");
             $stmt->bindParam(':room_name', $room_name, PDO::PARAM_STR);
+            $stmt->bindParam(':comment_id', $comment_id, PDO::PARAM_INT);
             $stmt->execute();
 
             // 新しく作成した room_id を取得

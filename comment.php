@@ -56,7 +56,10 @@ if ((int)$result['post_flag'] === 1) {
 
             <!-- 隠しフィールドでpost_detail, user_name, profile_img, post_idを送信 -->
             <input type="hidden" name="post_detail" value="<?php echo htmlspecialchars($result['post_detail']); ?>">
-            <input type="hidden" name="user_name" value="<?php echo htmlspecialchars($user_name); ?>">
+            <!-- ユーザー名を記名でpost送信 -->
+            <input type="hidden" name="user_name" value="<?php echo htmlspecialchars($result['user_name']); ?>">
+            <!-- 投稿の匿名フラグ -->
+            <input type="hidden" name="post_flag" value="<?php echo htmlspecialchars($result['post_flag']); ?>">
             <input type="hidden" name="profile_img" value="<?php echo htmlspecialchars($result['profile_img']); ?>">
             <input type="hidden" name="post_id" value="<?php echo htmlspecialchars($post_id); ?>">
             <!-- 投稿者のuser_id -->
