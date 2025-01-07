@@ -4,15 +4,10 @@
     require "./php/talk_model.php";
     // モデルのインスタンス化
     $model = new Talk_model($pdo);
-    // セッションにログイン情報がない場合はログイン画面にリダイレクト
-    if (!isset($_SESSION['id'])) {
-        header('Location: login.php');
-        exit();
-    }
+    
+    // 拒否されたチャットルームを取得
     try {
-        // 未承認と承認済みのチャットルームを取得
-        $pendingRooms = $model->getPendingChatRooms($_SESSION['id']);
-        $approvedRooms = $model->getApprovedChatRooms($_SESSION['id']);
+        $rejectedChatRooms = $model->getRejectedChatRooms($_SESSION['id']);
     } catch (Exception $e) {
         $error = "データ取得中にエラーが発生しました: " . htmlspecialchars($e->getMessage());
     }
@@ -29,15 +24,15 @@
     <div class="fullscreen-image">
         <img src="haikei4.png" alt="Full Screen Image">
         <div class="container">
-            <a href="#" class="back-button" onclick="goBack()">←戻る</a>    
+            <a href="#" class="back-button" onclick="backTalkitiran()">←戻る</a>    
             
             <?php if (!empty($error)): ?>
                 <p><?= htmlspecialchars($error) ?></p>
             <?php else: ?>
             <!-- 未承認チャット出力-->
-                <?php if (!empty($pendingRooms)): ?>
+                <?php if (!empty($rejectedChatRooms)): ?>
                     <h1></h1>
-                    <?php foreach ($pendingRooms as $room): ?>
+                    <?php foreach ($rejectedChatRooms as $room): ?>
                         <div class="pending-message">
                             <!-- 投稿 -->
                             <p class="username"><?= htmlspecialchars($room['post_detail']) ?></p>
@@ -46,39 +41,26 @@
                             <!-- ボタン -->
                             <div class="button-container">    
                                 <button class="approve-button" onclick="confirmApproval(<?= $room['room_id'] ?>)">承認する</button>
-                                <button class="reject-button" onclick="confirmRejection(<?= $room['room_id'] ?>)">保留する</button>
                                 <button class="delete-button" onclick="confirmDeletion(<?= $room['room_id'] ?>)">削除する</button>
                             </div>
                         </div>
                         <hr class="divider">
                     <?php endforeach; ?>
                 <?php else: ?>
-                    <!-- <p>未承認のチャットルームはありません。</p> -->
+                    <p>保留したチャットルームはありません。</p>
                 <?php endif; ?>
 
-                <?php if (!empty($approvedRooms)): ?>
-                    <!-- 承認チャット出力 -->
-                    <?php foreach ($approvedRooms as $room): ?>
-                        <div class="message">
-                            <!-- 画像 -->
-                            <div class="profile-pic"></div>
-                            <div class="message-content" onclick="location.href='talk.php?room_id=<?= htmlspecialchars($room['room_id']) ?>';">
-                                <p class="username"><?= htmlspecialchars($room['room_name']) ?></p>
-                                <!-- 最新チャット -->
-                                <p class="text"><?= htmlspecialchars($room['latest_message'] ?? '　　　　　　　　　　') ?></p>
-                            </div>
-                        </div>
-                        <hr class="divider">
-                    <?php endforeach; ?>
-                <?php else: ?>
-                    <p>承認済みのチャットルームはありません。</p>
-                <?php endif; ?>
             <?php endif; ?>
         </div>
-        <a href="talk_reject_list.php" class="reject-list-button">保留したチャットリストを見る</a>
 
     </div>
-    <!-- 戻るボタン、承認ボタンなどのjs -->
+    <!-- 承認ボタンなどのjs -->
     <script src="./js/talkitiran.js?v=<?php echo filemtime('./js/talkitiran.js'); ?>"></script>
+    <script>
+        // talkitirn.phpへ戻るボタン
+        function backTalkitiran() {
+            location.href = "talkitiran.php";
+        }
+    </script>
 </body>
 </html>
