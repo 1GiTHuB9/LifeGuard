@@ -9,7 +9,7 @@ if(isset($_SESSION['id'])){
 
 
 //データ取得
-$sql = "SELECT u.user_id,u.user_name,u.diagnosis_level,p.post_id,p.post_detail,p.post_date,p.post_flag FROM posts as p LEFT OUTER JOIN users as u ON p.user_id = u.user_id WHERE u.diagnosis_level = ? ORDER BY post_date ASC";
+$sql = "SELECT u.user_id,u.user_name,u.diagnosis_level,u.profile_img,p.post_id,p.post_detail,p.post_date,p.post_flag FROM posts as p LEFT OUTER JOIN users as u ON p.user_id = u.user_id WHERE u.diagnosis_level = ? ORDER BY post_date ASC";
         
         $stmt = $pdo->prepare($sql); 
         
@@ -27,7 +27,7 @@ $sql = "SELECT u.user_id,u.user_name,u.diagnosis_level,p.post_id,p.post_detail,p
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>チャット画面</title>
-    <link rel="stylesheet" href="./css/eturan.css">
+    <link rel="stylesheet" href="./css/eturan.css?1">
     <style>
         /* 初期スタイル */
         .detail-area {
@@ -81,7 +81,16 @@ $sql = "SELECT u.user_id,u.user_name,u.diagnosis_level,p.post_id,p.post_detail,p
                         }
                     ?>
                         <div class="message">
-                            <div class="profile-pic"></div>
+                            <div class="profile-pic">
+                            <?php
+                                // 画像のパスが存在すれば表示、無ければデフォルトの画像を表示
+                                if ($row['profile_img']) {
+                                    echo "<img src='./{$row['profile_img']}' alt='Profile Image' class='profile-image'>";
+                                } else {
+                                    echo "<img src='./img/user.png' alt='Default Profile Image' class='profile-image'>";
+                                }
+                            ?>
+                            </div>
                             <div class="message-content">
                                 <p class="username">
                                 <!-- 匿名判別 -->
