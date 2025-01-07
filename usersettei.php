@@ -33,42 +33,41 @@ if (!$uploaded_image) {
     $uploaded_image = 'img/user.png';
 }
 
-// POSTリクエスト時に更新処理
+// // POSTリクエスト時に更新処理
 if ($_SERVER['REQUEST_METHOD'] === 'POST') {
+    // デバッグ用
+    error_log('POST request received');
+    error_log('FILES: ' . print_r($_FILES, true));
+    
     $profile = !empty($_POST['profile']) ? $_POST['profile'] : '';
-    $uploadOk = 1; // アップロード成功フラグ
-    $targetFile = $uploaded_image; // 初期値として現在の画像
+    $uploadOk = 1;
+    $targetFile = $uploaded_image;
 
     // 画像アップロード時に処理を実施
     if (!empty($_FILES['profile_img']['name'])) {
         $targetDir = "uploads/";
         $targetFile = $targetDir . uniqid() . "_" . basename($_FILES["profile_img"]["name"]);
-       
-        // 画像ファイルかどうか確認
+        
+        // 画像ファイルの確認と処理
         $check = getimagesize($_FILES["profile_img"]["tmp_name"]);
-        if ($check === false) {
-            $uploadOk = 0;
-            echo "画像ファイルではありません。<br>";
-        }
-
-        // ファイルサイズの制限
-        if ($_FILES["profile_img"]["size"] > 500000) { // 500KB以上はNG
-            $uploadOk = 0;
-            echo "ファイルサイズが大きすぎます。<br>";
-        }
-
-        // 画像ファイルの拡張子を確認
-        $imageFileType = strtolower(pathinfo($targetFile, PATHINFO_EXTENSION));
-        if (!in_array($imageFileType, ['jpg', 'jpeg', 'png', 'gif'])) {
-            $uploadOk = 0;
-            echo "許可されていないファイル形式です。<br>";
-        }
-
-        // アップロード処理
-        if ($uploadOk === 1 && move_uploaded_file($_FILES["profile_img"]["tmp_name"], $targetFile)) {
-            $uploaded_image = basename($targetFile); //アップロード成功時に画像パスを更新
+        if ($check !== false) {
+            if ($_FILES["profile_img"]["size"] <= 500000) {
+                $imageFileType = strtolower(pathinfo($targetFile, PATHINFO_EXTENSION));
+                if (in_array($imageFileType, ['jpg', 'jpeg', 'png', 'gif'])) {
+                    if (move_uploaded_file($_FILES["profile_img"]["tmp_name"], $targetFile)) {
+                        $uploaded_image = $targetFile; // ここを修正：フルパスを保存
+                    } else {
+                        echo "画像のアップロードに失敗しました。<br>";
+                        exit();
+                    }
+                } else {
+                    echo "許可されていないファイル形式です。<br>";
+                }
+            } else {
+                echo "ファイルサイズが大きすぎます。<br>";
+            }
         } else {
-            echo "画像のアップロードに失敗しました。<br>";
+            echo "画像ファイルではありません。<br>";
         }
     }
 
@@ -95,14 +94,14 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>プロフィール設定画面</title>
-    <link rel="stylesheet" href="css/usersettei.css">
+    <link rel="stylesheet" href="css/usersettei.css?1">
 </head>
 <body>
     <div class="fullscreen-image">
         <img src="img/haikei4.png" alt="Full Screen Image">
         <div class="container">
             <a href="#" class="back-button" onclick="goBack()">←戻る</a>
-
+            <form action="" method="POST" id="profile-form" enctype="multipart/form-data">
             <!-- プロフィール画像のプレビュー -->
             <div class="user-image" id="profile-image-preview" style="background-image: url('<?php echo htmlspecialchars($uploaded_image); ?>');">
                 <label for="image-upload" class="image-label">
@@ -111,7 +110,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                 </label>
             </div>
 
-            <form action="" method="POST" id="profile-form" enctype="multipart/form-data">
+            
                 <div class="username">
                     <label>ユーザープロフィール</label>
                     <textarea name="profile" class="user-profile"><?php echo htmlspecialchars($profile); ?></textarea>
