@@ -80,7 +80,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         $stmt->bindParam(':profile', $profile, PDO::PARAM_STR);
         $stmt->bindParam(':user_id', $user_id, PDO::PARAM_INT);
         $stmt->execute();
-        echo "プロフィールが更新されました！<br>";
+        // echo "プロフィールが更新されました！<br>";
         header("Location: " . $_SERVER['PHP_SELF']); // 更新後、ページを再読み込み
         exit();
     } catch (PDOException $e) {
