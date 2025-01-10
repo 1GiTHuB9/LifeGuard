@@ -26,7 +26,7 @@ $sql = "SELECT u.user_id,u.user_name,u.diagnosis_level,p.post_id,p.post_detail,p
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>チャット画面</title>
+    <title>閲覧表示画面</title>
     <link rel="stylesheet" href="./css/eturan.css">
     <style>
         /* 初期スタイル */
