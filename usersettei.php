@@ -15,7 +15,7 @@ $user_id = $_SESSION['id']; // セッションから user_id を取得
 
 // データベースから現在のプロフィール情報を取得
 try {
-    $sql = "SELECT profile_img, profile FROM Users WHERE user_id = :user_id";
+    $sql = "SELECT profile_img, profile FROM users WHERE user_id = :user_id";
     $stmt = $pdo->prepare($sql);
     $stmt->bindParam(':user_id', $user_id, PDO::PARAM_INT);
     $stmt->execute();
