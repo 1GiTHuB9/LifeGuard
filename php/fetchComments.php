@@ -10,7 +10,7 @@ $limit = 10;
 $offset = $page * $limit;
 
 // データ取得クエリ
-$sql = "SELECT c.comment_detail, c.comment_date, c.comment_flag, u.user_name, u.profile_img
+$sql = "SELECT c.comment_detail, c.comment_date, u.user_name, u.profile_img
         FROM comments AS c
         LEFT JOIN users AS u ON c.user_id = u.user_id
         WHERE c.post_id = ?
