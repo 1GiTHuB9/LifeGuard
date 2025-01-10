@@ -58,6 +58,8 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         if ($stmt->execute()) {
             // echo $diagnosis_level,"診断結果の保存に成功しました。";
             // 診断結果の保存に成功した場合、結果ページへリダイレクト
+            //セッションにレベルを保存
+            $_SESSION['dlevel']=$diagnosis_level;
             header('Location: diagnosisresult.php?level=' . $diagnosis_level);
             exit();
         } else {

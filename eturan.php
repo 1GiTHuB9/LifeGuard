@@ -66,7 +66,8 @@ $sql = "SELECT u.user_id,u.user_name,u.diagnosis_level,p.post_id,p.post_detail,p
         <div class="container">
             <header class="header">
                 <a href="#" class="back-button" onclick="goBack()">←戻る</a>
-                <button class="menu-button">&#9776;</button>
+                <!-- 色を白にしてごまかしてます -->
+                <button class="menu-button" style="color: rgba(255, 255, 255, 0.8);">&#9776;</button>
             </header>
             <div class="content">
                 <!-- メッセージ一覧 -->
@@ -282,7 +283,7 @@ $sql = "SELECT u.user_id,u.user_name,u.diagnosis_level,p.post_id,p.post_detail,p
         }
 
         function goBack() {
-            history.back();
+            location.href = "home.html";
         }
 
         //スマホの時の２分割js
