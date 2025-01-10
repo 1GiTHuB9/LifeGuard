@@ -7,7 +7,7 @@ if (isset($_GET['post_id'])) {
     $post_id = (int) $_GET['post_id'];
     $limit = 10;
 
-    $sql = "SELECT c.comment_detail, c.comment_date, c.comment_flag, u.user_name, u.profile_img
+    $sql = "SELECT c.comment_detail, c.comment_date, u.user_name, u.profile_img
             FROM comments AS c
             LEFT JOIN users AS u ON c.user_id = u.user_id
             WHERE c.post_id = ?
@@ -20,11 +20,11 @@ if (isset($_GET['post_id'])) {
     $stmt->execute();
     $comments = $stmt->fetchAll(PDO::FETCH_ASSOC);
 
-    foreach ($comments as &$comment) {
-        if ($comment['comment_flag'] == 1) {
-            $comment['user_name'] = "匿名";
-        }
-    }
+    // foreach ($comments as &$comment) {
+    //     if ($comment['comment_flag'] == 1) {
+    //         $comment['user_name'] = "匿名";
+    //     }
+    // }
 
     echo json_encode($comments);
 } else {
