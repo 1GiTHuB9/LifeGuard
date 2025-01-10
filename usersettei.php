@@ -73,7 +73,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
 
     // データベースに更新
     try {
-        $sql = "UPDATE Users SET profile_img = :profile_img, profile = :profile WHERE user_id = :user_id";
+        $sql = "UPDATE users SET profile_img = :profile_img, profile = :profile WHERE user_id = :user_id";
 
         $stmt = $pdo->prepare($sql);
         $stmt->bindParam(':profile_img', $uploaded_image, PDO::PARAM_STR);
