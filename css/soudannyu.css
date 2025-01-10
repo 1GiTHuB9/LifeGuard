@@ -106,9 +106,18 @@ h2 {
     margin-bottom: 20px;
 }
 
- 
+/* フォーム全体のCSS */
+#consultation-form {
+    width: 500px; /* デフォルト幅を500px */
+    max-width: 100%; /* 画面幅を超えない最大幅 */
+    margin: 0 auto; /* フォーム全体を中央揃え */
+    box-sizing: border-box;
+}
+
+/* テキストエリア */
 textarea {
-    width: 100%;
+    width: 100%; /* テキストエリアの幅をフォームに合わせる */
+    max-width: 600px; /* 最大幅を設定 */
     height: 20vh;
     margin-bottom: 20px;
     padding: 10px;
@@ -119,20 +128,19 @@ textarea {
     box-sizing: border-box;
 }
 
- 
-.suggestion {
-    font-size: 16px;
-    margin-bottom: 20px;
+/* スマホ用のレスポンシブ */
+@media (max-width: 767px) {
+    textarea {
+        max-width: 100%;
+        width: 100%; 
+        height: 20vh;
+    }
 }
 
  
-.other-posts {
-    background-color: #fff;
-    padding: 10px;
-    border-radius: 10px;
-    border: 2px solid #ffa500;
-    margin-top: 10px;
-}
+
+
+
 
 .anonymous {
     margin-bottom: 20px;

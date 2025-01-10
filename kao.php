@@ -1,24 +1,29 @@
 <?php
+session_start();
 // DB接続のための設定
 require "./php/db.php"; // db.php のパスを確認してください
 
+if (!isset($_SESSION['id'])) {
+    // ログインしていない場合はログインページにリダイレクト
+    header('Location: login.php');
+    exit();
+}
+
+$user_id = $_SESSION['id']; // セッションからuser_idを取得
+
 // データベースから顔文字を取得する関数
-function getReactions($conn) {
+function getReactions($conn, $user_id) {
     $sql = "SELECT reaction, reaction_date FROM calendars WHERE user_id = :user_id";
     $stmt = $conn->prepare($sql);
-    $stmt->bindValue(':user_id', 1, PDO::PARAM_INT); // user_idを1に固定
+    $stmt->bindValue(':user_id', $user_id, PDO::PARAM_INT);
     $stmt->execute();
     return $stmt->fetchAll(PDO::FETCH_ASSOC);
 }
 
 // 顔文字を取得
-$reactions = getReactions($conn);
-$user_id = 1; // 一時的にuser_idを1に固定
-$reactions = getReactions($conn, $user_id); // データベースから顔文字を取得
+$reactions = getReactions($conn, $user_id);
 
 if ($_SERVER['REQUEST_METHOD'] === 'POST') {
-    $user_id = $_POST['user_id'];
-    //$user_id = 1; // 一時的にuser_idを1に固定
     $reaction = $_POST['reaction'];
     $reaction_date = $_POST['reaction_date'];
 
@@ -55,6 +60,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     <img src="haikei4.png" alt="Full Screen Image">
 
     <div class="calendar-container">
+    <a href="#" class="back-button" onclick="goBack()">←戻る</a>
         <button id="prev-month" class="month-nav-btn">◀</button>
         <div class="month-header" id="month-header"></div>
         <div class="calendar" id="calendar"></div>
@@ -223,7 +229,7 @@ confirmBtn.onclick = () => {
 
 function saveReaction(userId, reaction, reactionDate) {
     const xhr = new XMLHttpRequest();
-    xhr.open("POST", "", true); // 空のURLで同じファイルに送信
+    xhr.open("POST", "", true); // 同じファイルに送信
     xhr.setRequestHeader("Content-Type", "application/x-www-form-urlencoded");
     xhr.onreadystatechange = function() {
         if (xhr.readyState === 4 && xhr.status === 200) {
@@ -232,8 +238,12 @@ function saveReaction(userId, reaction, reactionDate) {
     };
     xhr.send(`user_id=${userId}&reaction=${reaction}&reaction_date=${reactionDate}`);
 }
+
 cancelBtn.onclick = closeKaomojiSelector;
 overlay.onclick = closeKaomojiSelector;
+function goBack() {
+            history.back();
+        }
 </script>
 
 </body>

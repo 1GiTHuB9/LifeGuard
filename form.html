@@ -1,0 +1,32 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>ユーザー登録</title>
+</head>
+<body>
+    <h1>ユーザー登録フォーム</h1>
+    <form action="upload.php" method="post" enctype="multipart/form-data">
+        <label for="mailaddress">メールアドレス:</label>
+        <input type="email" name="mailaddress" id="mailaddress" required><br><br>
+
+        <label for="password">パスワード:</label>
+        <input type="password" name="password" id="password" required><br><br>
+
+        <label for="user_name">ユーザー名:</label>
+        <input type="text" name="user_name" id="user_name" maxlength="15" required><br><br>
+
+        <label for="profile">プロフィール:</label>
+        <textarea name="profile" id="profile" rows="4" maxlength="128"></textarea><br><br>
+
+        <label for="diagnosis_level">診断レベル:</label>
+        <input type="number" name="diagnosis_level" id="diagnosis_level" required><br><br>
+
+        <label for="profile_img">プロフィール画像:</label>
+        <input type="file" name="profile_img" id="profile_img" accept="image/*" required><br><br>
+
+        <button type="submit">登録</button>
+    </form>
+</body>
+</html>

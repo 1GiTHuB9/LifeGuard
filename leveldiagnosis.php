@@ -58,6 +58,8 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         if ($stmt->execute()) {
             // echo $diagnosis_level,"診断結果の保存に成功しました。";
             // 診断結果の保存に成功した場合、結果ページへリダイレクト
+            //セッションにレベルを保存
+            $_SESSION['dlevel']=$diagnosis_level;
             header('Location: diagnosisresult.php?level=' . $diagnosis_level);
             exit();
         } else {
@@ -87,7 +89,10 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         <!-- <a href="#" class="back-button" onclick="goBack()">←戻る</a> -->
 
         <div class="header">
-            <h5>0: 全く感じない
+            <h5>これはあなたの心がどれくらい疲れているかを診断するためのものです。<br>
+                下記を参考に深く考えず直感で回答してください。<br>
+                <br>
+                0: 全く感じない
                 1: あまり感じない。
                 2: 時々感じる。
                 3: よく感じる。

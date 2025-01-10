@@ -62,6 +62,13 @@ body, html {
     position: relative;
 }
 
+.back-button {
+    font-size: 16px;
+    color: #333;
+    text-decoration: none;
+    margin-top: 10px;
+}
+
 .day {
     cursor: pointer;
     border: 1px solid #ccc;
@@ -89,9 +96,7 @@ body, html {
     box-shadow: 0 2px 10px rgba(0, 0, 0, 0.5); /* 影を追加 */
 }
 
-.kaomoji-selector .kaomoji-option:hover {
-    background-color: rgba(255, 255, 255, 0.7) !important; /* 例 */
-}
+
 
 .overlay {
     display: none;
@@ -124,23 +129,34 @@ body, html {
 
 /* 顔文字選択リストの画像スタイル */
 .kaomoji-option {
-    max-width: 80px;             
-    max-height: 80px;            
-    width: auto;                  
-    height: auto;                 
-    object-fit: contain;          
-    cursor: pointer;              
-    display: block;               
-    transition: background-color 0.2s ease, transform 0.2s ease, box-shadow 0.2s ease; 
+    max-width: 80px;
+    max-height: 80px;
+    width: auto;
+    height: auto;
+    object-fit: contain;
+    cursor: pointer;
+    display: block;
+    transition: background-color 0.2s ease, transform 0.2s ease, box-shadow 0.2s ease;
     border-radius: 5px; /* 角を丸める */
+    padding: 10px; /* マウスオーバー時に背景が見やすくなるように調整 */
 }
 
-/* マウスオーバー時のスタイル */
+/* マウスオーバー時の背景色変更 */
 .kaomoji-option:hover {
-    background-color: rgba(255, 255, 255, 0.7); /* マウスオーバー時の背景色 */
+    background-color: rgba(255, 255, 255, 0.7); /* 背景色を薄く白に変更 */
     box-shadow: 0 0 10px rgba(0, 0, 0, 0.3); /* シャドウを追加 */
-    transform: scale(1.05); /* ほんの少し大きくする */
+    transform: scale(1.05); /* 少し大きくする */
+    background-color: rgb(57, 118, 118);
 }
+
+/* 選択された顔文字に対して背景色を強調 */
+.kaomoji-option.selected {
+    background-color: rgba(0, 128, 255, 0.3); /* 背景色を青に変更（選択された場合） */
+    border: 2px solid rgba(0, 128, 255, 0.7); /* 境界線を青色に変更 */
+}
+
+
+
 
 /* カレンダー内の顔文字画像のスタイル */
 .kaomoji img {

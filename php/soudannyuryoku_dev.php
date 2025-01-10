@@ -34,13 +34,13 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
         $flag = 0;
         post_func($_SESSION['id'],$content,$flag,$pdo);
         // echo "投稿完了(公開)";
-        header('Location: ../home.html');
+        header('Location: ../home.php');
         exit;
     } else if($postStyle == "匿名"){
         $flag = 1;
         post_func($_SESSION['id'],$content,$flag,$pdo);
         // echo "投稿完了(匿名)";
-        header('Location: ../home.html');
+        header('Location: ../home.php');
         exit;
     } else {
         echo "匿名処理にエラーがあります。";

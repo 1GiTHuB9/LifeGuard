@@ -11,7 +11,7 @@ $post_id=$_GET['post_id'];
 try {
     // postsテーブルとusersテーブルを結合して、post_detailとuser_name, profile_imgを取得
     $stmt = $pdo->prepare("
-        SELECT posts.post_detail, posts.user_id, users.user_name, users.profile_img
+        SELECT posts.post_detail, posts.user_id,posts.post_flag, users.user_name, users.profile_img
         FROM posts
         INNER JOIN users ON posts.user_id = users.user_id
         WHERE posts.post_id = :post_id
@@ -25,6 +25,12 @@ try {
 } catch (PDOException $e) {
     echo "Error: " . $e->getMessage();
 }
+//匿名フラグが1の場合、ユーザー名を匿名にする
+if ((int)$result['post_flag'] === 1) {
+    $user_name = '匿名';
+}else {
+    $user_name = $result['user_name'];
+}
 ?>
 <!DOCTYPE html>
 <html lang="ja">
@@ -32,7 +38,7 @@ try {
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>コメント入力画面</title>
-    <link rel="stylesheet" href="./css/commentnyuryoku.css?1">
+    <link rel="stylesheet" href="./css/commentnyuryoku.css?v=<?php echo filemtime('./css/commentnyuryoku.css'); ?>">
 </head>
 <body>
     <div class="fullscreen-image">
@@ -41,26 +47,23 @@ try {
         <a href="#" class="back-button" onclick="goBack()">←戻る</a>
         <div class="user-image"><span>画像</span></div>
         <!-- ユーザー名 -->
-        <div class="user-name"> <?php echo htmlspecialchars($result['user_name'], ENT_QUOTES, 'UTF-8'); ?></div>
+        <div class="user-name"> <?php echo htmlspecialchars($user_name, ENT_QUOTES, 'UTF-8'); ?></div>
         <p id="post_detail">相談内容:<?php echo htmlspecialchars($result['post_detail'], ENT_QUOTES, 'UTF-8'); ?></p>
         <a href="#" class="tuduki">続きを読む</a>
 
         <form id="consultation-form" action="comment_check.php" method="POST">
             <textarea name="content" id="content" placeholder="コメント" required></textarea>
-            
-            <div class="anonymous">
-                <label for="anonymous">
-                    <input type="checkbox" id="anonymous" name="anonymous">
-                    匿名で投稿する
-                </label>
-            </div>
 
             <!-- 隠しフィールドでpost_detail, user_name, profile_img, post_idを送信 -->
             <input type="hidden" name="post_detail" value="<?php echo htmlspecialchars($result['post_detail']); ?>">
+            <!-- ユーザー名を記名でpost送信 -->
             <input type="hidden" name="user_name" value="<?php echo htmlspecialchars($result['user_name']); ?>">
+            <!-- 投稿の匿名フラグ -->
+            <input type="hidden" name="post_flag" value="<?php echo htmlspecialchars($result['post_flag']); ?>">
             <input type="hidden" name="profile_img" value="<?php echo htmlspecialchars($result['profile_img']); ?>">
             <input type="hidden" name="post_id" value="<?php echo htmlspecialchars($post_id); ?>">
-
+            <!-- 投稿者のuser_id -->
+            <input type="hidden" name="post_user_id" value="<?php echo htmlspecialchars($result['user_id']); ?>">
             <button class="submit-button">確認する！</button>
         </form>
     </div>  
@@ -77,7 +80,7 @@ try {
         // });
 
         function goBack() {
-            history.back();
+            location.href = "eturan.php";
         }
     </script>   
 </body>

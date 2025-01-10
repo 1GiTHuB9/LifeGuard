@@ -1,6 +1,9 @@
 <?php
 session_start();
-session_destroy(); // セッションの破棄
-header("Location: login.php"); // ログインページへリダイレクト
+session_unset(); // セッション変数を全て解除
+session_destroy(); // セッションを破棄
+
+header('Location: login.php'); // ログインページにリダイレクト
 exit();
 ?>
+
