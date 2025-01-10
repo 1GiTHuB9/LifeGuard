@@ -149,10 +149,6 @@ textarea {
     background-color: #FF8C00;
 }
 
-.anonymous {
-    margin-bottom: 20px;
-}
-
 .tuduki {
     margin-bottom: 20px; /* 余白を20pxに設定、値は必要に応じて変更してください */
     display: block; /* aタグはインライン要素なので、blockに変更 */

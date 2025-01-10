@@ -65,7 +65,7 @@ switch ($diagnosis_level) {
         </div>
 
         <div class="footer">      
-            <a href="home.html" class="button">ホームへ</a><br>
+            <a href="home.php" class="button">ホームへ</a><br>
         </div>
     </div>
 </body>

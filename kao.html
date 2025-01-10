@@ -124,11 +124,12 @@ let selectedReaction = null;
 // 顔文字をクリックで選択
 kaomojiOptions.forEach(option => {
     option.onclick = () => {
-        selectedReaction = option.getAttribute('data-kaomoji'); // 選択された顔文字を保存
+        selectedReaction = option.getAttribute('data-kaomoji');
         kaomojiOptions.forEach(opt => opt.classList.remove('selected')); // 他の選択を解除
-        option.classList.add('selected'); // 選択をハイライト
+        option.classList.add('selected'); // 選択中の要素にクラスを付与
     };
 });
+
 
 function showKaomojiSelector(dayElement) {
     selectedDayElement = dayElement; // 選択された日付要素を保存
@@ -175,7 +176,8 @@ function saveReaction(calendarId, userId, reaction, reactionDate) {
             console.log("保存結果:", xhr.responseText);
         }
     };
-    xhr.send(`calendar_id=${calendarId}&user_id=${userId}&reaction=${reaction}&reaction_date=${reactionDate}`);
+    xhr.send(`reaction=${reaction}&reaction_date=${reactionDate}`);
+
 }
 cancelBtn.onclick = closeKaomojiSelector;
 overlay.onclick = closeKaomojiSelector;
