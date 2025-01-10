@@ -103,7 +103,11 @@ $sql = "SELECT u.user_id,u.user_name,u.diagnosis_level,u.profile_img,p.post_id,p
                                     ?>
                                 </p>
                                 <!-- 投稿内容表示 -->
-                                <p class="text" onclick="showDetail('<?php echo $row['post_id'] ?>','<?php echo $row['user_name']?>','<?php echo $row['post_detail']?>'); event.stopPropagation();">
+                                <p class="text" onclick="showDetail(
+                                    '<?php echo $row['post_id'] ?>',
+                                    '<?php echo $row['user_name']?>',
+                                    '<?php echo $row['post_detail']?>',
+                                    '<?php echo $row['profile_img']?>'); event.stopPropagation();">
                                     <?php
                                     echo $row['post_detail'];
                                     ?>
@@ -156,7 +160,7 @@ $sql = "SELECT u.user_id,u.user_name,u.diagnosis_level,u.profile_img,p.post_id,p
 
         let currentPageC = 0;
 
-        function showDetail(postId,name,content) {
+        function showDetail(postId,name,content,profileImg) {
 
             currentPageC = 0;
             // 詳細エリアをスライドインで表示
@@ -169,14 +173,8 @@ $sql = "SELECT u.user_id,u.user_name,u.diagnosis_level,u.profile_img,p.post_id,p
                 <div class="comments-section">
                     <div class="comment">
                         <div class="profile-pic">
-                        <?php
-                                // 画像のパスが存在すれば表示、無ければデフォルトの画像を表示
-                                if ($row['profile_img']) {
-                                    echo "<img src='./{$row['profile_img']}' alt='Profile Image' class='profile-image'>";
-                                } else {
-                                    echo "<img src='./img/user.png' alt='Default Profile Image' class='profile-image'>";
-                                }
-                            ?></div>
+                            <img src="${profileImg ? './' + profileImg : './img/user.png'}" alt="Profile Image" class="profile-image">
+                        </div>
                         <div class="comment-content">
                             <p class="username">${name}</p>
                             <p class="text">${content}</p>
@@ -354,11 +352,20 @@ $sql = "SELECT u.user_id,u.user_name,u.diagnosis_level,u.profile_img,p.post_id,p
 
         document.getElementById("loadPostButton").addEventListener("click", loadMorePosts);
 
-function loadMorePosts() {
+        function loadMorePosts() {
     currentPage++;
     fetch(`./php/fetchPosts.php?page=${currentPage}`)
-        .then(response => response.json())
+        .then(response => {
+            if (response.status === 204) {
+                const loadButton = document.getElementById("loadPostButton");
+                loadButton.style.display = "none";
+                return null;
+            }
+            return response.json();
+        })
         .then(posts => {
+            if (!posts) return;
+
             const chatArea = document.getElementById("chatArea");
             const loadButton = document.getElementById("loadPostButton");
 
@@ -367,12 +374,21 @@ function loadMorePosts() {
                 messageDiv.classList.add("message");
 
                 const username = row.post_flag == 1 ? "匿名" : row.user_name;
+                // プロフィール画像の条件分岐を修正
+                let profileImgSrc;
+                if (row.profile_img && row.profile_img !== '') {
+                    profileImgSrc = `./${row.profile_img}`;
+                } else {
+                    profileImgSrc = './img/user.png';
+                }
 
                 messageDiv.innerHTML = `
-                    <div class="profile-pic"></div>
+                    <div class="profile-pic">
+                        <img src="${profileImgSrc}" alt="Profile Image" class="profile-image">
+                    </div>
                     <div class="message-content">
                         <p class="username">${username}</p>
-                        <p class="text" onclick="showDetail('${row.post_id}', '${username}', '${row.post_detail}'); event.stopPropagation();">
+                        <p class="text" onclick="showDetail('${row.post_id}', '${username}', '${row.post_detail}', '${row.profile_img}'); event.stopPropagation();">
                             ${row.post_detail}
                         </p>
                     </div>
@@ -381,7 +397,10 @@ function loadMorePosts() {
                 chatArea.insertBefore(messageDiv, loadButton);
             });
         })
-        .catch(error => console.error('エラーが発生しました:', error));
+        .catch(error => {
+            console.error('エラーが発生しました:', error);
+            alert('投稿の取得に失敗しました');
+        });
 }
 </script>
 </body>

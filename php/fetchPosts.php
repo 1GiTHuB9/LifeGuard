@@ -1,31 +1,31 @@
 <?php
+session_start(); // セッションの開始を追加
+require_once "dbConnect.php";
 
-ini_set('display_errors', 1);
-ini_set('display_startup_errors', 1);
-error_reporting(E_ALL);
-
-session_start();
-require "./dbConnect.php"; // データベース接続
-
-// ページ番号を取得し、デフォルトを0に設定
 $page = isset($_GET['page']) ? (int)$_GET['page'] : 0;
-$limit = 10;
-$offset = $page * $limit;
+$offset = $page * 10; // 1ページあたり10件
 
-// データ取得クエリ
-$sql = "SELECT u.user_id, u.user_name, u.diagnosis_level, p.post_id, p.post_detail, p.post_date, p.post_flag 
-        FROM posts AS p 
-        LEFT OUTER JOIN users AS u ON p.user_id = u.user_id 
-        WHERE u.diagnosis_level = ? 
-        ORDER BY post_date ASC 
-        LIMIT ? OFFSET ?";
-        
+// プロフィール画像も含めて投稿を取得
+$sql = "SELECT u.user_id, u.user_name, u.diagnosis_level, u.profile_img, 
+        p.post_id, p.post_detail, p.post_date, p.post_flag 
+        FROM posts as p 
+        LEFT OUTER JOIN users as u ON p.user_id = u.user_id 
+        WHERE u.diagnosis_level = :dlevel 
+        ORDER BY post_date DESC 
+        LIMIT 10 OFFSET :offset";
+
 $stmt = $pdo->prepare($sql);
-$stmt->bindValue(1, $_SESSION['dlevel'], PDO::PARAM_INT);
-$stmt->bindValue(2, $limit, PDO::PARAM_INT);
-$stmt->bindValue(3, $offset, PDO::PARAM_INT);
+$stmt->bindValue(':dlevel', $_SESSION['dlevel'], PDO::PARAM_INT);
+$stmt->bindValue(':offset', $offset, PDO::PARAM_INT);
 $stmt->execute();
-$post = $stmt->fetchAll(PDO::FETCH_ASSOC);
 
-// JSON形式で結果を返す
-echo json_encode($post);
+$posts = $stmt->fetchAll(PDO::FETCH_ASSOC);
+
+if (empty($posts)) {
+    http_response_code(204);
+    exit;
+}
+
+header('Content-Type: application/json');
+echo json_encode($posts);
+?>
