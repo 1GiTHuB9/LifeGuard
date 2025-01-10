@@ -168,7 +168,15 @@ $sql = "SELECT u.user_id,u.user_name,u.diagnosis_level,u.profile_img,p.post_id,p
             detailArea.innerHTML = `
                 <div class="comments-section">
                     <div class="comment">
-                        <div class="profile-pic"></div>
+                        <div class="profile-pic">
+                        <?php
+                                // 画像のパスが存在すれば表示、無ければデフォルトの画像を表示
+                                if ($row['profile_img']) {
+                                    echo "<img src='./{$row['profile_img']}' alt='Profile Image' class='profile-image'>";
+                                } else {
+                                    echo "<img src='./img/user.png' alt='Default Profile Image' class='profile-image'>";
+                                }
+                            ?></div>
                         <div class="comment-content">
                             <p class="username">${name}</p>
                             <p class="text">${content}</p>
