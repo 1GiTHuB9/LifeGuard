@@ -283,7 +283,7 @@ $sql = "SELECT u.user_id,u.user_name,u.diagnosis_level,p.post_id,p.post_detail,p
         }
 
         function goBack() {
-            location.href = "home.html";
+            location.href = "home.php";
         }
 
         //スマホの時の２分割js

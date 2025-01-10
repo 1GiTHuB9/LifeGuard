@@ -31,7 +31,7 @@ if (!isset($_SESSION['id'])) {
         <div class="side-menu" id="sideMenu">
             <ul>
                 <li><a href="usersettei.php">プロフィール</a></li>
-                <li><a href="page2.html">レベル診断</a></li>
+                <!-- <li><a href="page2.html">レベル診断</a></li> -->
                 <li><a href="#" id="logout">ログアウト</a></li>
             </ul>
         </div>

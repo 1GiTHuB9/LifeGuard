@@ -1,5 +1,5 @@
 function goBack() {
-    location.href = "home.html";
+    location.href = "home.php";
 }    
 // チャットルームの承認、保留、削除の確認
 function confirmApproval(roomId) {

@@ -38,7 +38,7 @@ if ((int)$result['post_flag'] === 1) {
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>コメント入力画面</title>
-    <link rel="stylesheet" href="./css/commentnyuryoku.css?1">
+    <link rel="stylesheet" href="./css/commentnyuryoku.css?v=<?php echo filemtime('./css/commentnyuryoku.css'); ?>">
 </head>
 <body>
     <div class="fullscreen-image">
