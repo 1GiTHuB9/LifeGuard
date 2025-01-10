@@ -59,7 +59,7 @@ $success = "ログインに成功しました。";
 $error = "メールアドレスまたはパスワードが間違っています。";
 
 if($result == $success){
-    header('Location:../home.html');
+    header('Location:../home.php');
 } else if($result == $error){
     $_SESSION['error'] = $error;
     header('Location:../login.php');
