@@ -58,8 +58,11 @@ $result = logincheck($mailaddress,$password,$pdo);
 $success = "ログインに成功しました。";
 $error = "メールアドレスまたはパスワードが間違っています。";
 
-if(logincheck($mailaddress,$password,$pdo)){
-    header('Location:../home.php');
+if($result == $success){
+    header('Location:../home.html');
+} else if($result == $error){
+    $_SESSION['error'] = $error;
+    header('Location:../login.php');
 } else {
     $_SESSION['e'] = $e;
     header('Location:../login.php');
