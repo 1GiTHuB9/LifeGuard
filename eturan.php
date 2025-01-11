@@ -9,7 +9,12 @@ if(isset($_SESSION['id'])){
 
 
 //データ取得
-$sql = "SELECT u.user_id,u.user_name,u.diagnosis_level,u.profile_img,p.post_id,p.post_detail,p.post_date,p.post_flag FROM posts as p LEFT OUTER JOIN users as u ON p.user_id = u.user_id WHERE u.diagnosis_level = ? ORDER BY post_date ASC";
+$sql = "SELECT u.user_id,u.user_name,u.diagnosis_level,u.profile_img,p.post_id,p.post_detail,p.post_date,p.post_flag 
+        FROM posts as p 
+        LEFT OUTER JOIN users as u ON p.user_id = u.user_id 
+        WHERE u.diagnosis_level = ? 
+        ORDER BY post_date ASC 
+        LIMIT 10";
         
         $stmt = $pdo->prepare($sql); 
         

@@ -11,7 +11,7 @@ $sql = "SELECT u.user_id, u.user_name, u.diagnosis_level, u.profile_img,
         FROM posts as p 
         LEFT OUTER JOIN users as u ON p.user_id = u.user_id 
         WHERE u.diagnosis_level = :dlevel 
-        ORDER BY post_date DESC 
+        ORDER BY post_date ASC 
         LIMIT 10 OFFSET :offset";
 
 $stmt = $pdo->prepare($sql);
