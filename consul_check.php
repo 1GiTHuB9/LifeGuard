@@ -2,6 +2,12 @@
 <?php 
 session_start();
 if(isset($_SESSION['id'])){
+    // データベースからユーザー情報を取得
+    require "./php/dbConnect.php";
+    $sql = "SELECT profile_img FROM users WHERE user_id = ?";
+    $stmt = $pdo->prepare($sql);
+    $stmt->execute([$_SESSION['id']]);
+    $user = $stmt->fetch(PDO::FETCH_ASSOC);
 }else{
     header('Location: ./login.php');
 }
@@ -22,7 +28,16 @@ if(isset($_SESSION['id'])){
         <div class="container1">
             <a href="#" class="back-button" onclick="goBack()">←戻る</a>
             <div class="user-info">
-                <div class="user-image"></div>
+                <div class="user-image">
+                <?php
+                // 画像のパスが存在すれば表示、無ければデフォルトの画像を表示
+                if (!empty($user['profile_img'])) {
+                    echo "<img src='./{$user['profile_img']}' alt='Profile Image' class='profile-image'>";
+                } else {
+                echo "<img src='./img/user.png' alt='Default Profile Image' class='profile-image'>";
+                }
+                ?>
+                </div>
                 <div class="user-name"><?php echo $_SESSION['uname']; ?></div>
             </div>
             <div class="post-style">投稿スタイル：<span id="post-style"></span></div>

@@ -16,9 +16,9 @@ $user_id = $_SESSION['id'];
     $result = $stmt->fetch(PDO::FETCH_ASSOC);
 
     if ($result && $result['diagnosis_level'] > 0) {
-        // すでに診断結果がある場合、home.html にリダイレクト
-        // echo "すでに診断結果があります。";
-        header('Location: home.html');
+        // すでに診断結果がある場合、home.php にリダイレクト
+        echo "すでに診断結果があります。";
+        header('Location: home.php');
         exit();
     }
 $errorMessage = '';//エラーメッセージの変数
