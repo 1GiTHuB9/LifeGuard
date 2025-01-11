@@ -71,8 +71,19 @@ $sql = "SELECT u.user_id,u.user_name,u.diagnosis_level,u.profile_img,p.post_id,p
         <div class="container">
             <header class="header">
                 <a href="#" class="back-button" onclick="goBack()">←戻る</a>
-                <button class="menu-button">&#9776;</button>
+                <div class="menu-icon">
+                    <span>&#9776;</span>
+                </div>
             </header>
+            <!-- サイドメニュー -->
+            <div class="side-menu" id="sideMenu">
+                <ul>
+                    <li><a href="usersettei.php">プロフィール</a></li>
+                    <li><a href="page2.html">レベル診断</a></li>
+                    <li><a href="#" id="logout">ログアウト</a></li>
+                </ul>
+            </div>
+
             <div class="content">
                 <!-- メッセージ一覧 -->
                 <main class="chat-area" id="chatArea" onclick="resetLayout()">
@@ -109,13 +120,14 @@ $sql = "SELECT u.user_id,u.user_name,u.diagnosis_level,u.profile_img,p.post_id,p
                                 </p>
                                 <!-- 投稿内容表示 -->
                                 <p class="text" onclick="showDetail(
-                                    '<?php echo $row['post_id'] ?>',
-                                    '<?php echo $row['user_name']?>',
-                                    '<?php echo $row['post_detail']?>',
-                                    '<?php echo $row['profile_img']?>'); event.stopPropagation();">
-                                    <?php
-                                    echo $row['post_detail'];
-                                    ?>
+                                '<?php echo $row['post_id'] ?>',
+                                '<?php echo $row['user_name']?>',
+                                '<?php echo $row['post_detail']?>',
+                                '<?php echo $row['profile_img']?>',
+                                '<?php echo $row['post_flag']?>'); event.stopPropagation();">
+                                <?php
+                                echo $row['post_detail'];
+                                ?>
                                 </p>
                             </div>
                         </div>
@@ -163,9 +175,38 @@ $sql = "SELECT u.user_id,u.user_name,u.diagnosis_level,u.profile_img,p.post_id,p
 
     <script>
 
+        // メニューの開閉処理
+    document.querySelector('.menu-icon').addEventListener('click', function() {
+        const sideMenu = document.getElementById('sideMenu');
+        const menuIcon = document.querySelector('.menu-icon');
+        
+        sideMenu.classList.toggle('open');
+        menuIcon.classList.toggle('active');
+        event.stopPropagation();
+    });
+
+    // 画面のどこかをクリックしたらメニューを閉じる
+    document.addEventListener('click', function(event) {
+        const sideMenu = document.getElementById('sideMenu');
+        const menuIcon = document.querySelector('.menu-icon');
+
+        if (!sideMenu.contains(event.target) && !menuIcon.contains(event.target)) {
+            sideMenu.classList.remove('open');
+            menuIcon.classList.remove('active');
+        }
+    });
+
+    // ログアウト処理
+    document.getElementById('logout').addEventListener('click', function(event) {
+        event.preventDefault();
+        if (confirm('ログアウトしますか？')) {
+            window.location.href = 'logout.php';
+        }
+    });
+
         let currentPageC = 0;
 
-        function showDetail(postId,name,content,profileImg) {
+        function showDetail(postId,name,content,profileImg, postFlag) {
 
             currentPageC = 0;
             // 詳細エリアをスライドインで表示
@@ -173,26 +214,29 @@ $sql = "SELECT u.user_id,u.user_name,u.diagnosis_level,u.profile_img,p.post_id,p
             detailArea.style.display = "block";  // 詳細エリアを表示
             detailArea.style.transform = "translateX(0)";  // スライドイン
 
+            // 表示する名前を決定
+            const displayName = postFlag == 1 ? "匿名" : name;
+
             // 詳細内容を挿入
             detailArea.innerHTML = `
                 <div class="comments-section">
                     <div class="comment">
-                        <div class="profile-pic">
-                            <img src="${profileImg ? './' + profileImg : './img/user.png'}" alt="Profile Image" class="profile-image">
-                        </div>
-                        <div class="comment-content">
-                            <p class="username">${name}</p>
-                            <p class="text">${content}</p>
-                        </div>
-                    </div>
-                    <button class="comment-button" id="dynamicCommentButton">コメント追加</button>
-                    <div class="comment_area" id="comment_area">
-                        <!-- ここにコメントが挿入されます -->
-                    </div>
-
-                    <button class="view-more-button" id="MoreComment" onclick="loadMoreComment('${postId}','${name}','${content}','1')">もっと見る</button>
+                    <div class="profile-pic">
+                        <img src="${profileImg ? './' + profileImg : './img/user.png'}" alt="Profile Image" class="profile-image">
                 </div>
-            `;
+                <div class="comment-content">
+                    <p class="username">${displayName}</p>
+                    <p class="text">${content}</p>
+                </div>
+                </div>
+            <button class="comment-button" id="dynamicCommentButton">コメント追加</button>
+            <div class="comment_area" id="comment_area">
+                <!-- ここにコメントが挿入されます -->
+            </div>
+
+            <button class="view-more-button" id="MoreComment" onclick="loadMoreComment('${postId}','${displayName}','${content}','1')">もっと見る</button>
+            </div>
+                `;
               // 動的に生成されたボタンにクリックイベントを追加
               // コメント追加ボタンがクリックされたときにページ遷移
             document.getElementById("dynamicCommentButton").addEventListener("click", function() {

@@ -42,11 +42,76 @@ body, html {
 }
 
 .header {
+    position: relative;
     display: flex;
     justify-content: space-between;
-    padding: 10px;
+    align-items: center;
+    padding: 10px 20px;
+    z-index: 1002; /* ヘッダーを最前面に */
     background-color: rgba(255, 255, 255, 0.8);
     border-bottom: 1px solid #ddd;
+}
+
+.side-menu {
+    position: fixed;
+    top: 0;
+    right: -100%; /* 初期状態では画面外 */
+    width: 200px;
+    height: 100%;
+    background-color:#333;
+    transition: right 0.3s ease-in-out;
+    z-index: 1002;
+}
+
+.side-menu.open {
+    right: 0;
+}
+
+/* メニューが開いているときのアイコンの色 */
+.menu-icon.active span {
+    color: white;
+}
+
+
+.side-menu ul {
+    list-style: none;
+    padding: 0;
+    margin: 0;
+    
+}
+
+.side-menu ul li {
+    border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+}
+
+.side-menu ul li a {
+    display: block;
+    color: white;
+    text-decoration: none;
+    padding: 15px 20px;
+    font-size: 16px;
+}
+
+.side-menu ul li a:hover {
+    background-color: rgba(255, 255, 255, 0.1);
+}
+
+/* メニューアイコンのスタイル */
+.menu-icon {
+    cursor: pointer;
+    padding: 5px;
+    z-index: 1001;
+    position: relative; /* absoluteからrelativeに変更 */
+}
+
+.menu-icon span {
+    color: #333;
+    font-size: 24px;
+}
+
+/* メニューが開いているときのアイコンの色 */
+.menu-icon.active span {
+    color: white;
 }
 
 .back-button {
