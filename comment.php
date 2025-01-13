@@ -45,7 +45,16 @@ if ((int)$result['post_flag'] === 1) {
         <img src="haikei4.png" alt="Full Screen Image">
     <div class="container">
         <a href="#" class="back-button" onclick="goBack()">←戻る</a>
-        <div class="user-image"><span>画像</span></div>
+        <div class="user-image">
+        <?php
+        // プロフィール画像が存在する場合はその画像を、存在しない場合はデフォルト画像を表示
+        if ($result['profile_img']) {
+            echo "<img src='./{$result['profile_img']}' alt='Profile Image' class='profile-image'>";
+        } else {
+            echo "<img src='./img/user.png' alt='Default Profile Image' class='profile-image'>";
+        }
+        ?>
+    </div>
         <!-- ユーザー名 -->
         <div class="user-name"> <?php echo htmlspecialchars($user_name, ENT_QUOTES, 'UTF-8'); ?></div>
         <p id="post_detail">相談内容:<?php echo htmlspecialchars($result['post_detail'], ENT_QUOTES, 'UTF-8'); ?></p>

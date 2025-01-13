@@ -37,7 +37,7 @@ body, html {
     left: 0;
     width: 100%;
     height: 100%;
-    background: rgba(255, 255, 255, 0.5); /* ここで不透明度を調整 */
+    
     pointer-events: none; /* オーバーレイがクリックイベントをブロックしないようにする */
 }
 /*背景のcss記述終わり*/
@@ -88,14 +88,24 @@ textarea {
 .user-image {
     width: 100px;
     height: 100px;
-    background-color: #c61e1e;
     border-radius: 50%;
-    margin: 0 auto;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    font-size: 30px;
-    color: #999;
+    margin: 0 auto 20px;
+    overflow: hidden;
+    position: relative;
+    background-color: #f0f0f0;
+    display: flex;           /* Flexboxを追加 */
+    justify-content: center; /* 水平方向の中央揃え */
+    align-items: center;     /* 垂直方向の中央揃え */
+    border: 2px solid rgb(141, 141, 249);
+}
+
+.profile-image {
+    min-width: 100%;        /* 最小幅を設定 */
+    min-height: 100%;       /* 最小高さを設定 */
+    width: auto;            /* 幅を自動調整 */
+    height: auto;           /* 高さを自動調整 */
+    object-fit: cover;      /* アスペクト比を保持しながら領域を埋める */
+    
 }
 
 .user-name, .user-profile {

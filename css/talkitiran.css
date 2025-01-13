@@ -8,11 +8,6 @@ body, html {
     overflow:hidden;
 }
 
-/*body {
-    margin: 0;
-    font-family: Arial, sans-serif;
-}*/
-
 /* 背景画像用の設定 */
 .fullscreen-image {
     position: relative;
@@ -37,61 +32,7 @@ body, html {
     left: 0;
     width: 100%;
     height: 100%;
-    
-    pointer-events: none; /* オーバーレイがクリックイベントをブロックしないようにする */
-}
-
-
-hr {
-    padding: 0.1px 0;
-  }
- 
-.back-button {
-    display: block;
-    margin-bottom: 20px;
-    text-decoration: none;
-    color: #000;
-    text-align: left; /* テキストを左揃え */
-    position: absolute;
-    left: 20px; /* 左から20pxの位置に配置 */
-    top: 20px;  /* 上から20pxの位置に配置 */
-    font-size: 16px;
-    margin-left: 10px;
-    margin-bottom: 10px;
-    text-align: left;
-}
-
-.profile-image {
-    width: 100px;
-    height: 100px;
-    background-color: #eee;
-    border-radius: 50%;
-    margin: 0 auto;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    font-size: 24px;
-    color: #999;
-}
-
-.user-name, .user-profile {
-    margin: 10px 0;
-    font-size: 18px;
-    color: #333; /* テキスト色をダークグレーに設定 */
-    text-shadow: 1px 1px 2px rgba(255, 255, 255, 0.7); /* テキストに影を追加して見やすくする */
-}
-
-.consultation-content {
-    font-size: 14px;
-    padding: 8px;
-    margin-top: 5px;
-    padding: 10px;
-    background-color: rgba(242, 242, 242, 0.8); /* 背景色を白、透明度80%に設定 */
-    border-radius: 5px;
-    text-align: center;
-    white-space: pre-wrap;
-    color: #333; /* テキスト色をダークグレーに設定 */
-    text-shadow: 1px 1px 2px rgba(255, 255, 255, 0.7); /* テキストに影を追加して見やすくする */
+    pointer-events: none;
 }
 
 .container {
@@ -101,190 +42,167 @@ hr {
     display: flex;
     transform: translate(-50%, -50%);
     flex-direction: column;
-   
     width: 90%;
     max-width: 400px;
-    height: 70vh; /* 高さを指定 */
-    overflow-y: auto; /* 縦スクロール可能に */
+    height: 70vh;
+    overflow-y: auto;
     background-color: rgba(255, 255, 255, 0.8);
     padding: 20px;
     border-radius: 10px;
     box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
 }
 
- 
 .back-button {
-    font-size: 14px;
-    margin-left: 10px;
-    margin-bottom: 10px;
+    display: block;
+    margin-bottom: 20px;
+    text-decoration: none;
+    color: #000;
     text-align: left;
-}
-
-.user-name, .user-profile {
+    position: absolute;
+    left: 20px;
+    top: 20px;
     font-size: 16px;
+    margin-left: 10px;
 }
 
-.divider {
-    border: 1px solid black; /* 黒い横棒 */
-    margin: 10px 0; /* 上下の余白を設定 */
+/* プロフィール画像関連 */
+.profile-pic {
+    width: 50px;
+    height: 50px;
+    border-radius: 50%;
+    margin-right: 10px;
+    overflow: hidden;
+    position: relative;
+    background-color: #f0f0f0;
+    border: 2px solid rgb(141, 141, 249);
+    flex-shrink: 0;
 }
 
+.profile-image {
+    min-width: 100%;        /* 最小幅を設定 */
+    min-height: 100%;       /* 最小高さを設定 */
+    width: auto;            /* 幅を自動調整 */
+    height: auto;           /* 高さを自動調整 */
+    object-fit: cover;      /* アスペクト比を保持しながら領域を埋める */
+}
+
+/* メッセージ関連 */
 .message {
     display: flex;
-    justify-content: center; /* 横方向の中央揃え */
-    align-items: center; /* 縦方向の中央揃え */
+    align-items: center;
+    padding: 10px;
+    cursor: pointer;
+    transition: background-color 0.3s;
+    background-color: rgba(255, 255, 255, 0.8);
     margin-bottom: 10px;
-    margin-top:20px;
+    border-radius: 8px;
 }
 
-
-.profile-pic {
-    width: 40px;
-    height: 40px;
-    background-color: #6cc;
-    border-radius: 50%;
-    margin-right: 10px;
-    margin-top:30px;
-}
-
-.profile-commenter {
-    width: 40px;
-    height: 40px;
-    background-color: rgb(208, 34, 121);
-    border-radius: 50%;
-    margin-right: 10px;
-    margin-top:5px;
+.message:hover {
+    background-color: rgba(0, 0, 0, 0.05);
 }
 
 .message-content {
-    max-width: 260px;
-    width: 100%; /* 利用可能なスペースを確保 */
+    flex: 1;
 }
 
-.username {
-    font-size: 14px;
-    font-weight: bold;
-    margin-bottom: 5px;
-    
-}
-
-.text {
-    background-color: #eeadad;
-    padding: 10px;
-    border-radius: 10px;
-    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
-    max-width: 220px;  /* テキストボックスの幅制限 */
-    width: 100%; /* テキストボックスを全幅にする */
-    word-wrap: break-word;
-    font-size: 14px;
-    cursor: pointer;
-    text-align: center; /* テキストを中央揃え */
-}
-/* 未承認チャット用のデザイン */
+/* 未承認チャット用のスタイル */
 .pending-message {
     display: flex;
     flex-direction: column;
     justify-content: flex-start;
-    align-items: flex-start;
-    margin-bottom: 20px;
+    align-items: stretch;
+    background-color: rgba(255, 255, 255, 0.9);
     padding: 15px;
-    border: 2px dashed #ff6961; /* 未承認チャットの枠線 */
-    background-color: #fff8f0;
-    border-radius: 10px;
-    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+    margin-bottom: 15px;
+    border-radius: 8px;
+    box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+    border: 2px dashed #ff6961;
+    width: calc(100% - 34px); /* パディングとボーダーを考慮 */
 }
 
-/* コメント内容 */
+.pending-message .profile-pic {
+    width: 40px;
+    height: 40px;
+    margin-bottom: 10px;
+}
+
+.pending-message .message-content {
+    width: 100%;
+    margin-bottom: 10px;
+}
+
 .pending-message .comment-detail {
     font-size: 14px;
-    font-style: italic;
-    margin-bottom: 10px;
+    margin: 5px 0;
     color: #555;
+    word-break: break-word;
 }
 
-/* 投稿タイトル */
-.pending-message .post-title {
-    font-size: 16px;
-    font-weight: bold;
-    margin-bottom: 5px;
-    color: #333;
-}
-
-/* ユーザー名 */
-.pending-message .username {
+.pending-message .user-name {
     font-size: 14px;
-    margin-bottom: 10px;
-    color: #007bff;
+    color: #666;
+    margin: 5px 0;
 }
 
-/* ボタンコンテナ */
 .button-container {
     display: flex;
-    justify-content: space-between;
+    justify-content: flex-start;
     gap: 10px;
     margin-top: 10px;
+    width: 100%;
 }
 
-/* 承認ボタン */
+.approve-button, .reject-button, .delete-button {
+    flex: 1;
+    max-width: 100px;
+    padding: 8px 5px;
+    font-size: 13px;
+}
+
 .approve-button {
     padding: 8px 15px;
-    background-color: #ffa500;
-    color: #fff;
-    border: none;
-    border-radius: 5px;
-    cursor: pointer;/* マウスカーソルをポインターに変更 */
-    font-size: 14px;
-    font-weight: bold;/* フォントの太さを太字に設定 */
-    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);/* ボタンに影を追加 */
-    transition: background-color 0.3s ease;/* ホバー時の色変化をスムーズにする */
-}
-
-.approve-button:hover {
-    background-color: #ffb733;
-}
-
-/* 承認しないボタン */
-.reject-button {
-    padding: 8px 15px;
-    background-color: #ff6961;
-    color: #fff;
+    background-color: #4CAF50;
+    color: white;
     border: none;
     border-radius: 5px;
     cursor: pointer;
     font-size: 14px;
     font-weight: bold;
-    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
-    transition: background-color 0.3s ease;
+    transition: background-color 0.3s;
 }
 
-.reject-button:hover {
-    background-color: #ff857a;
-}
-
-/* 削除ボタン */
-.delete-button {
+.reject-button {
     padding: 8px 15px;
-    background-color: #6c757d;
-    color: #fff;
+    background-color: #FFA500;
+    color: white;
     border: none;
     border-radius: 5px;
-    cursor: pointer;/* マウスカーソルをポインターに変更 */
+    cursor: pointer;
     font-size: 14px;
     font-weight: bold;
-    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
-    transition: background-color 0.3s ease;/* ホバー時の色変化をスムーズにする */
+    transition: background-color 0.3s;
 }
 
-.delete-button:hover {
-    background-color: #868e96;
+.delete-button {
+    padding: 8px 15px;
+    background-color: #f44336;
+    color: white;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+    font-size: 14px;
+    font-weight: bold;
+    transition: background-color 0.3s;
 }
-/* 保留したチャットリストを見るボタン */
+
+/* 保留リストボタン */
 .reject-list-button {
-    position: absolute; /* 画面の特定位置に配置 */
-    bottom: 13px; /* 画面の下からの余白 */
-    left: 50%; /* 水平中央に配置 */
-    transform: translateX(-50%); /* 水平中央の微調整 */
-    z-index: 3; /* 背景画像より前面に表示 */
+    position: absolute;
+    bottom: 13px;
+    left: 50%;
+    transform: translateX(-50%);
+    z-index: 3;
     padding: 10px 20px;
     background-color: #ffa500;
     color: white;
@@ -298,42 +216,31 @@ hr {
 .reject-list-button:hover {
     background-color: #ffb733;
 }
-/* モーダル(未実装) */
-/* モーダルの背景 */
-.modal-backdrop {
-    position: fixed;
-    top: 0;
-    left: 0;
-    width: 100%;
-    height: 100%;
-    background-color: rgba(0, 0, 0, 0.5);
-    display: none;
-    justify-content: center;
-    align-items: center;
-    z-index: 999;
+
+/* その他の要素 */
+.divider {
+    border: none;
+    border-top: 1px solid #eee;
+    margin: 10px 0;
+    padding: 0.1px 0;
 }
 
-/* モーダルコンテンツ */
-.modal-content {
-    background-color: #fff;
-    padding: 20px;
-    border-radius: 10px;
-    box-shadow: 0 2px 10px rgba(0, 0, 0, 0.3);
-    text-align: center;
-    width: 300px;
+.username {
+    font-weight: bold;
+    margin-bottom: 5px;
 }
 
-.modal-content .modal-message {
-    margin-bottom: 20px;
-    font-size: 16px;
+.text {
+    color: #666;
+    margin-bottom: 5px;
 }
 
-.modal-content .modal-buttons {
-    display: flex;
-    justify-content: space-around;
+.latest-message {
+    color: #999;
+    font-size: 0.9em;
 }
 
-/* アスペクト比に応じたレイアウト調整 */
+/* レスポンシブ対応 */
 @media (min-aspect-ratio: 16/9) {
     .fullscreen-image img {
         width: 100%;
@@ -341,12 +248,9 @@ hr {
     }
 }
 
- 
 @media (max-aspect-ratio: 9/16) {
     .fullscreen-image img {
         width: auto;
         height: 100%;
     }
 }
-
- 

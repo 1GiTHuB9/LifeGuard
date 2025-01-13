@@ -149,6 +149,7 @@ body, html {
     transition: transform 0.5s ease; /* スライドアニメーションを追加 */
     transform: translateX(100%); /* 初期状態では画面外に隠しておく */
     display: none; /* 初期状態では非表示 */
+    z-index:1003;
 }
 
 /* メッセージ全体のコンテナ */
@@ -267,6 +268,7 @@ body, html {
     padding: 10px;
     height: 100%;
     overflow-y: auto;  /* コンテンツが溢れた場合のスクロールを有効にする */
+    
 }
 
 /* 各コメントブロック */

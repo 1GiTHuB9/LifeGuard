@@ -78,6 +78,7 @@ $sql = "SELECT u.user_id,u.user_name,u.diagnosis_level,u.profile_img,p.post_id,p
             <!-- サイドメニュー -->
             <div class="side-menu" id="sideMenu">
                 <ul>
+                    <li><a href="home.php">ホーム</a></li>
                     <li><a href="usersettei.php">プロフィール</a></li>
                     <li><a href="page2.html">レベル診断</a></li>
                     <li><a href="#" id="logout">ログアウト</a></li>

@@ -67,15 +67,31 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
 <body>
     <div class="fullscreen-image">
         <img src="haikei4.png" alt="Full Screen Image">
-    <div class="container">
+        <div class="container">
         <a href="#" class="back-button" onclick="goBack()">←戻る</a>
-        <div class="user-image"><span>画像</span></div>
+        <div class="user-image">
+        <?php
+            if ($comment_profile_img) {
+                echo "<img src='./{$comment_profile_img}' alt='Profile Image' class='profile-image'>";
+            } else {
+                echo "<img src='./img/user.png' alt='Default Profile Image' class='profile-image'>";
+            }
+        ?>
+<       </div>
         <!-- ログインユーザー名 -->
         <div class="user-name"><?php echo htmlspecialchars($comment_user_name); ?></div>
         <p>投稿スタイル：<span id="post-style">公開</span></p>
         <p>投稿内容:<span id="content-display"><?php echo htmlspecialchars($content); ?></span></p>
         <p>投稿先</p>
-        <div class="user-image2"><span>画像</span></div>
+        <div class="user-image2">
+        <?php
+            if ($profile_img) {
+                echo "<img src='./{$profile_img}' alt='Profile Image' class='profile-image'>";
+            }else {
+                echo "<img src='./img/user.png' alt='Default Profile Image' class='profile-image'>";
+            }
+            ?>
+        </div>
         <!-- 投稿先ユーザー名 -->
         <div class="user-name"><?php echo htmlspecialchars($user_name); ?></div>
         <!-- 投稿先相談内容 -->
